@@ -48,6 +48,11 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
+      backgroundImage: {
+        "light-theme":
+          "linear-gradient(181.07deg, #CFE1FF -5.43%, rgba(255, 255, 255, 0.50) 28rem)",
+        "dark-theme": "none",
+      },
       borderRadius: {
         lg: "`var(--radius)`",
         md: "`calc(var(--radius) - 2px)`",

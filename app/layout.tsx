@@ -2,7 +2,7 @@ import "@/styles/globals.css"
 import { Metadata } from "next"
 
 import { siteConfig } from "@/config/site"
-import { fontSans } from "@/lib/fonts"
+import { fontPoppins } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
 import Navbar from "@/components/navbar/Navbar"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
@@ -36,12 +36,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <head />
         <body
           className={cn(
-            "min-h-screen bg-background font-sans antialiased ",
-            fontSans.variable
+            "min-h-screen bg-background font-sans antialiased",
+            fontPoppins.variable
           )}
         >
-          <ThemeProvider attribute="className" defaultTheme="dark" enableSystem>
-            <div className="relative flex min-h-screen flex-col ">
+          <ThemeProvider attribute="class" enableSystem>
+            <div className="relative flex min-h-screen flex-col bg-light-theme dark:bg-dark-theme">
               <header className="sticky top-0 z-50">
                 <Navbar />
               </header>

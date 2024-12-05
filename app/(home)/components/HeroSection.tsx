@@ -6,6 +6,7 @@ import { Search } from "lucide-react"
 import { useTheme } from "next-themes"
 
 import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
   Select,
@@ -67,15 +68,7 @@ const HeroSection = () => {
   }
 
   return (
-    <div
-      className="bg-gradient-to-b from-slate-50 to-slate-50 text-gray-900 dark:from-gray-800 dark:to-gray-900 dark:text-slate-50"
-      style={{
-        background:
-          theme === "dark"
-            ? "linear-gradient(181.07deg, #0F172A -5.43%, rgba(45, 55, 72, 0.978) 100%)"
-            : "linear-gradient(181.07deg, #CFE1FF -5.43%, rgba(255, 255, 255, 0.15) 60.79%)",
-      }}
-    >
+    <div>
       <MaxWidthWrapper className="flex flex-col items-center py-6 md:py-10 md:pb-10 lg:pb-16 space-y-4">
         <h1 className="text-3xl md:text-4xl font-bold text-center">
           Find your dream job
