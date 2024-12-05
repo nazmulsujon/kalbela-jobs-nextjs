@@ -2,8 +2,7 @@ export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
   name: "Kalbela Jobs",
-  description:
-    "Jobs portal website",
+  description: "Jobs portal website",
   mainNav: [
     {
       title: "Home",

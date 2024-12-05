@@ -25,7 +25,7 @@ import { ThemeToggle } from "../theme-toggle"
 import { Navigations } from "./Navigations"
 
 const Navbar: React.FC = () => {
-  const theme = useTheme()
+  const { theme } = useTheme()
   const pathname = usePathname()
   const isHomePage = pathname === "/"
 
@@ -46,13 +46,13 @@ const Navbar: React.FC = () => {
 
   return (
     <section
-      className={`shadow-none transition-colors duration-300 ${
+      className={`${
         isScrolled
-          ? "bg-gray-900 dark:bg-gray-900 bg-white/75 backdrop-blur-lg border-b"
+          ? "bg-white/75 backdrop-blur-lg border-b"
           : isHomePage
           ? "bg-[#d8e5ff] bg-gradient-to-br from-[#d7e6ff] to-[#d7e6ff]"
-          : "bg-transparent dark:bg-[#121a2d]"
-      }`}
+          : "bg-transparent"
+      } shadow-none transition-colors duration-300`}
     >
       <MaxWidthWrapper className="h-[64px] flex justify-between items-center">
         <Button

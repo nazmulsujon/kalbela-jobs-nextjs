@@ -44,7 +44,7 @@ export function Navigations() {
             {navigations.map((navigation, index) => (
               <NavigationMenuItem key={index}>
                 <Link href={navigation.slug}>
-                  <NavigationMenuTrigger className="bg-transparent hover:bg-transparent text-gray-900 dark:text-white dark:hover:text-slate-100">
+                  <NavigationMenuTrigger className="bg-transparent hover:bg-transparent text-gray-900 dark:text-white dark:hover:text-slate-100 rounded-sm">
                     {navigation.name}
                     {/* {navigation.categories && (
                       <ChevronDownIcon
