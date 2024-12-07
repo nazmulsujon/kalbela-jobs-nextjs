@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { ChevronDownIcon } from "lucide-react"
 
-import { CategoryType } from "@/types/category"
+import { CategoryType } from "@/types/global"
 import {
   Accordion,
   AccordionContent,

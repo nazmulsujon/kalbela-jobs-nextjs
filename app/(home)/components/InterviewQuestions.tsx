@@ -1,14 +1,16 @@
-import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+"use client"
+
+import Lottie from "lottie-react"
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import Lottie from "lottie-react";
-import jobInterviewAnimation from "../../../assets/lottie-files/job-interview.json";
-import { useTheme } from "@/context/ThemeProvider";
-import { cn } from "@/lib/utils";
+} from "@/components/ui/accordion"
+import MaxWidthWrapper from "@/components/MaxWidthWrapper"
+
+import jobInterviewAnimation from "../../../public/assets/lottie-files/job-interview.json"
 
 const interviewQuestions = [
   {
@@ -31,23 +33,13 @@ const interviewQuestions = [
     question: "What are your strengths?",
     answer: `My key strengths include strong analytical skills, attention to detail, and the ability to communicate complex ideas clearly. I am also highly adaptable and able to thrive in fast-paced environments. Additionally, my interpersonal skills allow me to build positive relationships with colleagues and clients alike.`,
   },
-];
+]
 
 const InterviewQuestions: React.FC = () => {
-  const { theme } = useTheme();
   return (
-    <section
-      className={cn("pb-6 md:pb-10 -mt-0.5", {
-        "bg-[#323b4c] text-slate-200": theme === "dark",
-        "text-gray-900 bg-transparent": theme === "light",
-      })}
-    >
+    <section className="pb-6 md:pb-10 -mt-0.5">
       <MaxWidthWrapper>
-        <h2
-          className={cn("text-xl md:text-3xl font-bold text-left mb-2", {
-            "base-color": theme === "light",
-          })}
-        >
+        <h2 className="text-xl md:text-3xl font-bold text-left mb-2">
           Common Interview Questions
         </h2>
         <p className="text-xs font-thin text-left mb-6">
@@ -74,7 +66,7 @@ const InterviewQuestions: React.FC = () => {
         </div>
       </MaxWidthWrapper>
     </section>
-  );
-};
+  )
+}
 
-export default InterviewQuestions;
+export default InterviewQuestions

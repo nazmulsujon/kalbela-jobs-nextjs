@@ -29,25 +29,26 @@ const skillSuggestions = [
   "Graphic Designer",
   "Content Writer",
 ]
-const jobTypeSuggestions = [
-  "Full time",
-  "Part time",
-  "Remote",
-  "Internship",
-  "Contractual",
-  "Hybrid",
-  "Night shift",
-  "Govt job",
+
+const locationSuggestions = [
+  "Dhaka",
+  "Chattogram",
+  "Khulna",
+  "Rajshahi",
+  "Sylhet",
+  "Barishal",
+  "Mymensingh",
+  "Rangpur",
 ]
 
 const HeroSection = () => {
   const { theme } = useTheme()
   const [searchQuery, setSearchQuery] = useState("")
-  const [jobType, setJobType] = useState("")
+  const [location, setLocation] = useState("")
 
   console.log("theme", theme)
 
-  console.log(jobType)
+  console.log(location)
 
   const [filteredSkills, setFilteredSkills] = useState<string[]>([])
   const [showSkillDropdown, setShowSkillDropdown] = useState(false)
@@ -123,15 +124,15 @@ const HeroSection = () => {
               className="h-10 w-0.5 bg-slate-400 mx-2"
             />
 
-            <Select onValueChange={(value: any) => setJobType(value)}>
-              <SelectTrigger className="border-none outline-none focus:ring-0 shadow-none w-28 dark:bg-gray-800">
-                <SelectValue placeholder="Enter job type" />
+            <Select onValueChange={(value: any) => setLocation(value)}>
+              <SelectTrigger className="border-none outline-none focus:ring-0 shadow-none w-40 dark:bg-gray-800">
+                <SelectValue placeholder="Select location" />
               </SelectTrigger>
               <SelectContent className="max-h-72 bg-white text-gray-900 dark:bg-gray-800 dark:text-slate-200">
                 <SelectGroup>
-                  {jobTypeSuggestions.map((jobType) => (
-                    <SelectItem key={jobType} value={jobType}>
-                      {jobType}
+                  {locationSuggestions.map((location) => (
+                    <SelectItem key={location} value={location}>
+                      {location}
                     </SelectItem>
                   ))}
                 </SelectGroup>

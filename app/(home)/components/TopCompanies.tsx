@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from "react";
+"use client"
+
+import React, { useEffect, useState } from "react"
+import Link from "next/link"
+import Autoplay from "embla-carousel-autoplay"
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
 import {
   Carousel,
   CarouselApi,
   CarouselContent,
   CarouselItem,
-} from "@/components/ui/carousel";
-import MaxWidthWrapper from "@/components/MaxWidthWrapper";
-import Autoplay from "embla-carousel-autoplay";
-import { Button } from "@/components/ui/button";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Link } from "react-router-dom";
-import { useTheme } from "@/context/ThemeProvider";
-import { cn } from "@/lib/utils";
-import SecondaryBtn from "@/components/SecondaryBtn";
+} from "@/components/ui/carousel"
+import { Skeleton } from "@/components/ui/skeleton"
+import MaxWidthWrapper from "@/components/MaxWidthWrapper"
+import SecondaryBtn from "@/components/SecondaryBtn"
 
 const topCompaniessArr = [
   {
@@ -71,44 +72,30 @@ const topCompaniessArr = [
     job_title: "Leading global telecom company.",
     logo: "/company-logo.png",
   },
-];
+]
 
 const TopCompanies: React.FC = () => {
-  const [api, setApi] = useState<CarouselApi | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const { theme } = useTheme();
+  const [api, setApi] = useState<CarouselApi | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
 
-  console.log(setLoading);
+  console.log(setLoading)
 
   useEffect(() => {
-    if (!api) return;
-  }, [api]);
+    if (!api) return
+  }, [api])
 
   const handleNextClick = () => {
-    if (api) api.scrollNext();
-  };
+    if (api) api.scrollNext()
+  }
 
   const handlePrevClick = () => {
-    if (api) api.scrollPrev();
-  };
+    if (api) api.scrollPrev()
+  }
 
   return (
-    <section
-      className={cn("pb-6 md:pb-10 lg:pb-16", {
-        "bg-[#323b4c]": theme === "dark",
-        "bg-transparent": theme === "light",
-      })}
-    >
+    <section className="pb-6 md:pb-10 lg:pb-16">
       <MaxWidthWrapper>
-        <h2
-          className={cn(
-            "text-xl md:text-3xl font-bold mb-4 md:mb-6 flex items-center",
-            {
-              "text-slate-200": theme === "dark",
-              "base-color": theme === "light",
-            }
-          )}
-        >
+        <h2 className="text-xl md:text-3xl font-bold mb-4 md:mb-6 flex items-center">
           Top companies hiring now
         </h2>
         <Carousel
@@ -143,13 +130,8 @@ const TopCompanies: React.FC = () => {
                     className="basis-1/2 md:basis-1/4 lg:basis-1/5"
                   >
                     <Link
-                      to="#"
-                      className={cn(
-                        "w-full h-full flex flex-col justify-between items-center border rounded-sm p-2 py-4",
-                        theme === "dark"
-                          ? "border-gray-800 bg-gray-800 text-white hover:bg-gray-700"
-                          : "bg-white text-gray-900 hover:shadow-xl"
-                      )}
+                      href="#"
+                      className="w-full h-full flex flex-col justify-between items-center border rounded-sm p-2 py-4"
                     >
                       <div className="size-24 flex justify-center items-center">
                         <img
@@ -163,12 +145,7 @@ const TopCompanies: React.FC = () => {
                       <h3 className="text-sm font-medium max-w-sm truncate my-2">
                         {company.company_name}
                       </h3>
-                      <p
-                        className={cn(
-                          "text-xs mb-2 text-center",
-                          theme === "dark" ? "text-slate-300" : "text-gray-700"
-                        )}
-                      >
+                      <p className="text-xs mb-2 text-center">
                         {company.job_title}
                       </p>
                       <SecondaryBtn className="mt-2">View jobs</SecondaryBtn>
@@ -190,7 +167,7 @@ const TopCompanies: React.FC = () => {
         </Carousel>
       </MaxWidthWrapper>
     </section>
-  );
-};
+  )
+}
 
-export default TopCompanies;
+export default TopCompanies
