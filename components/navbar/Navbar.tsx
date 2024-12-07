@@ -21,7 +21,7 @@ import MobileNav from "@/components/navbar/MobileNav"
 import MaxWidthWrapper from "../MaxWidthWrapper"
 import PrimaryBtn from "../PrimaryBtn"
 import SecondaryBtn from "../SecondaryBtn"
-import { ThemeToggle } from "../theme-toggle"
+import { ThemeToggle } from "../ThemeToggle"
 import { Navigations } from "./Navigations"
 
 const Navbar: React.FC = () => {
