@@ -5,7 +5,6 @@ import Link from "next/link"
 //@ts-ignore
 import { redirect, usePathname } from "next/navigation"
 import { Menu } from "lucide-react"
-import { useTheme } from "next-themes"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -25,7 +24,6 @@ import { ThemeToggle } from "../ThemeToggle"
 import { Navigations } from "./Navigations"
 
 const Navbar: React.FC = () => {
-  const { theme } = useTheme()
   const pathname = usePathname()
   const isHomePage = pathname === "/"
 
@@ -36,7 +34,7 @@ const Navbar: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20)
+      setIsScrolled(window.scrollY > 50)
     }
     window.addEventListener("scroll", handleScroll)
     return () => {
