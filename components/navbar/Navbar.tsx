@@ -42,6 +42,10 @@ const Navbar: React.FC = () => {
     }
   }, [])
 
+  const redirect = (path: string) => {
+    window.location.href = path // Basic redirection using `window.location`
+  }
+
   return (
     <section
       className={`${
@@ -80,7 +84,7 @@ const Navbar: React.FC = () => {
           ) : (
             <div className="hidden md:flex justify-between items-center space-x-4 me-2 md:me-0">
               <PrimaryBtn onClick={() => redirect("/login")}>Login</PrimaryBtn>
-              <SecondaryBtn onClick={() => redirect("/register")}>
+              <SecondaryBtn onClick={() => redirect("/registration")}>
                 Registration
               </SecondaryBtn>
             </div>
