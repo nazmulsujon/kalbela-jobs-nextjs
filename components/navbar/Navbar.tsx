@@ -46,27 +46,27 @@ const Navbar: React.FC = () => {
     <section
       className={`${
         isScrolled
-          ? "bg-white/75 backdrop-blur-lg border-b dark:bg-black dark:border-b-gray-500"
+          ? "border-b bg-white/75 backdrop-blur-lg dark:border-b-gray-500 dark:bg-black"
           : isHomePage
-          ? ""
-          : "dark:bg-[#121a2d]"
+            ? ""
+            : "dark:bg-[#121a2d]"
       } shadow-none`}
     >
-      <MaxWidthWrapper className="h-[64px] flex justify-between items-center">
+      <MaxWidthWrapper className="flex h-[64px] items-center justify-between">
         <Button
           onClick={() => setIsMobileNavOpen(true)}
           variant="outline"
           size="icon"
-          className={`md:hidden text-gray-900 dark:text-slate-200 dark:border-gray-700 dark:hover:bg-gray-900`}
+          className={`text-gray-900 dark:border-gray-700 dark:text-slate-200 dark:hover:bg-gray-900 md:hidden`}
         >
           <Menu
-            className={`w-full text-gray-900 dark:text-slate-200 dark:border-gray-700 dark:hover:bg-gray-900`}
+            className={`w-full text-gray-900 dark:border-gray-700 dark:text-slate-200 dark:hover:bg-gray-900`}
           />
         </Button>
 
         <div>
           <Link href="/">
-            <img className="h-auto w-48 mx-auto" src="/logo.png" alt="logo" />
+            <img className="mx-auto h-auto w-48" src="/logo.png" alt="logo" />
           </Link>
         </div>
 
@@ -78,7 +78,7 @@ const Navbar: React.FC = () => {
           {isAuthenticated ? (
             <PrimaryBtn>Logout</PrimaryBtn>
           ) : (
-            <div className="hidden md:flex justify-between items-center space-x-4 me-2 md:me-0">
+            <div className="me-2 hidden items-center justify-between space-x-4 md:me-0 md:flex">
               <PrimaryBtn onClick={() => redirect("/login")}>Login</PrimaryBtn>
               <SecondaryBtn onClick={() => redirect("/register")}>
                 Registration
@@ -99,7 +99,7 @@ const Navbar: React.FC = () => {
 
           <SheetContent
             side="left"
-            className={`w-80 h-full overflow-y-auto pt-[14px] bg-white text-gray-800 dark:bg-gray-900 dark:text-slate-200`}
+            className={`h-full w-80 overflow-y-auto bg-white pt-[14px] text-gray-800 dark:bg-gray-900 dark:text-slate-200`}
           >
             <SheetHeader>
               <SheetTitle className="text-start">
