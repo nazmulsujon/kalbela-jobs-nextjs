@@ -11,8 +11,6 @@ import useApiRequest from "@/app/hooks/useApiRequest"
 const FeaturedJobs: React.FC = () => {
   const { data, loading, error } = useApiRequest<any>("jobs", "GET")
 
-  console.log(data)
-
   return (
     <section>
       <MaxWidthWrapper className="py-6 md:py-10 lg:py-16">
@@ -20,7 +18,7 @@ const FeaturedJobs: React.FC = () => {
           <span className="mr-2 text-red-500">🔥</span> Featured Jobs
         </h2>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {!loading
+          {loading
             ? Array.from({ length: 16 }).map((_, index) => (
                 <div
                   key={index}
@@ -33,13 +31,13 @@ const FeaturedJobs: React.FC = () => {
                   </div>
                 </div>
               ))
-            : data?.data?.jobs?.map((job, index) => (
+            : data?.data?.jobs?.map((job: any) => (
                 <div
-                  key={index}
+                  key={job._id}
                   className="group relative flex flex-col items-start overflow-hidden rounded-sm border p-4 md:flex-row"
                 >
                   <img
-                    src={job.logo}
+                    src={job.company_logo}
                     alt={`${job.company} logo`}
                     className="mr-3 h-14 w-14 rounded-full object-cover"
                   />
@@ -54,7 +52,7 @@ const FeaturedJobs: React.FC = () => {
                     href={`#`}
                     className="absolute inset-0 flex items-center justify-end bg-black bg-opacity-60 pe-2 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100"
                   >
-                    <ChevronRight className="text-white" />
+                    <ChevronRight className="text-gray-800 group-hover:text-white dark:text-white" />
                   </Link>
                 </div>
               ))}
