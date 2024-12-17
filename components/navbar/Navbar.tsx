@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 //@ts-ignore
-import { redirect, usePathname } from "next/navigation"
+import { redirect, usePathname, useRouter } from "next/navigation"
 import { Menu } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -26,7 +26,7 @@ import { Navigations } from "./Navigations"
 const Navbar: React.FC = () => {
   const pathname = usePathname()
   const isHomePage = pathname === "/"
-
+  const router = useRouter()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
 
@@ -79,8 +79,10 @@ const Navbar: React.FC = () => {
             <PrimaryBtn>Logout</PrimaryBtn>
           ) : (
             <div className="hidden md:flex justify-between items-center space-x-4 me-2 md:me-0">
-              <PrimaryBtn onClick={() => redirect("/login")}>Login</PrimaryBtn>
-              <SecondaryBtn onClick={() => redirect("/register")}>
+              <PrimaryBtn onClick={() => router.push("/login")}>
+                Login
+              </PrimaryBtn>
+              <SecondaryBtn onClick={() => router.push("/registration")}>
                 Registration
               </SecondaryBtn>
             </div>
