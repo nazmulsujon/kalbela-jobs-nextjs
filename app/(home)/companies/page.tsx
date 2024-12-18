@@ -1,11 +1,15 @@
 import React from "react"
 
-const page = () => {
+import CompanyJobs from "../components/CompanyJobs"
+import CompanyProfile from "../components/CompanyProfile"
+
+const Companies = () => {
   return (
     <div>
-      <p>this is companies page</p>
+      <CompanyProfile />
+      <CompanyJobs />
     </div>
   )
 }
 
-export default page
+export default Companies
