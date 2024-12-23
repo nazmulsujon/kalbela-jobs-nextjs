@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import axios, { CancelTokenSource } from "axios"
@@ -21,12 +23,11 @@ interface UseJobsSearchReturn<T> {
 
 export default function useJobsSearch<T>({
   endpoint,
-  query,
+  query = "",
   pageNumber,
-  selectedSource,
+  selectedSource = "",
   fetchOnMount = true,
 }: UseJobsSearchProps<T>): UseJobsSearchReturn<T> {
-  const router = useRouter()
   const [loading, setLoading] = useState(fetchOnMount)
   const [error, setError] = useState(false)
   const [jobs, setJobs] = useState<T[]>([])
@@ -38,17 +39,9 @@ export default function useJobsSearch<T>({
 
   useEffect(() => {
     setJobs([])
-  }, [query, , selectedSource])
+  }, [query, selectedSource])
 
   useEffect(() => {
-    const local = localStorage.getItem("token")
-    const token = local ? JSON.parse(local) : null
-
-    if (!token) {
-      router.push("/login")
-      return
-    }
-
     if (!fetchOnMount && pageNumber === 1) return
 
     setLoading(true)
@@ -58,7 +51,7 @@ export default function useJobsSearch<T>({
 
     const params = {
       limit: 10,
-      skip: (pageNumber - 1) * 10,
+      page: (pageNumber - 1) * 10,
       ...(query && { search: query }),
       ...(selectedSource && { source: selectedSource }),
     }
@@ -67,21 +60,19 @@ export default function useJobsSearch<T>({
       try {
         cancel = axios.CancelToken.source()
         const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/${endpoint}`,
+          `${process.env.NEXT_APP_BASE_URL}/api/v1/${endpoint}`,
           {
-            headers: {
-              "Content-Type": "application/json",
-              authorization: `Bearer ${token}`,
-            },
+            headers: { "Content-Type": "application/json" },
             params,
             cancelToken: cancel.token,
           }
         )
 
-        const fetchedData: T[] = res?.data?.jobs
+        const fetchedData: T[] = res.data.data.jobs
+        const totalCount = res.data.data.pagination?.totalCount
 
         setJobs((prev) => [...prev, ...fetchedData])
-        setTotalJobs(res?.data?.pagination?.totalCount)
+        setTotalJobs(totalCount || 0)
         setHasMore(fetchedData.length === params.limit)
         setLoading(false)
       } catch (e) {
@@ -92,16 +83,8 @@ export default function useJobsSearch<T>({
     }
 
     fetchData()
-
     return () => cancel?.cancel()
   }, [endpoint, query, pageNumber, selectedSource, fetchOnMount, revalidate])
 
-  return {
-    loading,
-    error,
-    jobs,
-    totalJobs,
-    hasMore,
-    triggerRevalidate,
-  }
+  return { loading, error, jobs, totalJobs, hasMore, triggerRevalidate }
 }
