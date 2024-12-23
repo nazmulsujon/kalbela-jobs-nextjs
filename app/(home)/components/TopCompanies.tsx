@@ -15,6 +15,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 import MaxWidthWrapper from "@/components/MaxWidthWrapper"
 import SecondaryBtn from "@/components/SecondaryBtn"
+import useApiRequest from "@/app/hooks/useApiRequest"
 
 const topCompaniessArr = [
   {
@@ -76,9 +77,9 @@ const topCompaniessArr = [
 
 const TopCompanies: React.FC = () => {
   const [api, setApi] = useState<CarouselApi | null>(null)
-  const [loading, setLoading] = useState<boolean>(false)
+  const { data, loading, error } = useApiRequest<any>("workspace", "GET")
 
-  console.log(setLoading)
+  console.log("company data", data)
 
   useEffect(() => {
     if (!api) return
@@ -95,7 +96,7 @@ const TopCompanies: React.FC = () => {
   return (
     <section className="pb-6 md:pb-10 lg:pb-16">
       <MaxWidthWrapper>
-        <h2 className="text-xl md:text-3xl font-bold mb-4 md:mb-6 flex items-center">
+        <h2 className="mb-4 flex items-center text-xl font-bold md:mb-6 md:text-3xl">
           Top companies hiring now
         </h2>
         <Carousel
@@ -106,7 +107,7 @@ const TopCompanies: React.FC = () => {
               delay: 4000,
             }),
           ]}
-          className="w-full flex justify-between items-center"
+          className="flex w-full items-center justify-between"
         >
           <div className="h-6 w-6">
             <Button
@@ -122,30 +123,30 @@ const TopCompanies: React.FC = () => {
           <CarouselContent className="flex">
             {loading
               ? Array.from({ length: 5 }).map((_, index) => (
-                  <Skeleton key={index} className="w-full h-auto mx-2" />
+                  <Skeleton key={index} className="mx-2 h-auto w-full" />
                 ))
-              : topCompaniessArr.map((company, index) => (
+              : data?.data?.map((company: any) => (
                   <CarouselItem
-                    key={index}
-                    className="basis-1/2 md:basis-1/4 lg:basis-1/5"
+                    key={company._id}
+                    className="min-w-48 basis-1/2 md:basis-1/4 lg:basis-1/5"
                   >
                     <Link
                       href="#"
-                      className="w-full h-full flex flex-col justify-between items-center border rounded-sm p-2 py-4"
+                      className="flex h-full w-full flex-col items-center justify-between rounded-sm border p-2 py-4"
                     >
-                      <div className="size-24 flex justify-center items-center">
+                      <div className="flex size-24 items-center justify-center">
                         <img
-                          className="size-full rounded-sm mr-1 object-cover"
+                          className="mr-1 size-full rounded-sm object-cover"
                           src={company.logo}
                           style={{ aspectRatio: "3/2" }}
                           alt={`${company.company_name} image`}
                           loading="lazy"
                         />
                       </div>
-                      <h3 className="text-sm font-medium max-w-sm truncate my-2">
+                      <h3 className="my-2 max-w-sm truncate text-sm font-medium">
                         {company.company_name}
                       </h3>
-                      <p className="text-xs mb-2 text-center">
+                      <p className="mb-2 text-center text-xs">
                         {company.job_title}
                       </p>
                       <SecondaryBtn className="mt-2">View jobs</SecondaryBtn>

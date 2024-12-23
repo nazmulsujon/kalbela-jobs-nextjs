@@ -6,6 +6,7 @@ import { fontPoppins } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
 import { TailwindIndicator } from "@/components/TailwindIndicator"
 import { ThemeProvider } from "@/components/ThemeProvider"
+import Footer from "@/components/footer/Footer"
 import Navbar from "@/components/navbar/Navbar"
 
 export const metadata: Metadata = {
@@ -48,6 +49,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
               <main>
                 <div className="flex-1">{children}</div>
               </main>
+              <Footer />
             </div>
             <TailwindIndicator />
           </ThemeProvider>

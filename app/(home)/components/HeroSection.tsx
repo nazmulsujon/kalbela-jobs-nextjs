@@ -6,7 +6,6 @@ import { Search } from "lucide-react"
 import { useTheme } from "next-themes"
 
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
   Select,
@@ -45,10 +44,6 @@ const HeroSection = () => {
   const { theme } = useTheme()
   const [searchQuery, setSearchQuery] = useState("")
   const [location, setLocation] = useState("")
-
-  console.log("theme", theme)
-
-  console.log(location)
 
   const [filteredSkills, setFilteredSkills] = useState<string[]>([])
   const [showSkillDropdown, setShowSkillDropdown] = useState(false)

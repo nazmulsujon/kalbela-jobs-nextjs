@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/carousel"
 import { Skeleton } from "@/components/ui/skeleton"
 import MaxWidthWrapper from "@/components/MaxWidthWrapper"
+import useApiRequest from "@/app/hooks/useApiRequest"
 
 const jobTypesArr = [
   { label: "Remote", icon: "/jobtype-icons/remote-job.svg" },
@@ -36,10 +37,9 @@ const jobTypesArr = [
 
 const JobType: React.FC = () => {
   const [api, setApi] = useState<CarouselApi | null>(null)
-  const [loading, setLoading] = useState<boolean>(false)
-  const { theme } = useTheme()
+  const { data, loading, error } = useApiRequest<any>("job-type", "GET")
 
-  console.log(setLoading)
+  console.log("data", data)
 
   useEffect(() => {
     if (!api) return
@@ -64,7 +64,7 @@ const JobType: React.FC = () => {
               delay: 3000,
             }),
           ]}
-          className="w-full flex justify-between items-center"
+          className="flex w-full items-center justify-between"
         >
           <div className="h-6 w-6">
             <Button
@@ -80,30 +80,30 @@ const JobType: React.FC = () => {
           <CarouselContent className="flex">
             {loading
               ? Array.from({ length: 8 }).map((_, index) => (
-                  <Skeleton key={index} className="w-[180px] h-[60px] mx-2" />
+                  <Skeleton key={index} className="mx-2 h-[60px] w-[180px]" />
                 ))
-              : jobTypesArr.map((type, index) => (
+              : data?.data?.map((type: any) => (
                   <CarouselItem
-                    key={index}
-                    className="basis-1/2 md:basis-1/6 lg:basis-1/8"
+                    key={type._id}
+                    className="lg:basis-1/8 min-w-40 basis-1/2 md:min-w-48 md:basis-1/6"
                   >
                     <Link
-                      href="#"
+                      href={type.slag}
                       className={cn(
-                        "w-full h-full flex justify-between items-center border rounded-sm p-2"
+                        "flex h-full w-full items-center justify-between rounded-sm border p-2"
                       )}
                     >
-                      <div className="size-10 flex justify-center items-center h-auto">
+                      <div className="flex size-10 h-auto items-center justify-center">
                         <img
-                          className="size-8 md:size-10 mr-1"
-                          src={type.icon}
+                          className="mr-1 size-8 md:size-10"
+                          src={type.image}
                           style={{ aspectRatio: "3/2" }}
                           alt={`${type.label} image`}
                           loading="lazy"
                         />
                       </div>
-                      <h3 className="text-sm font-medium max-w-sm truncate">
-                        {type.label}
+                      <h3 className="max-w-sm truncate text-sm font-medium">
+                        {type.name}
                       </h3>
                       <ChevronRightIcon className="size-4 text-slate-400" />
                     </Link>
