@@ -9,7 +9,7 @@ interface JobcardLargeProps {
 
 const JobcardLarge: React.FC<JobcardLargeProps> = ({ job }) => {
   return (
-    <div className="rounded border p-4 shadow-sm" key={job.id}>
+    <div className="rounded border p-4 shadow-sm" key={job._id}>
       <div className="relative border-b border-gray-400 pb-2">
         <div>
           <div className="max-w-64 md:max-w-xl">
@@ -22,18 +22,20 @@ const JobcardLarge: React.FC<JobcardLargeProps> = ({ job }) => {
           <div className="flex items-center space-x-4 text-sm">
             <span>{job.experience_level}</span>
             <span>
-              {job.salary_range?.min}-{job.salary_range.max}{" "}
-              {job.salary_range?.currency}
+              {job.salary_negotiable
+                ? "Negotiable"
+                : `${job.salary_range?.min} -
+                  ${job.salary_range?.max} ${job.salary_range?.currency}`}
             </span>
           </div>
           <p className="mt-0.5 max-w-2xl truncate text-sm">{job.description}</p>
           <div className="mt-2 flex flex-wrap gap-2">
-            {job.tags?.map((tag: string, idx: number) => (
+            {job.skills?.map((skill: string, idx: number) => (
               <span
                 key={idx}
                 className="rounded border border-gray-400 px-2 py-1 text-xs"
               >
-                {tag}
+                {skill}
               </span>
             ))}
           </div>

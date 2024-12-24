@@ -11,6 +11,8 @@ import useApiRequest from "@/app/hooks/useApiRequest"
 const FeaturedJobs: React.FC = () => {
   const { data, loading, error } = useApiRequest<any>("jobs", "GET")
 
+  console.log("data from featured jobs", data)
+
   return (
     <section>
       <MaxWidthWrapper className="py-6 md:py-10 lg:py-16">
@@ -37,15 +39,15 @@ const FeaturedJobs: React.FC = () => {
                   className="group relative flex flex-col items-start overflow-hidden rounded-sm border p-4 md:flex-row"
                 >
                   <img
-                    src={job.company_logo}
-                    alt={`${job.company} logo`}
+                    src={job.company_info?.logo}
+                    alt={`${job.company_info?.name} logo`}
                     className="mr-3 h-14 w-14 rounded-full object-cover"
                   />
                   <div className="flex-grow">
                     <h3 className="font-semibold hover:text-blue-500">
-                      {job.company}
+                      {job.company_info?.name}
                     </h3>
-                    <p className="text-xs">{job.title}</p>
+                    <p className="text-xs">{job.job_title}</p>
                   </div>
 
                   <Link

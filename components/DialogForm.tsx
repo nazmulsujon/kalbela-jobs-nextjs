@@ -28,6 +28,11 @@ const DailogForm: React.FC = () => {
     resolver: zodResolver(apply_form_Schema),
   })
 
+  const addFile = (newFile: string) => {
+    // @ts-ignore
+    setResumeStore((prev) => [...prev, { file: newFile }])
+  }
+
   const onSubmit = (data: FormData) => {
     const formData = new FormData()
     formData.append("email", data.email)
@@ -41,16 +46,6 @@ const DailogForm: React.FC = () => {
     console.log("Form data:", Object.fromEntries(formData))
     addFile(data.resume)
   }
-
-  const [resumeStore, setResumeStore] = useState([
-    { name: "react.jsResume.pdf(Demo)" },
-    {},
-  ])
-
-  const addFile = (newFile: string) => {
-    setResumeStore([...resumeStore, { file: newFile }])
-  }
-  // console.log("checked resume", resumeStore)
 
   return (
     <div className="mx-auto mt-7 h-[500px] w-full max-w-2xl overflow-y-auto rounded bg-white p-6 dark:bg-gray-800">
@@ -89,11 +84,11 @@ const DailogForm: React.FC = () => {
               Email Address
             </Label>
             <Input
-              className="border-[0.5px] border-gray-900"
               type="email"
               id="email"
               placeholder="elias@example.com"
               {...register("email")}
+              className="border-[0.5px] border-gray-900"
               aria-invalid={errors.email ? "true" : "false"}
             />
             {errors.email && (
@@ -102,7 +97,8 @@ const DailogForm: React.FC = () => {
               </p>
             )}
           </div>
-          {/* Phone number Input field */}
+
+          {/* Phone Number Input field */}
           <div>
             <Label
               htmlFor="phone"
@@ -115,7 +111,7 @@ const DailogForm: React.FC = () => {
               control={control}
               render={({ field }) => (
                 <PhoneInput
-                  country={"bd"}
+                  country="bd"
                   inputProps={{
                     id: "phone",
                     "aria-invalid": errors.phone ? "true" : "false",
@@ -147,40 +143,12 @@ const DailogForm: React.FC = () => {
             )}
           </div>
 
-          {/* Resume file select Area Input field start*/}
-          <RadioGroup defaultValue="option-one">
+          {/* Resume Upload Section */}
+          <div>
             <Label htmlFor="resume" className="text-lg font-bold">
               Resume
             </Label>
-            {resumeStore.slice().map((item, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between space-x-2 border-2 border-blue-600 px-3 py-2"
-              >
-                <Label htmlFor={`option-${index}`}>
-                  {item?.name || "No file name"}
-                </Label>
-                <div className="flex items-center gap-3">
-                  <Download className="h-4 w-4" />
-
-                  <RadioGroupItem
-                    value={item.name || `option-${index}`}
-                    id={`option-${index}`}
-                  />
-                </div>
-              </div>
-            ))}
-          </RadioGroup>
-          <div>
-            <Label
-              htmlFor="resume"
-              className="text-md border-gray-900 font-medium"
-            >
-              Resume (PDF or DOC only)
-            </Label>
-
             <Input
-              className="border-[0.5px] border-gray-900"
               type="file"
               id="resume"
               accept=".pdf,.doc,.docx"
@@ -199,16 +167,11 @@ const DailogForm: React.FC = () => {
                   }
                 },
               })}
+              className="border-[0.5px] border-gray-900"
             />
-            {/* {errors.resume && (
-              <p className="mt-1 text-sm text-red-500" role="alert">
-                {errors.resume.message}
-              </p>
-            )} */}
           </div>
-          {/* Resume file select Area Input field  end*/}
 
-          {/* Additional Questions Area */}
+          {/* Additional Questions */}
           <div className="space-y-1">
             <h4 className="text-lg font-bold text-gray-900 dark:text-white">
               Additional Questions
@@ -221,11 +184,11 @@ const DailogForm: React.FC = () => {
                 Your Age
               </Label>
               <Input
-                className="border-[0.5px] border-gray-900"
                 type="text"
                 id="age"
                 placeholder="Your age"
                 {...register("age")}
+                className="border-[0.5px] border-gray-900"
                 aria-invalid={errors.age ? "true" : "false"}
               />
               {errors.age && (
@@ -243,11 +206,11 @@ const DailogForm: React.FC = () => {
                 Your Salary Expectation
               </Label>
               <Input
-                className="border-[0.5px] border-gray-900"
                 type="text"
                 id="salary"
                 placeholder="Your salary expectation"
                 {...register("salary")}
+                className="border-[0.5px] border-gray-900"
                 aria-invalid={errors.salary ? "true" : "false"}
               />
               {errors.salary && (
@@ -258,6 +221,7 @@ const DailogForm: React.FC = () => {
             </div>
           </div>
 
+          {/* Submit Button */}
           <div className="pt-3">
             <PrimaryBtn type="submit" className="w-1/3 py-1.5">
               Submit Application

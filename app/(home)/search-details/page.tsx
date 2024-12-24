@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
+import { useSearchParams } from "next/navigation"
 import { Filter } from "lucide-react"
 import { useTheme } from "next-themes"
 import Select from "react-select"
@@ -24,7 +25,11 @@ const SearchDetails: React.FC = () => {
   const { theme } = useTheme()
   const customStyles = selectCustomStyles(theme || "light")
 
-  const [query, setQuery] = useState("")
+  const searchParams = useSearchParams()
+  const searchQuery = searchParams.get("query")
+  const location = searchParams.get("location")
+
+  const [query, setQuery] = useState(searchQuery || "")
   const [pageNumber, setPageNumber] = useState(1)
 
   const { jobs, totalJobs, hasMore, loading, error, triggerRevalidate } =

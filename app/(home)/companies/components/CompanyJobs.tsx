@@ -6,6 +6,7 @@ import { Save } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import ApplyModal from "@/components/ApplyModal"
+import PrimaryBtn from "@/components/PrimaryBtn"
 
 const CompanyJobs = () => {
   return (
@@ -48,8 +49,7 @@ const CompanyJobs = () => {
                     >
                       <Save className="h-6 w-6" />
                     </Button>
-                    {/* Applied Modal use here */}
-                    <ApplyModal />
+                    <PrimaryBtn>Details</PrimaryBtn>
                   </div>
                 </div>
               </Card>

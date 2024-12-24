@@ -1,5 +1,6 @@
 "use client"
 
+import "@/styles/globals.css"
 import { useEffect, useState } from "react"
 import Link from "next/link"
 //@ts-ignore

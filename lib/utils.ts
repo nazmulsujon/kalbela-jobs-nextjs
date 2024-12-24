@@ -37,19 +37,19 @@ export const selectCustomStyles = (theme: string) => ({
         ? "#FFFFFF"
         : "#E2E8F0"
       : state.isFocused
-      ? theme === "dark"
-        ? "#334155"
-        : "#f8fafc"
-      : theme === "dark"
-      ? "#1E293B"
-      : "#FFFFFF",
+        ? theme === "dark"
+          ? "#334155"
+          : "#f8fafc"
+        : theme === "dark"
+          ? "#1E293B"
+          : "#FFFFFF",
     color: state.isSelected
       ? theme === "dark"
         ? "#000000"
         : "#000000"
       : theme === "dark"
-      ? "#FFFFFF"
-      : "#000000",
+        ? "#FFFFFF"
+        : "#000000",
     "&:active": {
       backgroundColor: theme === "dark" ? "#475569" : "#f8fafc",
       color: theme === "dark" ? "#ffff" : "#000000",
