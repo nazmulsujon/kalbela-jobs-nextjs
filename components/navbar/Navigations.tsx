@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import Link from "next/link"
 import { ChevronDown } from "lucide-react"
 
@@ -10,6 +10,7 @@ export function Navigations() {
   const [activeDropdown, setActiveDropdown] = useState<
     "categories" | "resources" | null
   >(null)
+  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const { data, loading, error } = useApiRequest<any>("category", "GET")
   const {
@@ -18,20 +19,31 @@ export function Navigations() {
     error: error2,
   } = useApiRequest<any>("resource/category", "GET")
 
-  console.log("careerResources", careerResources)
+  const handleMouseEnter = (dropdown: "categories" | "resources") => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current)
+      closeTimeoutRef.current = null
+    }
+    setActiveDropdown(dropdown)
+  }
 
-  const toggleDropdown = (dropdown: "categories" | "resources") => {
-    setActiveDropdown((prev) => (prev === dropdown ? null : dropdown))
+  const handleMouseLeave = () => {
+    closeTimeoutRef.current = setTimeout(() => {
+      setActiveDropdown(null)
+    }, 300) // Adjust delay time (in milliseconds) for smoother experience
   }
 
   return (
     <section className="text-gray-900 dark:text-slate-200">
       <nav className="flex justify-center gap-4">
         {/* Categories Dropdown */}
-        <div className="relative inline-flex">
+        <div
+          className="relative inline-flex"
+          onMouseEnter={() => handleMouseEnter("categories")}
+          onMouseLeave={handleMouseLeave}
+        >
           <PrimaryBtn
             type="button"
-            onClick={() => toggleDropdown("categories")}
             className="inline-flex items-center justify-center gap-2 rounded-sm border-0 bg-slate-50 py-1.5 text-sm font-semibold text-black shadow transition-all duration-500 hover:bg-slate-100"
           >
             Categories
@@ -45,7 +57,7 @@ export function Navigations() {
           {activeDropdown === "categories" && (
             <div
               id="categories-dropdown"
-              className="absolute top-full mt-2 w-fit text-nowrap rounded-sm bg-white shadow-lg"
+              className="absolute top-full mt-2 w-fit text-nowrap rounded-sm bg-white shadow-lg transition-opacity duration-300"
             >
               <ul className="py-2">
                 {loading && (
@@ -73,10 +85,13 @@ export function Navigations() {
         </div>
 
         {/* Career Resources Dropdown */}
-        <div className="relative inline-flex">
+        <div
+          className="relative inline-flex"
+          onMouseEnter={() => handleMouseEnter("resources")}
+          onMouseLeave={handleMouseLeave}
+        >
           <PrimaryBtn
             type="button"
-            onClick={() => toggleDropdown("resources")}
             className="inline-flex items-center justify-center gap-2 rounded-sm border-0 bg-slate-50 py-1.5 text-sm font-semibold text-black shadow transition-all duration-500 hover:bg-slate-100"
           >
             Career Resources
@@ -90,7 +105,7 @@ export function Navigations() {
           {activeDropdown === "resources" && (
             <div
               id="resources-dropdown"
-              className="absolute top-full mt-2 w-fit text-nowrap rounded-sm bg-white shadow-lg"
+              className="absolute top-full mt-2 w-fit text-nowrap rounded-sm bg-white shadow-lg transition-opacity duration-300"
             >
               <ul className="py-2">
                 {loading2 && (
