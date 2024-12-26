@@ -58,8 +58,8 @@ const OtherInfo: React.FC<OtherInfoProps> = ({
   }
 
   return (
-    <div className="lg:w-[800px] w-full mx-auto">
-      <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+    <div className="mx-auto w-full lg:w-[800px]">
+      <div className="min-h-screen px-4 py-12 sm:px-6 lg:px-8">
         <Card>
           <CardHeader>
             <CardTitle>Others Info</CardTitle>
@@ -72,6 +72,7 @@ const OtherInfo: React.FC<OtherInfoProps> = ({
                 <Controller
                   name="position"
                   control={control}
+                  // @ts-ignore
                   render={({ field }) => (
                     <Input
                       id="position"
@@ -81,7 +82,7 @@ const OtherInfo: React.FC<OtherInfoProps> = ({
                   )}
                 />
                 {errors.position && (
-                  <p className="text-red-500 text-sm mt-1">
+                  <p className="mt-1 text-sm text-red-500">
                     {errors.position.message}
                   </p>
                 )}
@@ -93,17 +94,19 @@ const OtherInfo: React.FC<OtherInfoProps> = ({
                 <Controller
                   name="skills"
                   control={control}
+                  // @ts-ignore
                   render={({ field }) => (
                     <CreatableSelect
                       isMulti
                       options={skillsArray}
                       value={field.value}
+                      // @ts-ignore
                       onChange={(selected) => field.onChange(selected || [])}
                     />
                   )}
                 />
                 {errors.skills && (
-                  <p className="text-red-500 text-sm mt-1">
+                  <p className="mt-1 text-sm text-red-500">
                     {errors.skills.message}
                   </p>
                 )}
