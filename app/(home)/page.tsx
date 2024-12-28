@@ -1,10 +1,13 @@
 import React from "react"
+import dynamic from "next/dynamic"
 
-import FeaturedJobs from "./components/FeaturedJobs"
-import HeroSection from "./components/HeroSection"
-import InterviewQuestions from "./components/InterviewQuestions"
-import JobType from "./components/JobType"
-import TopCompanies from "./components/TopCompanies"
+const HeroSection = dynamic(() => import("./components/HeroSection"))
+const JobType = dynamic(() => import("./components/JobType"))
+const FeaturedJobs = dynamic(() => import("./components/FeaturedJobs"))
+const TopCompanies = dynamic(() => import("./components/TopCompanies"))
+const InterviewQuestions = dynamic(
+  () => import("./components/InterviewQuestions")
+)
 
 const HomePage = () => {
   return (
