@@ -32,13 +32,12 @@ const SearchDetails: React.FC = () => {
   const [query, setQuery] = useState(searchQuery || "")
   const [pageNumber, setPageNumber] = useState(1)
 
-  const { jobs, totalJobs, hasMore, loading, error, triggerRevalidate } =
-    useJobsSearch({
-      endpoint: "jobs",
-      query,
-      pageNumber,
-      fetchOnMount: true,
-    })
+  const { jobs, totalJobs, hasMore, loading, error } = useJobsSearch({
+    endpoint: "jobs",
+    query,
+    pageNumber,
+    fetchOnMount: true,
+  })
 
   console.log("jobs from search", jobs)
 
