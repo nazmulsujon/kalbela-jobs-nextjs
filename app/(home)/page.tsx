@@ -1,4 +1,4 @@
-import React from "react"
+import { Fragment } from "react"
 import dynamic from "next/dynamic"
 
 const HeroSection = dynamic(() => import("./components/HeroSection"))
@@ -11,13 +11,13 @@ const InterviewQuestions = dynamic(
 
 const HomePage = () => {
   return (
-    <React.Fragment>
+    <Fragment>
       <HeroSection />
       <JobType />
       <FeaturedJobs />
       <TopCompanies />
       <InterviewQuestions />
-    </React.Fragment>
+    </Fragment>
   )
 }
 
