@@ -13,7 +13,7 @@ const useApiRequest = <T>(
   body?: any
 ): UseApiRequestResponse<T> => {
   const url = useMemo(
-    () => `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/${endpoint}`,
+    () => `${process.env.NEXT_APP_BASE_URL}/api/v1/${endpoint}`,
     [endpoint]
   )
 
