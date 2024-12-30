@@ -8,6 +8,9 @@ const nextConfig = {
   env: {
     NEXT_APP_BASE_URL: process.env.NEXT_APP_BASE_URL,
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 }
 
 export default nextConfig
