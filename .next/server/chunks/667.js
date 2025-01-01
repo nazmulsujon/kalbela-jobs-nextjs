@@ -1,1 +1,0 @@
-"use strict";exports.id=667,exports.ids=[667],exports.modules={6667:(e,t,o)=>{o.r(t),o.d(t,{$$typeof:()=>l,__esModule:()=>r,default:()=>d});var s=o(5153);let a=(0,s.createProxy)(String.raw`C:\kalbela-IT\kalbela-jobs-nextjs\app\(home)\components\JobType.tsx`),{__esModule:r,$$typeof:l}=a,p=a.default,d=p}};

@@ -1,18 +1,21 @@
 "use client"
 
-import Link from "next/link"
+import { useParams } from "next/navigation"
 import { dummyJobs } from "@/public/assets/dummyData"
 
 import { Badge } from "@/components/ui/badge"
 import { Card, CardTitle } from "@/components/ui/card"
 import ApplyModal from "@/components/ApplyModal"
 import MaxWidthWrapper from "@/components/MaxWidthWrapper"
-import PrimaryBtn from "@/components/PrimaryBtn"
 import SecondaryBtn from "@/components/SecondaryBtn"
 import useApiRequest from "@/app/hooks/useApiRequest"
 
 const JobsDetails = () => {
-  const { data, loading, error } = useApiRequest<any>("jobs", "GET")
+  const { id } = useParams()
+  const { data, loading, error } = useApiRequest<any>(
+    `jobs/get-by-id?id=${id}`,
+    "GET"
+  )
 
   console.log("data from job details", data)
 

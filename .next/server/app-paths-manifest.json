@@ -1,13 +1,6 @@
 {
-  "/_not-found": "app/_not-found.js",
-  "/user/apply-jobs/page": "app/user/apply-jobs/page.js",
-  "/user/message/page": "app/user/message/page.js",
-  "/user/save-jobs/page": "app/user/save-jobs/page.js",
-  "/(home)/companies/page": "app/(home)/companies/page.js",
-  "/(home)/page": "app/(home)/page.js",
-  "/(home)/search-details/[job-details]/page": "app/(home)/search-details/[job-details]/page.js",
+  "/not-found": "app/not-found.js",
   "/(home)/search-details/page": "app/(home)/search-details/page.js",
-  "/(auth)/login/page": "app/(auth)/login/page.js",
-  "/(auth)/registration/page": "app/(auth)/registration/page.js",
-  "/personal-details/page": "app/personal-details/page.js"
+  "/(home)/search-details/job-details/[id]/page": "app/(home)/search-details/job-details/[id]/page.js",
+  "/(home)/page": "app/(home)/page.js"
 }
