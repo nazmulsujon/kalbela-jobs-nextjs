@@ -1,6 +1,6 @@
 {
-  "/not-found": "app/not-found.js",
-  "/(home)/search-details/page": "app/(home)/search-details/page.js",
   "/(home)/search-details/job-details/[id]/page": "app/(home)/search-details/job-details/[id]/page.js",
+  "/(auth)/login/page": "app/(auth)/login/page.js",
+  "/(home)/search-details/page": "app/(home)/search-details/page.js",
   "/(home)/page": "app/(home)/page.js"
 }
