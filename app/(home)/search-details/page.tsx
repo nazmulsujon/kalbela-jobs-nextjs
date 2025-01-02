@@ -14,6 +14,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import JobCardSkeleton from "@/components/JobCardSkeleton"
 import MaxWidthWrapper from "@/components/MaxWidthWrapper"
 import PrimaryBtn from "@/components/PrimaryBtn"
 import useJobsSearch from "@/app/hooks/useJobSearch"
@@ -27,7 +28,6 @@ const SearchDetails: React.FC = () => {
 
   const searchParams = useSearchParams()
   const searchQuery = searchParams.get("query")
-  const location = searchParams.get("location")
 
   const [query, setQuery] = useState(searchQuery || "")
   const [pageNumber, setPageNumber] = useState(1)
@@ -38,8 +38,6 @@ const SearchDetails: React.FC = () => {
     pageNumber,
     fetchOnMount: true,
   })
-
-  console.log("jobs from search", jobs)
 
   const handleLoadMore = () => {
     if (hasMore) setPageNumber((prev) => prev + 1)
@@ -86,16 +84,23 @@ const SearchDetails: React.FC = () => {
             </div>
           </div>
 
-          <div className="space-y-4">
-            {jobs.map((job, index) => (
-              <JobcardLarge job={job} key={index} />
-            ))}
-          </div>
+          {loading ? (
+            <div className="space-y-4">
+              {[...Array(3)].map((_, index) => (
+                <JobCardSkeleton key={index} />
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {jobs.map((job, index) => (
+                <JobcardLarge job={job} key={index} />
+              ))}
+            </div>
+          )}
 
-          {loading && <p>Loading...</p>}
           {error && <p>Error loading jobs</p>}
 
-          {hasMore && (
+          {hasMore && !loading && (
             <button onClick={handleLoadMore} className="mt-4 w-full">
               Load More
             </button>
