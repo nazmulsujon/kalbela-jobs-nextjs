@@ -2,6 +2,12 @@ import { Fragment } from "react"
 import { Metadata } from "next"
 import dynamic from "next/dynamic"
 
+import FeaturedJobs from "./components/FeaturedJobs"
+import HeroSection from "./components/HeroSection"
+import InterviewQuestions from "./components/InterviewQuestions"
+import JobType from "./components/JobType"
+import TopCompanies from "./components/TopCompanies"
+
 // metadata for the HomePage
 export const metadata: Metadata = {
   title: "Kalbela Jobs Portal - Find Your Dream Job",
@@ -16,36 +22,29 @@ export const metadata: Metadata = {
     "top companies",
     "interview tips",
   ],
-  openGraph: {
-    title: "Kalbela Jobs Portal - Find Your Dream Job",
-    description:
-      "Explore career opportunities with Kalbela Jobs Portal. Access featured jobs, top companies, and expert interview tips.",
-    url: "https://kalbela.com/jobs", //todo
-    type: "website",
-  },
   icons: {
     icon: "/favicon.ico",
   },
 }
 
-const HeroSection = dynamic(() => import("./components/HeroSection"), {
-  ssr: false,
-})
-const JobType = dynamic(() => import("./components/JobType"), {
-  ssr: false,
-})
-const FeaturedJobs = dynamic(() => import("./components/FeaturedJobs"), {
-  ssr: false,
-})
-const TopCompanies = dynamic(() => import("./components/TopCompanies"), {
-  ssr: false,
-})
-const InterviewQuestions = dynamic(
-  () => import("./components/InterviewQuestions"),
-  {
-    ssr: false,
-  }
-)
+// const HeroSection = dynamic(() => import("./components/HeroSection"), {
+//   ssr: false,
+// })
+// const JobType = dynamic(() => import("./components/JobType"), {
+//   ssr: false,
+// })
+// const FeaturedJobs = dynamic(() => import("./components/FeaturedJobs"), {
+//   ssr: false,
+// })
+// const TopCompanies = dynamic(() => import("./components/TopCompanies"), {
+//   ssr: false,
+// })
+// const InterviewQuestions = dynamic(
+//   () => import("./components/InterviewQuestions"),
+//   {
+//     ssr: false,
+//   }
+// )
 
 const HomePage = () => {
   return (
