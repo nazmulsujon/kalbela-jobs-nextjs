@@ -10,7 +10,7 @@ interface JobcardLargeProps {
 const JobcardLarge: React.FC<JobcardLargeProps> = ({ job }) => {
   return (
     <Link
-      href={`/search-details/job-details/${job._id}`}
+      href={`/search-details/job-details/${job.url}`}
       className="block rounded border p-4 shadow-sm focus:outline-none focus:ring focus:ring-offset-2"
       key={job._id}
     >

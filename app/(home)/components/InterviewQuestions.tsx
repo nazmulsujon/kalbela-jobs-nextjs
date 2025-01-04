@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/accordion"
 import MaxWidthWrapper from "@/components/MaxWidthWrapper"
 
-import jobInterviewAnimation from "../../../public/assets/lottie-files/job-interview.json"
+import jobInterviewAnimation from "../../../public/assets/animation/job-interview.json"
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false })
 

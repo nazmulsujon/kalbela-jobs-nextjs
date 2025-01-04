@@ -37,6 +37,7 @@ const useApiRequest = <T>(
       } catch (err: any) {
         if (axios.isCancel(err)) {
           console.log("Request canceled:", err.message)
+          setLoading(false)
         } else {
           setError(
             err.response?.data?.message || err.message || "Something went wrong"

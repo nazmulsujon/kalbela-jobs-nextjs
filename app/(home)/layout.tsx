@@ -42,12 +42,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
           )}
         >
           <ThemeProvider attribute="class" enableSystem>
-            <div className="relative flex min-h-screen flex-col bg-light-theme dark:bg-dark-theme">
+            <div className="relative flex min-h-screen flex-col justify-between bg-light-theme dark:bg-dark-theme">
               <header className="sticky top-0 z-50">
                 <Navbar />
               </header>
               <main>
-                <div className="flex-1">{children}</div>
+                <div className="min-h-[60vh] flex-1">{children}</div>
               </main>
               <Footer />
             </div>
