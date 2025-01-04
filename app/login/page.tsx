@@ -8,6 +8,9 @@ import { Eye, EyeOff } from "lucide-react"
 
 import PrimaryBtn from "@/components/PrimaryBtn"
 import SecondaryBtn from "@/components/SecondaryBtn"
+import { useRouter } from "next/navigation"
+import useApiForPost from "../hooks/useApiForPost"
+import { set_user_data } from "@/utils/encript_decript"
 
 interface FormData {
       email: string
@@ -15,6 +18,9 @@ interface FormData {
 }
 const RegistrationPage = () => {
       const [isPasswordVisible, setPasswordVisible] = useState(false)
+      const router = useRouter(); // Next.js Router
+      const [error_message, set_error_message] = useState('')
+      const [loading, setLoading] = useState(false)
 
       const [formData, setFormData] = useState<FormData>({
             email: "",
@@ -29,11 +35,32 @@ const RegistrationPage = () => {
             }))
       }
 
-      const handleSubmit = (e: React.FormEvent) => {
+      const { apiRequest } = useApiForPost();
+
+      const handleSubmit = async (e: React.FormEvent) => {
             e.preventDefault()
-            console.log("Form Data:", formData)
-            // Perform further actions like sending data to an API
+            setLoading(true)
+            const { data, error } = await apiRequest<any>(
+                  "api/v1/auth/signin-user",
+                  "POST",
+                  formData
+            );
+
+            setLoading(false)
+            if (error) {
+                  set_error_message(error.message)
+                  return;
+            }
+            if (data) {
+                  set_user_data(data.data)
+                  set_error_message('')
+
+                  router.push('/user');
+
+            }
+
       }
+
 
       return (
             <section className="bg-white ">
@@ -150,6 +177,7 @@ const RegistrationPage = () => {
                                     </p>
                                     <form
                                           onSubmit={handleSubmit}
+                                          onChange={() => set_error_message('')}
                                           action="#"
                                           method="POST"
                                           className="mt-8"
@@ -191,12 +219,23 @@ const RegistrationPage = () => {
                                                       </div>
                                                 </div>
                                                 <div>
-                                                      <label
-                                                            htmlFor=""
-                                                            className="text-base font-medium text-gray-900"
-                                                      >
-                                                            Password
-                                                      </label>
+                                                      <div className="flex items-center justify-between">
+                                                            <label
+                                                                  htmlFor=""
+                                                                  className="text-base font-medium text-gray-900"
+                                                            >
+                                                                  {" "}
+                                                                  Password{" "}
+                                                            </label>
+                                                            <a
+                                                                  href="#"
+                                                                  title=""
+                                                                  className="text-sm font-medium text-blue-600 transition-all duration-200 hover:text-blue-700 focus:text-blue-700 hover:underline"
+                                                            >
+                                                                  {" "}
+                                                                  Forgot password?{" "}
+                                                            </a>
+                                                      </div>
                                                       <div className="mt-2.5 relative text-gray-400 focus-within:text-gray-600">
                                                             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                                                   <svg
@@ -235,8 +274,13 @@ const RegistrationPage = () => {
                                                             </button>
                                                       </div>
                                                 </div>
+
+
+                                                {error_message && <p className="mt-2 text-base text-red-600">
+                                                      {error_message}
+                                                </p>}
                                                 <div>
-                                                      <PrimaryBtn className="w-full py-3">Sign up </PrimaryBtn>
+                                                      <PrimaryBtn disabled={loading} className="w-full py-3">{loading ? "Loading..." : "Sign in "}</PrimaryBtn>
                                                 </div>
                                           </div>
                                     </form>
@@ -253,7 +297,7 @@ const RegistrationPage = () => {
                                                             alt=""
                                                       />
                                                 </div>
-                                                Sign up with Google
+                                                Sign in with Google
                                           </SecondaryBtn>
                                           <SecondaryBtn
                                                 // onClick={handlerGoogleLogin}
@@ -267,7 +311,7 @@ const RegistrationPage = () => {
                                                             alt=""
                                                       />
                                                 </div>
-                                                Sign up with Linkedin
+                                                Sign in with Linkedin
                                           </SecondaryBtn>
                                     </div>
                                     <p className="mt-5 text-sm text-gray-600">

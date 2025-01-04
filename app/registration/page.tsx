@@ -5,11 +5,15 @@ import Link from "next/link"
 import animation from "@/public/assets/animation/log_in.json"
 import Lottie from "lottie-react"
 import { Eye, EyeOff } from "lucide-react"
-
 import PrimaryBtn from "@/components/PrimaryBtn"
 import SecondaryBtn from "@/components/SecondaryBtn"
-import usePostApiRequest from "../hooks/usePostApiRequest"
-import axios from "axios"
+import Cookies from "js-cookie"
+import { useRouter } from "next/navigation"
+import useApiForPost from "../hooks/useApiForPost"
+import { set_user_data } from "@/utils/encript_decript"
+
+
+
 
 
 interface FormData {
@@ -19,12 +23,12 @@ interface FormData {
 }
 const RegistrationPage = () => {
       const [isPasswordVisible, setPasswordVisible] = useState(false)
+      const [loading, setLoading] = useState(false)
       const [error_message, set_error_message] = useState('')
+      const router = useRouter(); // Next.js Router
 
-      const { data, loading, error, sendRequest } = usePostApiRequest<any>(
-            "api/v1/auth/sign-up-user",
-            "POST"
-      )
+
+
 
       const [formData, setFormData] = useState<FormData>({
             fullName: "",
@@ -40,19 +44,38 @@ const RegistrationPage = () => {
             }))
       }
 
+      const { apiRequest } = useApiForPost();
+
       const handleSubmit = async (e: React.FormEvent) => {
             e.preventDefault()
-            await sendRequest(formData)
-            console.log(data, 'data');
-            if (data.error) {
-                  console.log('error', data);
-                  set_error_message(data.message)
+            setLoading(true)
+            const { data, error } = await apiRequest<any>(
+                  "api/v1/auth/sign-up-user",
+                  "POST",
+                  formData
+            );
+
+
+
+            if (error) {
+                  set_error_message(error.message)
+                  setLoading(false)
+                  return;
             }
-            else {
-                  console.log(data)
+            if (data) {
+                  set_user_data(data.data)
                   set_error_message('')
+                  setLoading(false)
+                  router.push('/user');
+
             }
+
+
+
       }
+
+
+      console.log(error_message, 'error_message');
 
       return (
             <section className="bg-white">
@@ -169,6 +192,7 @@ const RegistrationPage = () => {
                                     </p>
                                     <form
                                           onSubmit={handleSubmit}
+                                          onChange={() => set_error_message('')}
                                           action="#"
                                           method="POST"
                                           className="mt-8"
@@ -290,7 +314,7 @@ const RegistrationPage = () => {
                                                             </button>
                                                       </div>
                                                 </div>
-                                                {error_message.length ? <p className="text-red-500 py-4">{error_message}</p> : ''}
+                                                {error_message?.length ? <p className="text-red-500 py-4">{error_message}</p> : ''}
                                                 <div>
                                                       <PrimaryBtn disabled={loading} className="w-full py-3">{loading ? "Loading..." : "Sign up"}</PrimaryBtn>
                                                 </div>
@@ -309,7 +333,7 @@ const RegistrationPage = () => {
                                                             alt=""
                                                       />
                                                 </div>
-                                                Sign up with Google
+                                                Sign in with Google
                                           </SecondaryBtn>
                                           <SecondaryBtn
                                                 // onClick={handlerGoogleLogin}
@@ -323,7 +347,7 @@ const RegistrationPage = () => {
                                                             alt=""
                                                       />
                                                 </div>
-                                                Sign up with Linkedin
+                                                Sign in with Linkedin
                                           </SecondaryBtn>
                                     </div>
                                     <p className="mt-5 text-sm text-gray-600">
