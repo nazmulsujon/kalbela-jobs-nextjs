@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
+import dynamic from "next/dynamic"
 import { useSearchParams } from "next/navigation"
 import { Filter } from "lucide-react"
 import { useTheme } from "next-themes"
@@ -14,12 +15,16 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import JobCardSkeleton from "@/components/JobCardSkeleton"
 import MaxWidthWrapper from "@/components/MaxWidthWrapper"
 import PrimaryBtn from "@/components/PrimaryBtn"
 import useJobsSearch from "@/app/hooks/useJobSearch"
 
+import noVacancies from "../../../public/assets/animation/no-vacancies.json"
 import FilterSelect from "./components/FilterSelect"
 import JobcardLarge from "./components/JobCardLarge"
+
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false })
 
 const SearchDetails: React.FC = () => {
   const { theme } = useTheme()
@@ -27,20 +32,25 @@ const SearchDetails: React.FC = () => {
 
   const searchParams = useSearchParams()
   const searchQuery = searchParams.get("query")
-  const location = searchParams.get("location")
+  const locationParams = searchParams.get("location")
+  const job_type_params = searchParams.get("job_type")
 
   const [query, setQuery] = useState(searchQuery || "")
+  const [location, setLocation] = useState(locationParams || "")
+  const [job_type, setJobType] = useState(job_type_params || "")
+
   const [pageNumber, setPageNumber] = useState(1)
 
-  const { jobs, totalJobs, hasMore, loading, error, triggerRevalidate } =
-    useJobsSearch({
-      endpoint: "jobs",
-      query,
-      pageNumber,
-      fetchOnMount: true,
-    })
+  const { jobs, totalJobs, hasMore, loading } = useJobsSearch({
+    endpoint: "jobs",
+    query,
+    pageNumber,
+    location,
+    job_type,
+    fetchOnMount: true,
+  })
 
-  console.log("jobs from search", jobs)
+  console.log(location, job_type)
 
   const handleLoadMore = () => {
     if (hasMore) setPageNumber((prev) => prev + 1)
@@ -60,7 +70,13 @@ const SearchDetails: React.FC = () => {
               <SheetTitle>All Filters</SheetTitle>
             </SheetHeader>
             <div className="w-full rounded border p-4 shadow-sm">
-              <FilterSelect customStyles={customStyles} />
+              <FilterSelect
+                customStyles={customStyles}
+                location={location}
+                setLocation={setLocation}
+                job_type={job_type}
+                setJobType={setJobType}
+              />
             </div>
           </SheetContent>
         </Sheet>
@@ -69,7 +85,13 @@ const SearchDetails: React.FC = () => {
       <MaxWidthWrapper className="flex flex-col gap-6 p-4 lg:flex-row">
         <aside className="hidden h-fit w-full rounded border p-4 shadow-sm md:sticky md:top-20 lg:block lg:w-1/4">
           <h3 className="mb-4 text-lg font-semibold">All Filters</h3>
-          <FilterSelect customStyles={customStyles} />
+          <FilterSelect
+            customStyles={customStyles}
+            location={location}
+            setLocation={setLocation}
+            job_type={job_type}
+            setJobType={setJobType}
+          />
         </aside>
 
         <div className="flex-grow">
@@ -87,16 +109,25 @@ const SearchDetails: React.FC = () => {
             </div>
           </div>
 
-          <div className="space-y-4">
-            {jobs.map((job, index) => (
-              <JobcardLarge job={job} key={index} />
-            ))}
-          </div>
+          {loading ? (
+            <div className="space-y-4">
+              {[...Array(3)].map((_, index) => (
+                <JobCardSkeleton key={index} />
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {jobs.length > 0 ? (
+                jobs.map((job, index) => <JobcardLarge job={job} key={index} />)
+              ) : (
+                <div className="mx-auto h-48 w-48">
+                  <Lottie animationData={noVacancies} />
+                </div>
+              )}
+            </div>
+          )}
 
-          {loading && <p>Loading...</p>}
-          {error && <p>Error loading jobs</p>}
-
-          {hasMore && (
+          {hasMore && !loading && (
             <button onClick={handleLoadMore} className="mt-4 w-full">
               Load More
             </button>

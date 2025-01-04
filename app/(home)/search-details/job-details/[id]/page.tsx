@@ -1,18 +1,21 @@
 "use client"
 
-import Link from "next/link"
+import { useParams } from "next/navigation"
 import { dummyJobs } from "@/public/assets/dummyData"
 
 import { Badge } from "@/components/ui/badge"
 import { Card, CardTitle } from "@/components/ui/card"
 import ApplyModal from "@/components/ApplyModal"
 import MaxWidthWrapper from "@/components/MaxWidthWrapper"
-import PrimaryBtn from "@/components/PrimaryBtn"
 import SecondaryBtn from "@/components/SecondaryBtn"
 import useApiRequest from "@/app/hooks/useApiRequest"
 
 const JobsDetails = () => {
-  const { data, loading, error } = useApiRequest<any>("jobs", "GET")
+  const { id } = useParams()
+  const { data, loading, error } = useApiRequest<any>(
+    `jobs/get-by-id?url=${id}`,
+    "GET"
+  )
 
   console.log("data from job details", data)
 
@@ -21,23 +24,22 @@ const JobsDetails = () => {
       <div className="flex flex-col gap-8 py-6 pb-14 md:gap-4 lg:flex-row">
         {/* Left Section */}
         <div className="content-container flex-1 space-y-2.5 text-[18px]">
-          <h1 className="mb-5 text-3xl font-semibold md:text-4xl">
-            {data?.data?.jobs[0].job_title}
+          <h1 className="mb-5 text-xl font-semibold md:text-3xl">
+            {data?.data?.job_title}
           </h1>
           <p className="flex space-x-2 text-base md:text-lg">
-            <strong>Job Type:</strong>{" "}
-            <span>{data?.data?.jobs[0]?.job_type}</span>
+            <strong>Job Type:</strong> <span>{data?.data?.job_type}</span>
           </p>
           {/* <p className="pt-1 text-base md:text-lg">
-            <strong>Work Type:</strong> {data?.data?.jobs[0].work_mode}
+            <strong>Work Type:</strong> {data?.data?.work_mode}
           </p> */}
           <p className="flex space-x-2 pt-1">
             <strong>Salary:</strong>
             <span>
-              {data?.data?.jobs[0].salary_negotiable
+              {data?.data?.salary_negotiable
                 ? "Negotiable"
-                : `${data?.data?.jobs[0].salary_range?.min} -
-                  ${data?.data?.jobs[0]?.max} ${data?.data?.jobs[0]?.salary_range?.currency}`}
+                : `${data?.data?.salary_range?.min} -
+                  ${data?.data?.max} ${data?.data?.salary_range?.currency}`}
             </span>
           </p>
 
@@ -45,7 +47,7 @@ const JobsDetails = () => {
             <strong>About the job:</strong>
             <span
               dangerouslySetInnerHTML={{
-                __html: data?.data?.jobs[0]?.job_description,
+                __html: data?.data?.job_description,
               }}
             />
           </p>
@@ -54,7 +56,7 @@ const JobsDetails = () => {
             <strong>About the job:</strong>
             <span
               dangerouslySetInnerHTML={{
-                __html: data?.data?.jobs[0]?.benefit,
+                __html: data?.data?.benefit,
               }}
             />
           </p>
@@ -62,7 +64,7 @@ const JobsDetails = () => {
           <div className="pt-1">
             <h2 className="text-lg font-semibold">Required Skills:</h2>
             <ul className="ml-5 list-disc">
-              {data?.data?.jobs[0].skills.map((skill: string) => (
+              {data?.data?.skills.map((skill: string) => (
                 <li key={skill}>{skill}</li>
               ))}
             </ul>
@@ -70,26 +72,25 @@ const JobsDetails = () => {
 
           <p className="flex space-x-2 text-base md:text-lg">
             <strong>Experience level:</strong>{" "}
-            <span>{data?.data?.jobs[0]?.experience_level}</span>
+            <span>{data?.data?.experience_level}</span>
           </p>
 
           <p className="flex space-x-2 text-base md:text-lg">
             <strong>Responsibilities:</strong>
             <span
               dangerouslySetInnerHTML={{
-                __html: data?.data?.jobs[0]?.responsibilities,
+                __html: data?.data?.responsibilities,
               }}
             />
           </p>
 
           <p className="flex space-x-2 text-base md:text-lg">
-            <strong>Deadline:</strong>{" "}
-            <span>{data?.data?.jobs[0]?.expiry_date}</span>
+            <strong>Deadline:</strong> <span>{data?.data?.expiry_date}</span>
           </p>
 
           <p className="flex space-x-2 text-base md:text-lg">
             <strong>Location:</strong>{" "}
-            <span>{data?.data?.jobs[0]?.location?.country}</span>
+            <span>{data?.data?.location?.country}</span>
           </p>
 
           {/* Other details */}

@@ -9,7 +9,10 @@ import MaxWidthWrapper from "@/components/MaxWidthWrapper"
 import useApiRequest from "@/app/hooks/useApiRequest"
 
 const FeaturedJobs: React.FC = () => {
-  const { data, loading, error } = useApiRequest<any>("jobs", "GET")
+  const { data, loading, error } = useApiRequest<any>(
+    "jobs/get-featured-jobs",
+    "GET"
+  )
 
   console.log("data from featured jobs", data)
 
@@ -33,7 +36,7 @@ const FeaturedJobs: React.FC = () => {
                   </div>
                 </div>
               ))
-            : data?.data?.jobs?.map((job: any) => (
+            : data?.data?.map((job: any) => (
                 <div
                   key={job._id}
                   className="group relative flex flex-col items-start overflow-hidden rounded-sm border p-4 md:flex-row"

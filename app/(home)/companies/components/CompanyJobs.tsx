@@ -5,7 +5,6 @@ import { Save } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import ApplyModal from "@/components/ApplyModal"
 import PrimaryBtn from "@/components/PrimaryBtn"
 
 const CompanyJobs = () => {

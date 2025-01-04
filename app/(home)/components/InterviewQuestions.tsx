@@ -1,6 +1,7 @@
 "use client"
 
-import Lottie from "lottie-react"
+import React from "react"
+import dynamic from "next/dynamic"
 
 import {
   Accordion,
@@ -10,7 +11,9 @@ import {
 } from "@/components/ui/accordion"
 import MaxWidthWrapper from "@/components/MaxWidthWrapper"
 
-import jobInterviewAnimation from "../../../public/assets/lottie-files/job-interview.json"
+import jobInterviewAnimation from "../../../public/assets/animation/job-interview.json"
+
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false })
 
 const interviewQuestions = [
   {
@@ -37,12 +40,12 @@ const interviewQuestions = [
 
 const InterviewQuestions: React.FC = () => {
   return (
-    <section className="pb-6 md:pb-10 -mt-0.5">
+    <section className="-mt-0.5 pb-6 md:pb-10">
       <MaxWidthWrapper>
-        <h2 className="text-xl md:text-3xl font-bold text-left mb-2">
+        <h2 className="mb-2 text-left text-xl font-bold md:text-3xl">
           Common Interview Questions
         </h2>
-        <p className="text-xs font-thin text-left mb-6">
+        <p className="mb-6 text-left text-xs font-thin">
           Stand Out in Your Next Job Interview!
         </p>
         <div className="grid grid-cols-12 items-center">
@@ -53,10 +56,10 @@ const InterviewQuestions: React.FC = () => {
             <Accordion type="single" collapsible className="w-full">
               {interviewQuestions.map((item, index) => (
                 <AccordionItem key={index} value={`item-${index + 1}`}>
-                  <AccordionTrigger className="text-sm text-left md:text-lg">
+                  <AccordionTrigger className="text-left text-sm md:text-lg">
                     {item.question}
                   </AccordionTrigger>
-                  <AccordionContent className="text-xs text-left md:text-sm">
+                  <AccordionContent className="text-left text-xs md:text-sm">
                     {item.answer}
                   </AccordionContent>
                 </AccordionItem>

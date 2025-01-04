@@ -8,7 +8,8 @@ interface UseJobsSearchProps<T> {
   endpoint: string
   query?: string
   pageNumber: number
-  selectedSource?: string
+  location?: string
+  job_type?: string
   fetchOnMount?: boolean
 }
 
@@ -25,7 +26,8 @@ export default function useJobsSearch<T>({
   endpoint,
   query = "",
   pageNumber,
-  selectedSource = "",
+  location = "",
+  job_type = "",
   fetchOnMount = true,
 }: UseJobsSearchProps<T>): UseJobsSearchReturn<T> {
   const [loading, setLoading] = useState(fetchOnMount)
@@ -39,7 +41,7 @@ export default function useJobsSearch<T>({
 
   useEffect(() => {
     setJobs([])
-  }, [query, selectedSource])
+  }, [query, location, job_type])
 
   useEffect(() => {
     if (!fetchOnMount && pageNumber === 1) return
@@ -53,7 +55,8 @@ export default function useJobsSearch<T>({
       limit: 10,
       page: (pageNumber - 1) * 10,
       ...(query && { search: query }),
-      ...(selectedSource && { source: selectedSource }),
+      ...(location && { location: location }),
+      ...(job_type && { job_type: job_type }),
     }
 
     const fetchData = async () => {
@@ -84,7 +87,15 @@ export default function useJobsSearch<T>({
 
     fetchData()
     return () => cancel?.cancel()
-  }, [endpoint, query, pageNumber, selectedSource, fetchOnMount, revalidate])
+  }, [
+    endpoint,
+    query,
+    pageNumber,
+    location,
+    job_type,
+    fetchOnMount,
+    revalidate,
+  ])
 
   return { loading, error, jobs, totalJobs, hasMore, triggerRevalidate }
 }

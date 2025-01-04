@@ -1,3 +1,2 @@
 # Kalbela Jobs
-
-A hiring platform
+Hiring platform 

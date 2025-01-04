@@ -21,7 +21,7 @@ import MaxWidthWrapper from "@/components/MaxWidthWrapper"
 import PrimaryBtn from "@/components/PrimaryBtn"
 
 const locationSuggestions = [
-  "dhaka",
+  "dhaka city",
   "chattogram",
   "khulna",
   "rajshahi",
@@ -118,7 +118,7 @@ const HeroSection = () => {
                       setSearchQuery(skill)
                       setShowSkillDropdown(false)
                     }}
-                    className="m-1 cursor-pointer p-1.5 hover:bg-gray-100 dark:rounded-lg dark:hover:bg-gray-700 dark:hover:text-gray-800"
+                    className="m-1 cursor-pointer p-1.5 capitalize hover:bg-gray-100 dark:rounded-lg dark:hover:bg-gray-700 dark:hover:text-gray-800"
                   >
                     {skill}
                   </li>
@@ -140,7 +140,11 @@ const HeroSection = () => {
               <SelectContent className="max-h-72 bg-white text-gray-900 dark:bg-gray-800 dark:text-slate-200">
                 <SelectGroup>
                   {locationSuggestions.map((location) => (
-                    <SelectItem key={location} value={location}>
+                    <SelectItem
+                      key={location}
+                      value={location}
+                      className="capitalize"
+                    >
                       {location}
                     </SelectItem>
                   ))}
