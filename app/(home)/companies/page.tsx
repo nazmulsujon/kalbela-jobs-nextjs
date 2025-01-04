@@ -4,7 +4,6 @@ import { Metadata } from "next"
 import CompanyJobs from "./components/CompanyJobs"
 import CompanyProfile from "./components/CompanyProfile"
 
-// metadata for the Companies page
 export const metadata: Metadata = {
   title: "Top Companies Hiring - Kalbela Jobs Portal",
   description:

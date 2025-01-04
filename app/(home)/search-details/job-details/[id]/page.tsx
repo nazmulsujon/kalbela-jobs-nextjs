@@ -1,5 +1,6 @@
 "use client"
 
+import Head from "next/head"
 import { useParams } from "next/navigation"
 import { dummyJobs } from "@/public/assets/dummyData"
 
@@ -10,7 +11,7 @@ import MaxWidthWrapper from "@/components/MaxWidthWrapper"
 import SecondaryBtn from "@/components/SecondaryBtn"
 import useApiRequest from "@/app/hooks/useApiRequest"
 
-const JobsDetails = () => {
+const JobsDetails = async () => {
   const { id } = useParams()
   const { data, loading, error } = useApiRequest<any>(
     `jobs/get-by-id?id=${id}`,
