@@ -313,6 +313,20 @@ const RegistrationPage = () => {
                                                 </div>
                                                 Sign in with Linkedin
                                           </SecondaryBtn>
+                                          <SecondaryBtn
+                                                // onClick={handlerGoogleLogin}
+
+                                                className="w-full py-3 relative"
+                                          >
+                                                <div className="absolute inset-y-0 left-0 py-2 px-4">
+                                                      <img
+                                                            className="w-6 h-6 text-[#2563EB]"
+                                                            src="https://app.kalbelajobs.com/sign-in"
+                                                            alt=""
+                                                      />
+                                                </div>
+                                                Sign In as a Employer
+                                          </SecondaryBtn>
                                     </div>
                                     <p className="mt-5 text-sm text-gray-600">
                                           This site is protected by reCAPTCHA and the Google{" "}
