@@ -37,7 +37,8 @@ const FeaturedJobs: React.FC = () => {
                 </div>
               ))
             : data?.data?.map((job: any) => (
-                <div
+                <Link
+                  href={`/search-details/job-details/${job.url}`}
                   key={job._id}
                   className="group relative flex flex-col items-start overflow-hidden rounded-sm border p-4 md:flex-row"
                 >
@@ -53,13 +54,10 @@ const FeaturedJobs: React.FC = () => {
                     <p className="text-xs">{job.job_title}</p>
                   </div>
 
-                  <Link
-                    href={`#`}
-                    className="absolute inset-0 flex items-center justify-end bg-black bg-opacity-60 pe-2 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100"
-                  >
+                  <div className="absolute inset-0 flex items-center justify-end bg-black bg-opacity-60 pe-2 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100">
                     <ChevronRight className="text-gray-800 group-hover:text-white dark:text-white" />
-                  </Link>
-                </div>
+                  </div>
+                </Link>
               ))}
         </div>
       </MaxWidthWrapper>

@@ -13,7 +13,7 @@ import useApiRequest from "@/app/hooks/useApiRequest"
 const JobsDetails = () => {
   const { id } = useParams()
   const { data, loading, error } = useApiRequest<any>(
-    `jobs/get-by-id?url=${id}`,
+    `jobs/get-by-url?url=${id}`,
     "GET"
   )
 
@@ -39,7 +39,7 @@ const JobsDetails = () => {
               {data?.data?.salary_negotiable
                 ? "Negotiable"
                 : `${data?.data?.salary_range?.min} -
-                  ${data?.data?.max} ${data?.data?.salary_range?.currency}`}
+                  ${data?.data?.salary_range?.max} ${data?.data?.salary_range?.currency}`}
             </span>
           </p>
 
