@@ -15,12 +15,10 @@ export const metadata: Metadata = {
       },
       description: siteConfig.description,
       keywords: ["job search", "employment", "career", "recruitment"],
-      authors: [{ name: siteConfig.name, url: siteConfig.url }],
       creator: siteConfig.name,
       openGraph: {
             type: "website",
             locale: "en_US",
-            url: siteConfig.url,
             title: siteConfig.name,
             description: siteConfig.description,
             siteName: siteConfig.name,
@@ -29,7 +27,7 @@ export const metadata: Metadata = {
             card: "summary_large_image",
             title: siteConfig.name,
             description: siteConfig.description,
-            images: [`${siteConfig.url}/og-image.jpg`],
+
             creator: "@" + siteConfig.name.toLowerCase().replace(/\s+/g, ''),
       },
       icons: {
@@ -37,7 +35,6 @@ export const metadata: Metadata = {
             shortcut: "/favicon-16x16.png",
             apple: "/apple-touch-icon.png",
       },
-      manifest: `${siteConfig.url}/site.webmanifest`,
       themeColor: [
             { media: "(prefers-color-scheme: light)", color: "white" },
             { media: "(prefers-color-scheme: dark)", color: "black" },
