@@ -1,10 +1,11 @@
 import CryptoJS from 'crypto-js';
 import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
 
-// Define your secret key (you can change it to something more secure)
+// Define your secret key (use a secure value in production)
 const SECRET_KEY = 'kalbela_jobs_bd'; // Replace with a more secure key
 
-// Encrypt user data before storing in the cookie
+// Encrypt user data before storing it in the cookie
 export const encrypt_user = (userData: any): string => {
   const stringifiedData = JSON.stringify(userData);
   const encrypted = CryptoJS.AES.encrypt(stringifiedData, SECRET_KEY).toString();
@@ -18,22 +19,29 @@ export const decryptData = (encryptedData: string): any => {
   return decryptedData ? JSON.parse(decryptedData) : null;
 };
 
-// Get decrypted user data from cookies
-export const get_user_data = (): any => {
-  const encryptedUserData = Cookies.get('kalbelajobs_user'); // Retrieve encrypted data from cookies
-  if (encryptedUserData) {
-    return decryptData(encryptedUserData);  // Decrypt and return the data
-  }
-  return null;  // If no data is found, return null
-};
-
 // Set encrypted user data in cookies
 export const set_user_data = (userData: any) => {
-  const encryptedData = encrypt_user(userData);  // Encrypt the user data
+  const encryptedData = encrypt_user(userData); // Encrypt the user data
   Cookies.set('kalbelajobs_user', encryptedData, { expires: 30 });
 };
 
-
-export  const logout = () => {
+// Logout and remove the user data from cookies
+export const logout = () => {
   Cookies.remove('kalbelajobs_user');
+  window.location.href = '/login';
+};
+
+// Custom Hook to manage user data
+export const useUserData = () => {
+  const [user, setUserData] = useState<any>(null);
+
+  useEffect(() => {
+    const encryptedUserData = Cookies.get('kalbelajobs_user'); // Retrieve encrypted data from cookies
+    if (encryptedUserData) {
+      const decryptedData = decryptData(encryptedUserData); // Decrypt the data
+      setUserData(decryptedData); // Update state with decrypted data
+    }
+  }, []); // Empty dependency array ensures this runs once on component mount
+
+  return [user, setUserData];
 };
