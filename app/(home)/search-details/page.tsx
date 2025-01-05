@@ -20,11 +20,12 @@ import MaxWidthWrapper from "@/components/MaxWidthWrapper"
 import PrimaryBtn from "@/components/PrimaryBtn"
 import useJobsSearch from "@/app/hooks/useJobSearch"
 
-import noVacancies from "../../../public/assets/animation/no-vacancies.json"
 import FilterSelect from "./components/FilterSelect"
 import JobcardLarge from "./components/JobCardLarge"
 
-const Lottie = dynamic(() => import("lottie-react"), { ssr: false })
+const NoVacancies = dynamic(() => import("./components/NoVacancies"), {
+  ssr: false,
+})
 
 const SearchDetails: React.FC = () => {
   const { theme } = useTheme()
@@ -120,9 +121,7 @@ const SearchDetails: React.FC = () => {
               {jobs.length > 0 ? (
                 jobs.map((job, index) => <JobcardLarge job={job} key={index} />)
               ) : (
-                <div className="mx-auto h-48 w-48">
-                  <Lottie animationData={noVacancies} />
-                </div>
+                <NoVacancies />
               )}
             </div>
           )}
