@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useState } from "react"
-import dynamic from "next/dynamic"
 import { useSearchParams } from "next/navigation"
 import { Filter } from "lucide-react"
 import { useTheme } from "next-themes"
@@ -22,10 +21,7 @@ import useJobsSearch from "@/app/hooks/useJobSearch"
 
 import FilterSelect from "./components/FilterSelect"
 import JobcardLarge from "./components/JobCardLarge"
-
-const NoVacancies = dynamic(() => import("./components/NoVacancies"), {
-  ssr: false,
-})
+import NoVacancies from "./components/NoVacancies"
 
 const SearchDetails: React.FC = () => {
   const { theme } = useTheme()
