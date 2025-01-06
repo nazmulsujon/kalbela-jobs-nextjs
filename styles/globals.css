@@ -84,3 +84,11 @@
 
 @layer utilities {
 }
+
+.ql-toolbar.ql-snow {
+  @apply block w-full rounded-t-md border border-gray-800 bg-transparent py-2 pl-5 pr-10 text-base font-normal text-white placeholder-gray-500 focus:border-white focus:ring-1 focus:ring-white;
+}
+
+.ql-container.ql-snow {
+  @apply block min-h-20 w-full rounded-b-md border border-gray-800 bg-transparent text-base font-normal text-gray-400 placeholder-gray-500 focus:border-white focus:ring-1 focus:ring-white;
+}

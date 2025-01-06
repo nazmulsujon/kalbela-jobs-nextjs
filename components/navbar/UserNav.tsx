@@ -43,12 +43,12 @@ const UserNav = () => {
                               </DropdownMenuLabel>
                               <DropdownMenuSeparator />
                               <DropdownMenuGroup>
-                                    <DropdownMenuItem><Link href="/profile">Profile</Link></DropdownMenuItem>
-                                    <DropdownMenuItem><Link href="/user">Dashboard</Link></DropdownMenuItem>
-                                    <DropdownMenuItem>Settings</DropdownMenuItem>
+                                    <Link href="/user"> <DropdownMenuItem className="cursor-pointer">Dashboard</DropdownMenuItem></Link>
+                                    <Link href="/user/profile"> <DropdownMenuItem className="cursor-pointer">Profile</DropdownMenuItem></Link>
+                                    <DropdownMenuItem className="cursor-pointer">Settings</DropdownMenuItem>
                               </DropdownMenuGroup>
                               <DropdownMenuSeparator />
-                              <DropdownMenuItem><button onClick={() => logout()}>Log out</button></DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => logout()} className="cursor-pointer">Log out</DropdownMenuItem>
                         </DropdownMenuContent>
                   </div> : ""}
             </DropdownMenu>

@@ -119,7 +119,7 @@ export default function AppliedJobs() {
       }
 
       return (
-            <div className="container mx-auto px-4 py-8">
+            <div className="  ">
                   <h1 className="mb-6 text-3xl font-bold">Saved Jobs</h1>
                   <div className="mb-6 flex flex-col gap-4 sm:flex-row">
                         <div className="relative flex-grow">

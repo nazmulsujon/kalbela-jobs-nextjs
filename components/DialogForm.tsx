@@ -183,27 +183,6 @@ const DailogForm: React.FC = () => {
                                     <h4 className="text-lg font-bold text-gray-900 dark:text-white">
                                           Additional Questions
                                     </h4>
-                                    <div>
-                                          <Label
-                                                htmlFor="age"
-                                                className="text-md border-gray-900 font-medium"
-                                          >
-                                                Your Age
-                                          </Label>
-                                          <Input
-                                                type="text"
-                                                id="age"
-                                                placeholder="Your age"
-                                                {...register("age")}
-                                                className="border-[0.5px] border-gray-900"
-                                                aria-invalid={errors.age ? "true" : "false"}
-                                          />
-                                          {errors.age && (
-                                                <p className="mt-1 text-sm text-red-500" role="alert">
-                                                      {errors.age.message}
-                                                </p>
-                                          )}
-                                    </div>
 
                                     <div>
                                           <Label
