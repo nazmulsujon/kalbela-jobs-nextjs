@@ -10,7 +10,7 @@ const page = () => {
             <div className="flex flex-1 flex-col overflow-x-hidden">
 
                   <div className="py-6">
-                        <div className="mx-auto px-4 sm:px-6 md:px-8">
+                        <div className="mx-auto ">
                               <div className="md:flex md:items-center">
                                     <p className="text-base font-bold text-gray-900">Hey {user?.name} -</p>
                                     <p className="mt-1 text-base font-medium text-gray-500 md:ml-2 md:mt-0">
@@ -18,7 +18,7 @@ const page = () => {
                                     </p>
                               </div>
                         </div>
-                        <div className="mx-auto mt-8 px-4 sm:px-6 md:px-8">
+                        <div className="mx-auto mt-8">
                               <div className="space-y-5 sm:space-y-6">
                                     <div className="grid grid-cols-1 gap-5 sm:gap-6 lg:grid-cols-6">
                                           <div className="overflow-hidden rounded-xl border border-gray-200 bg-white lg:col-span-4">
