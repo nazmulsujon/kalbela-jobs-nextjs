@@ -131,7 +131,7 @@ const TopCompanies: React.FC = () => {
                     className="min-w-48 basis-1/2 md:basis-1/4 lg:basis-1/5"
                   >
                     <Link
-                      href="#"
+                      href={`companies/${company.company_website}`}
                       className="flex h-full w-full flex-col items-center justify-between rounded-sm border p-2 py-4"
                     >
                       <div className="flex size-24 items-center justify-center">

@@ -1,15 +1,15 @@
-import React from "react"
+import React, { Dispatch, FC, SetStateAction } from "react"
 import Select, { SingleValue, StylesConfig } from "react-select"
 
 interface FilterSelectProps {
   customStyles: StylesConfig<any, false>
   location: string
-  setLocation: React.Dispatch<React.SetStateAction<string>>
+  setLocation: Dispatch<SetStateAction<string>>
   job_type: string
-  setJobType: React.Dispatch<React.SetStateAction<string>>
+  setJobType: Dispatch<SetStateAction<string>>
 }
 
-const FilterSelect: React.FC<FilterSelectProps> = ({
+const FilterSelect: FC<FilterSelectProps> = ({
   customStyles,
   location,
   setLocation,
@@ -44,6 +44,7 @@ const FilterSelect: React.FC<FilterSelectProps> = ({
             { value: "contract", label: "Contract" },
             { value: "internship", label: "Internship" },
           ]}
+          className="capitalize"
           styles={customStyles}
           isSearchable
         />
@@ -60,11 +61,16 @@ const FilterSelect: React.FC<FilterSelectProps> = ({
           onChange={handleFilterChange("location")}
           options={[
             { value: "", label: "All Locations" },
-            { value: "chandigarh", label: "Chandigarh" },
-            { value: "delhi", label: "Delhi / NCR" },
-            { value: "bengaluru", label: "Bengaluru" },
-            { value: "new-delhi", label: "New Delhi" },
+            { value: "dhaka", label: "Dhaka" },
+            { value: "chittagong", label: "Chittagong" },
+            { value: "rajshahi", label: "Rajshahi" },
+            { value: "khulna", label: "Khulna" },
+            { value: "barisal", label: "Barisal" },
+            { value: "sylhet", label: "Sylhet" },
+            { value: "rangpur", label: "Rangpur" },
+            { value: "mymensingh", label: "Mymensingh" },
           ]}
+          className="capitalize"
           styles={customStyles}
           isSearchable
         />

@@ -11,9 +11,9 @@ import SecondaryBtn from "@/components/SecondaryBtn"
 import useApiRequest from "@/app/hooks/useApiRequest"
 
 const JobsDetails = () => {
-  const { id } = useParams()
+  const { slug } = useParams()
   const { data, loading, error } = useApiRequest<any>(
-    `jobs/get-by-url?url=${id}`,
+    `jobs/get-by-url?url=${slug}`,
     "GET"
   )
 
@@ -44,7 +44,7 @@ const JobsDetails = () => {
           </p>
 
           <p className="flex space-x-2 text-base md:text-lg">
-            <strong>About the job:</strong>
+            <strong className="text-nowrap">About the job:</strong>
             <span
               dangerouslySetInnerHTML={{
                 __html: data?.data?.job_description,
@@ -53,7 +53,7 @@ const JobsDetails = () => {
           </p>
 
           <p className="flex space-x-2 text-base md:text-lg">
-            <strong>About the job:</strong>
+            <strong>Benifits:</strong>
             <span
               dangerouslySetInnerHTML={{
                 __html: data?.data?.benefit,

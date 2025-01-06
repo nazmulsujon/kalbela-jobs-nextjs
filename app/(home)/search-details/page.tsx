@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import { Filter } from "lucide-react"
 import { useTheme } from "next-themes"
@@ -28,13 +28,16 @@ const SearchDetails: React.FC = () => {
   const customStyles = selectCustomStyles(theme || "light")
 
   const searchParams = useSearchParams()
+
   const searchQuery = searchParams.get("query")
   const locationParams = searchParams.get("location")
   const job_type_params = searchParams.get("job_type")
+  const categoryParams = searchParams.get("category")
 
   const [query, setQuery] = useState(searchQuery || "")
   const [location, setLocation] = useState(locationParams || "")
   const [job_type, setJobType] = useState(job_type_params || "")
+  const [category, setCategory] = useState(categoryParams || "")
 
   const [pageNumber, setPageNumber] = useState(1)
 
@@ -44,14 +47,19 @@ const SearchDetails: React.FC = () => {
     pageNumber,
     location,
     job_type,
-    fetchOnMount: true,
+    category,
   })
 
-  console.log(location, job_type)
+  console.log("jobs", jobs)
+  console.log("category", category)
 
   const handleLoadMore = () => {
     if (hasMore) setPageNumber((prev) => prev + 1)
   }
+
+  useEffect(() => {
+    setCategory(searchParams.get("category") || "")
+  }, [searchParams])
 
   return (
     <section>

@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
 import axios, { CancelTokenSource } from "axios"
 
 interface UseJobsSearchProps<T> {
@@ -10,7 +9,7 @@ interface UseJobsSearchProps<T> {
   pageNumber: number
   location?: string
   job_type?: string
-  fetchOnMount?: boolean
+  category?: string
 }
 
 interface UseJobsSearchReturn<T> {
@@ -28,9 +27,9 @@ export default function useJobsSearch<T>({
   pageNumber,
   location = "",
   job_type = "",
-  fetchOnMount = true,
+  category = "",
 }: UseJobsSearchProps<T>): UseJobsSearchReturn<T> {
-  const [loading, setLoading] = useState(fetchOnMount)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
   const [jobs, setJobs] = useState<T[]>([])
   const [totalJobs, setTotalJobs] = useState(0)
@@ -41,11 +40,9 @@ export default function useJobsSearch<T>({
 
   useEffect(() => {
     setJobs([])
-  }, [query, location, job_type])
+  }, [query, location, job_type, category])
 
   useEffect(() => {
-    if (!fetchOnMount && pageNumber === 1) return
-
     setLoading(true)
     setError(false)
 
@@ -57,6 +54,7 @@ export default function useJobsSearch<T>({
       ...(query && { search: query }),
       ...(location && { location: location }),
       ...(job_type && { job_type: job_type }),
+      ...(category && { category: category }),
     }
 
     const fetchData = async () => {
@@ -87,15 +85,7 @@ export default function useJobsSearch<T>({
 
     fetchData()
     return () => cancel?.cancel()
-  }, [
-    endpoint,
-    query,
-    pageNumber,
-    location,
-    job_type,
-    fetchOnMount,
-    revalidate,
-  ])
+  }, [endpoint, query, pageNumber, location, job_type, category, revalidate])
 
   return { loading, error, jobs, totalJobs, hasMore, triggerRevalidate }
 }

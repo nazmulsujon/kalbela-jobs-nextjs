@@ -1,8 +1,10 @@
+"use client"
+
 import React from "react"
 import Link from "next/link"
-import { Linkedin } from "lucide-react"
+import { Globe, Linkedin } from "lucide-react"
 
-const CompanyProfile = () => {
+const CompanyProfile = ({ company_info }: { company_info: any }) => {
   return (
     <div className="relative mb-20 w-full">
       <section className="relative z-10">
@@ -17,7 +19,7 @@ const CompanyProfile = () => {
         <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-white shadow-lg">
           <div className="relative h-16 w-16">
             <img
-              src="https://kalbela-jobs-backend.vercel.app/api/v1/image/675f6be4949742e5a48cd306.png"
+              src={company_info?.logo}
               alt="Logo"
               className="h-full w-full rounded-full object-cover"
             />
@@ -26,21 +28,30 @@ const CompanyProfile = () => {
 
         {/* Text content */}
         <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
-          Bright Future Soft
+          {company_info?.company_name}
         </h1>
 
         {/* Buttons */}
         <div className="mt-4 flex items-center justify-center gap-3">
           <Link
             target="blank"
-            href="https://www.linkedin.com/company/brightfuturesoft/posts/?feedView=all"
-            className="rounded-sm border border-gray-400 bg-white px-6 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+            href={
+              company_info?.company_website
+                ? company_info?.company_website
+                : "#"
+            }
+            className="rounded-sm border border-gray-400 bg-white p-2 px-3 text-gray-700 transition-colors hover:bg-gray-50"
           >
-            Website
+            <Globe className="h-5 w-5" />
           </Link>
+
           <Link
             target="blank"
-            href="https://www.linkedin.com/company/brightfuturesoft/posts/?feedView=all"
+            href={
+              company_info?.company_website
+                ? company_info?.company_website
+                : "#"
+            }
             className="rounded-sm border border-gray-400 bg-white p-2 px-3 text-gray-700 transition-colors hover:bg-gray-50"
           >
             <Linkedin className="h-5 w-5" />

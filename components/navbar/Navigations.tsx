@@ -1,16 +1,19 @@
 import { useRef, useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { ChevronDown } from "lucide-react"
 
 import useApiRequest from "@/app/hooks/useApiRequest"
 
 import PrimaryBtn from "../PrimaryBtn"
+import { Button } from "../ui/button"
 
 export function Navigations() {
+  const router = useRouter()
   const [activeDropdown, setActiveDropdown] = useState<
     "categories" | "resources" | null
   >(null)
-  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const closeTimeoutRef = useRef<any>(null)
 
   const { data, loading, error } = useApiRequest<any>("category", "GET")
   const {
@@ -30,7 +33,14 @@ export function Navigations() {
   const handleMouseLeave = () => {
     closeTimeoutRef.current = setTimeout(() => {
       setActiveDropdown(null)
-    }, 300) // Adjust delay time (in milliseconds) for smoother experience
+    }, 300)
+  }
+
+  const handleRedirect = (category: string) => {
+    const queryParams = new URLSearchParams({
+      category: category,
+    }).toString()
+    router.push(`/search-details?${queryParams}`)
   }
 
   return (
@@ -59,7 +69,7 @@ export function Navigations() {
               id="categories-dropdown"
               className="absolute top-full mt-2 w-fit text-nowrap rounded-sm bg-white shadow-lg transition-opacity duration-300"
             >
-              <ul className="py-2">
+              <ul className="py-1">
                 {loading && (
                   <li className="p-4 text-gray-500">Loading categories...</li>
                 )}
@@ -70,13 +80,15 @@ export function Navigations() {
                 )}
                 {data?.data?.map((navigation: any) => (
                   <li key={navigation?._id}>
-                    <Link
-                      href={navigation?.slag}
-                      passHref
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    <Button
+                      onClick={() => {
+                        handleRedirect(navigation?.slag)
+                      }}
+                      variant="link"
+                      className="block w-full px-4 text-left text-sm text-gray-700 hover:bg-gray-100 hover:no-underline"
                     >
                       {navigation.name}
-                    </Link>
+                    </Button>
                   </li>
                 ))}
               </ul>
@@ -107,7 +119,7 @@ export function Navigations() {
               id="resources-dropdown"
               className="absolute top-full mt-2 w-fit text-nowrap rounded-sm bg-white shadow-lg transition-opacity duration-300"
             >
-              <ul className="py-2">
+              <ul className="py-1">
                 {loading2 && (
                   <li className="p-4 text-gray-500">Loading resources...</li>
                 )}
@@ -116,13 +128,12 @@ export function Navigations() {
                 )}
                 {careerResources?.data?.map((resource: any) => (
                   <li key={resource?._id}>
-                    <Link
-                      href={resource?.slug}
-                      passHref
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    <Button
+                      variant="link"
+                      className="block w-full px-4 text-left text-sm text-gray-700 hover:bg-gray-100 hover:no-underline"
                     >
                       {resource.name}
-                    </Link>
+                    </Button>
                   </li>
                 ))}
               </ul>
