@@ -56,7 +56,7 @@ const InterviewQuestions: React.FC = () => {
             <Accordion type="single" collapsible className="w-full">
               {interviewQuestions.map((item, index) => (
                 <AccordionItem key={index} value={`item-${index + 1}`}>
-                  <AccordionTrigger className="text-left text-sm md:text-lg">
+                  <AccordionTrigger className="text-left text-sm hover:no-underline md:text-lg">
                     {item.question}
                   </AccordionTrigger>
                   <AccordionContent className="text-left text-xs md:text-sm">
