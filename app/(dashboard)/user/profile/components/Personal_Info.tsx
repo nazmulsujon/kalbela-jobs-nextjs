@@ -26,297 +26,282 @@ import uploadImage from "@/app/hooks/useUploadImage"
 import useApiForPost from "@/app/hooks/useApiForPost"
 import About from "./About"
 
-
-
-
-
 export default function ProfilePage() {
+  const [user, setUserData] = useUserData()
+  const [editDetailsOpen, setEditDetailsOpen] = useState(false)
+  const [editNameOpen, setEditNameOpen] = useState(false)
+  const [editImageOpen, setEditImageOpen] = useState(false)
+  const [editLanguagesOpen, setEditLanguagesOpen] = useState(false)
+  const [image, setImage] = useState(null)
+  const [image_file, setImageFile] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [error_message, set_error_message] = useState("")
 
-      const [user, setUserData] = useUserData()
+  const [name, setName] = useState(user?.name)
+  const [languages, setLanguages] = useState(user?.languages || []);
+  const [new_language, setNewLanguage] = useState(user?.languages);
 
-      const [editDetailsOpen, setEditDetailsOpen] = useState(false)
-      const [editNameOpen, setEditNameOpen] = useState(false)
-      const [editImageOpen, setEditImageOpen] = useState(false)
-      const [editLanguagesOpen, setEditLanguagesOpen] = useState(false)
-      const [image, setImage] = useState(null)
-      const [image_file, setImageFile] = useState(null)
-      const [loading, setLoading] = useState(false)
-      const [error_message, set_error_message] = useState("")
+  useEffect(() => {
+    setNewLanguage(user?.languages);
+  }, [user?.languages]);
 
-      const [name, setName] = useState(user?.name)
-      const [languages, setLanguages] = useState(user?.languages || []);
-      const [new_language, setNewLanguage] = useState(user?.languages);
+  // Handle change for CreatableSelect
+  const handleLanguageChange = (selectedOptions: any) => {
+    const selectedLanguages = selectedOptions.map((item: any) => item.value);
+    setLanguages(selectedLanguages);
+    setNewLanguage(selectedLanguages);
+  };
 
-      useEffect(() => {
-            setNewLanguage(user?.languages);
-      }, [user?.languages]);
 
-      // Handle change for CreatableSelect
-      const handleLanguageChange = (selectedOptions: any) => {
-            const selectedLanguages = selectedOptions.map((item: any) => item.value);
-            setLanguages(selectedLanguages);
-            setNewLanguage(selectedLanguages);
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setImageFile(file as any)
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result as any);
       };
+      reader.readAsDataURL(file);
+    }
+  };
 
+  const { apiRequest } = useApiForPost()
 
+  const profile_image_update = async () => {
+    setLoading(true)
+    if (image_file) {
+      const image = await uploadImage(image_file)
+      if (image) {
+        const { data, error } = await apiRequest<any>(
+          `api/v1/user/update-profile?id=${user?._id}`,
+          "PUT",
+          {
+            profile_picture: image
+          }
+        )
 
-      const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-            const file = event.target.files?.[0];
-            if (file) {
-                  setImageFile(file as any)
-                  const reader = new FileReader();
-                  reader.onloadend = () => {
-                        setImage(reader.result as any);
-                  };
-                  reader.readAsDataURL(file);
-            }
-      };
-
-
-
-      const { apiRequest } = useApiForPost()
-
-      const profile_image_update = async () => {
-            setLoading(true)
-            if (image_file) {
-                  const image = await uploadImage(image_file)
-                  if (image) {
-                        const { data, error } = await apiRequest<any>(
-                              `api/v1/user/update-profile?id=${user?._id}`,
-                              "PUT",
-                              {
-                                    profile_picture: image
-                              }
-                        )
-
-                        setLoading(false)
-                        if (error) {
-                              set_error_message(error.message)
-                              return
-                        }
-                        if (data) {
-                              set_user_data(data.data)
-                              setUserData(data.data)
-                              set_error_message("")
-                              setEditImageOpen(false)
-                        }
-                  }
-            }
+        setLoading(false)
+        if (error) {
+          set_error_message(error.message)
+          return
+        }
+        if (data) {
+          set_user_data(data.data)
+          setUserData(data.data)
+          set_error_message("")
+          setEditImageOpen(false)
+        }
       }
+    }
+  }
 
-      const user_name_update = async () => {
-            setLoading(true)
-            const { data, error } = await apiRequest<any>(
-                  `api/v1/user/update-profile?id=${user?._id}`,
-                  "PUT",
-                  {
-                        name
-                  }
-            )
-
-            setLoading(false)
-            if (error) {
-                  set_error_message(error.message)
-                  return
-            }
-            if (data) {
-                  set_user_data(data.data)
-                  setUserData(data.data)
-                  set_error_message("")
-                  setEditNameOpen(false)
-            }
+  const user_name_update = async () => {
+    setLoading(true)
+    const { data, error } = await apiRequest<any>(
+      `api/v1/user/update-profile?id=${user?._id}`,
+      "PUT",
+      {
+        name
       }
+    )
 
-      const user_languages_update = async () => {
-            setLoading(true)
-            const { data, error } = await apiRequest<any>(
-                  `api/v1/user/update-profile?id=${user?._id}`,
-                  "PUT",
-                  {
-                        languages
-                  }
-            )
+    setLoading(false)
+    if (error) {
+      set_error_message(error.message)
+      return
+    }
+    if (data) {
+      set_user_data(data.data)
+      setUserData(data.data)
+      set_error_message("")
+      setEditNameOpen(false)
+    }
+  }
 
-            setLoading(false)
-            if (error) {
-                  set_error_message(error.message)
-                  return
-            }
-            if (data) {
-                  set_user_data(data.data)
-                  setUserData(data.data)
-                  set_error_message("")
-                  setEditLanguagesOpen(false)
-            }
+  const user_languages_update = async () => {
+    setLoading(true)
+    const { data, error } = await apiRequest<any>(
+      `api/v1/user/update-profile?id=${user?._id}`,
+      "PUT",
+      {
+        languages
       }
+    )
 
+    setLoading(false)
+    if (error) {
+      set_error_message(error.message)
+      return
+    }
+    if (data) {
+      set_user_data(data.data)
+      setUserData(data.data)
+      set_error_message("")
+      setEditLanguagesOpen(false)
+    }
+  }
 
+  return (
+    <div >
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-6">
+        <div className="space-y-6">
+          {/* Header Section */}
+          <div className="flex items-center gap-4">
+            {user?.profile_picture ? <Image
+              onClick={() => setEditImageOpen(true)}
+              src={user?.profile_picture}
+              alt="Bright Future Logo"
+              width={80}
+              height={80}
+              className="w-20 h-20 flex items-center justify-center text-3xl text-white rounded-full bg-blue-600"
+            /> : <div onClick={() => setEditImageOpen(true)} className="w-20 h-20 flex items-center justify-center text-3xl text-white rounded-full bg-blue-600" >
+              {user?.name?.charAt(0).toUpperCase()}
+            </div>}
+            <div className="space-y-2 flex-1">
+              <div className="flex  items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <h1 className="text-2xl font-bold">{user?.name}</h1>
+                  <Pencil onClick={() => setEditNameOpen(true)} className="h-4 w-4" />
+                </div>
 
-
-
-
-
-
-      return (
-            <div >
-                  <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-6">
-                        <div className="space-y-6">
-                              {/* Header Section */}
-                              <div className="flex items-center gap-4">
-                                    {user?.profile_picture ? <Image
-                                          onClick={() => setEditImageOpen(true)}
-                                          src={user?.profile_picture}
-                                          alt="Bright Future Logo"
-                                          width={80}
-                                          height={80}
-                                          className="w-20 h-20 flex items-center justify-center text-3xl text-white rounded-full bg-blue-600"
-                                    /> : <div onClick={() => setEditImageOpen(true)} className="w-20 h-20 flex items-center justify-center text-3xl text-white rounded-full bg-blue-600" >
-                                          {user?.name?.charAt(0).toUpperCase()}
-                                    </div>}
-                                    <div className="space-y-2 flex-1">
-                                          <div className="flex  items-center justify-between">
-                                                <div className="flex items-center gap-2">
-                                                      <h1 className="text-2xl font-bold">{user?.name}</h1>
-                                                      <Pencil onClick={() => setEditNameOpen(true)} className="h-4 w-4" />
-                                                </div>
-
-                                          </div>
-                                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                                                <div className="flex items-center gap-1">
-                                                      <MapPin className="h-4 w-4" />
-                                                      Bangladesh
-                                                </div>
-                                                <div className="flex items-center gap-1">
-                                                      <span>{user?.languages?.join(", ")}</span>
-                                                      <Pencil onClick={() => setEditLanguagesOpen(true)} className="h-4 w-4" />
-                                                </div>
-                                          </div>
-                                    </div>
-                              </div>
-
-
-
-                              <About />
-                              <Resume />
-                              <Educations />
-                              <Certifications />
-                              <Skills />
-
-                              <EditModal
-                                    open={editNameOpen}
-                                    onOpenChange={setEditNameOpen}
-                                    title="Edit Name"
-                                    description="Update your name"
-                              >
-                                    <div className="grid gap-4 py-4">
-                                          <div className="grid gap-2">
-                                                <Label htmlFor="name">Name</Label>
-                                                <Input onChange={(e) => setName(e.target.value)} id="name" defaultValue={user?.name} />
-                                          </div>
-                                    </div>
-                                    <DialogFooter>
-                                          <Button onClick={user_name_update} type="submit">{loading ? "Updating..." : 'Save changes'}</Button>
-                                    </DialogFooter>
-                              </EditModal>
-
-                              <EditModal
-                                    open={editLanguagesOpen}
-                                    onOpenChange={setEditLanguagesOpen}
-                                    title="Edit Languages"
-                                    description="Update your languages"
-                              >
-                                    <div className="grid gap-4 py-4">
-                                          <div className="grid gap-2">
-                                                <Label htmlFor="languages">Spoken Languages</Label>
-                                                <CreatableSelect
-                                                      onChange={handleLanguageChange}
-                                                      value={new_language?.map((item: any) => ({ value: item, label: item }))}
-                                                      isMulti
-                                                />
-                                          </div>
-                                    </div>
-                                    <DialogFooter>
-                                          <Button onClick={user_languages_update} type="submit">{loading ? "Updating..." : 'Save changes'}</Button>
-                                    </DialogFooter>
-                              </EditModal>
-
-                              {/* Edit Modals */}
-
-
-
-
-
-                              <EditModal
-                                    open={editImageOpen}
-                                    onOpenChange={setEditImageOpen}
-                                    title="Edit Image"
-                                    description="Update your profile image"
-                              >
-                                    <div className="sm:max-w-md">
-
-                                          <div className="space-y-4">
-                                                <div className="flex flex-col items-center justify-center gap-4">
-                                                      {image ? (
-                                                            <div className="relative w-32 h-32">
-                                                                  <img
-                                                                        src={image}
-                                                                        alt="Preview"
-                                                                        className="w-full h-full   rounded-full object-cover"
-                                                                  />
-                                                                  <Button
-                                                                        variant="outline"
-                                                                        size="sm"
-                                                                        className="absolute rounded-full top-0 right-0"
-                                                                        onClick={() => setImage(null)}
-                                                                  >
-                                                                        ✕
-                                                                  </Button>
-                                                            </div>
-                                                      ) : (
-                                                            <div className="w-32 h-32 rounded-full bg-muted flex items-center justify-center">
-                                                                  <Upload className="w-8 h-8 text-muted-foreground" />
-                                                            </div>
-                                                      )}
-
-                                                </div>
-                                          </div>
-
-                                    </div>
-                                    <Input
-                                          className="my-4"
-                                          id="picture"
-                                          type="file"
-                                          accept="image/*"
-                                          onChange={handleImageChange}
-
-                                    />
-                                    <DialogFooter>
-                                          <Button disabled={loading} onClick={profile_image_update} type="submit" className="bg-blue-500 text-white hover:bg-blue-600">
-                                                {loading ? "Saving..." : " Save changes"}
-                                          </Button>
-                                    </DialogFooter>
-                              </EditModal>
-
-
-
-
-
-
-                        </div>
-
-
-                        <Card className="h-fit">
-                              <CardHeader>
-                                    <CardTitle>Quick Links</CardTitle>
-                              </CardHeader>
-                              <CardContent>
-                                    <Link href="#" className="flex items-center gap-2 text-muted-foreground hover:text-foreground">
-                                          <LinkIcon className="h-4 w-4" />
-                                          Portfolio
-                                    </Link>
-                              </CardContent>
-                        </Card>
-                  </div>
+              </div>
+              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                <div className="flex items-center gap-1">
+                  <MapPin className="h-4 w-4" />
+                  Bangladesh
+                </div>
+                <div className="flex items-center gap-1">
+                  <span>{user?.languages?.join(", ")}</span>
+                  <Pencil onClick={() => setEditLanguagesOpen(true)} className="h-4 w-4" />
+                </div>
+              </div>
             </div>
-      )
+          </div>
+
+
+
+          <About />
+          <Resume />
+          <Educations />
+          <Certifications />
+          <Skills />
+
+          <EditModal
+            open={editNameOpen}
+            onOpenChange={setEditNameOpen}
+            title="Edit Name"
+            description="Update your name"
+          >
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label htmlFor="name">Name</Label>
+                <Input onChange={(e) => setName(e.target.value)} id="name" defaultValue={user?.name} />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button onClick={user_name_update} type="submit">{loading ? "Updating..." : 'Save changes'}</Button>
+            </DialogFooter>
+          </EditModal>
+
+          <EditModal
+            open={editLanguagesOpen}
+            onOpenChange={setEditLanguagesOpen}
+            title="Edit Languages"
+            description="Update your languages"
+          >
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label htmlFor="languages">Spoken Languages</Label>
+                <CreatableSelect
+                  onChange={handleLanguageChange}
+                  value={new_language?.map((item: any) => ({ value: item, label: item }))}
+                  isMulti
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button onClick={user_languages_update} type="submit">{loading ? "Updating..." : 'Save changes'}</Button>
+            </DialogFooter>
+          </EditModal>
+
+          {/* Edit Modals */}
+
+
+
+
+
+          <EditModal
+            open={editImageOpen}
+            onOpenChange={setEditImageOpen}
+            title="Edit Image"
+            description="Update your profile image"
+          >
+            <div className="sm:max-w-md">
+
+              <div className="space-y-4">
+                <div className="flex flex-col items-center justify-center gap-4">
+                  {image ? (
+                    <div className="relative w-32 h-32">
+                      <img
+                        src={image}
+                        alt="Preview"
+                        className="w-full h-full   rounded-full object-cover"
+                      />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="absolute rounded-full top-0 right-0"
+                        onClick={() => setImage(null)}
+                      >
+                        ✕
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="w-32 h-32 rounded-full bg-muted flex items-center justify-center">
+                      <Upload className="w-8 h-8 text-muted-foreground" />
+                    </div>
+                  )}
+
+                </div>
+              </div>
+
+            </div>
+            <Input
+              className="my-4"
+              id="picture"
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+
+            />
+            <DialogFooter>
+              <Button disabled={loading} onClick={profile_image_update} type="submit" className="bg-blue-500 text-white hover:bg-blue-600">
+                {loading ? "Saving..." : " Save changes"}
+              </Button>
+            </DialogFooter>
+          </EditModal>
+
+
+
+
+
+
+        </div>
+
+
+        <Card className="h-fit">
+          <CardHeader>
+            <CardTitle>Quick Links</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Link href="#" className="flex items-center gap-2 text-muted-foreground hover:text-foreground">
+              <LinkIcon className="h-4 w-4" />
+              Portfolio
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
 }

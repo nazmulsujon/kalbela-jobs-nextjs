@@ -14,16 +14,16 @@ const queryClient = new QueryClient();
 
 
 const CustomTabs = () => {
-      const [activeTab, setActiveTab] = useState("personal_info")
-      const [personalInfo, setPersonalInfo] = useState({})
+  const [activeTab, setActiveTab] = useState("personal_info")
+  const [personalInfo, setPersonalInfo] = useState({})
 
-      console.log("checked", personalInfo)
-      return (
-            <QueryClientProvider client={queryClient}>
-                  <ProfilePage />
-            </QueryClientProvider>
+  console.log("checked", personalInfo)
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ProfilePage />
+    </QueryClientProvider>
 
-      )
+  )
 }
 
 export default CustomTabs
