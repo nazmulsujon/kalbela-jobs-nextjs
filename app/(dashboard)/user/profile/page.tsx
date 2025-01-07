@@ -1,12 +1,6 @@
 "use client"
 
 import React, { useState } from "react"
-
-import { Tabs, TabsContent } from "@/components/ui/tabs"
-
-import Other_info from "./components/Other_info"
-
-import MaxWidthWrapper from "@/components/MaxWidthWrapper"
 import ProfilePage from "./components/Personal_Info"
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 

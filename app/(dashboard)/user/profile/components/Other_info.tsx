@@ -4,15 +4,12 @@ import React from "react"
 import { otherInfoSchema } from "@/schema/schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
-// shadcn/ui label
 import CreatableSelect from "react-select/creatable"
 import { z } from "zod"
 
-import { Button } from "@/components/ui/button"
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-// shadcn/ui button
 import { Input } from "@/components/ui/input"
-// shadcn/ui input
 import { Label } from "@/components/ui/label"
 import PrimaryBtn from "@/components/PrimaryBtn"
 import SecondaryBtn from "@/components/SecondaryBtn"
