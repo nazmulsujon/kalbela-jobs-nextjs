@@ -68,7 +68,7 @@ const About = () => {
                         <CardContent className="space-y-4">
                               <p className="font-medium">{user?.title}</p>
                               <p className="text-muted-foreground">
-                                    <div dangerouslySetInnerHTML={{ __html: user?.description }} />
+                                    <span dangerouslySetInnerHTML={{ __html: user?.description }} />
                               </p>
                               <Button variant="outline" className="gap-2" onClick={() => setEditDetailsOpen(true)}>
                                     <Pencil className="h-4 w-4" />
