@@ -72,11 +72,9 @@ const DailogForm: React.FC = () => {
                                           {user?.name}
                                     </h3>
                                     <p className="text-md text-gray-700 dark:text-gray-300">
-                                          Mern Stack Developer || React.js Developer
+                                          {user?.title}
                                     </p>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                                          Dinajpur, Rajshahi, Bangladesh
-                                    </p>
+
                               </div>
                         </div>
 

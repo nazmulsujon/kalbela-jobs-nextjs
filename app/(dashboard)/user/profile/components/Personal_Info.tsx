@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Eye, LinkIcon, MapPin, Share2, Plus, Video, GraduationCap, Award, Book, Upload, Edit, Pencil } from 'lucide-react'
+import { Eye, LinkIcon, MapPin, Share2, Plus, Video, GraduationCap, Award, Book, Upload, Edit, Pencil, Contact, Mail } from 'lucide-react'
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
@@ -46,6 +46,9 @@ export default function ProfilePage() {
       const [name, setName] = useState(user?.name)
       const [languages, setLanguages] = useState(user?.languages || []);
       const [new_language, setNewLanguage] = useState(user?.languages);
+      const [editContactOpen, setEditContactOpen] = useState(false)
+      const [phone, setPhone] = useState(user?.phone)
+      const [email, setEmail] = useState(user?.email)
 
       useEffect(() => {
             setNewLanguage(user?.languages);
@@ -151,6 +154,31 @@ export default function ProfilePage() {
       }
 
 
+      const update_contact = async () => {
+            setLoading(true)
+            const { data, error } = await apiRequest<any>(
+                  `api/v1/user/update-profile?id=${user?._id}`,
+                  "PUT",
+                  {
+                        phone_number: phone,
+                        email
+                  }
+            )
+
+            setLoading(false)
+            if (error) {
+                  set_error_message(error.message)
+                  return
+            }
+            if (data) {
+                  set_user_data(data.data)
+                  setUserData(data.data)
+                  set_error_message("")
+                  setEditContactOpen(false)
+            }
+      }
+
+
 
 
 
@@ -173,7 +201,7 @@ export default function ProfilePage() {
                                     /> : <div onClick={() => setEditImageOpen(true)} className="w-20 h-20 flex items-center justify-center text-3xl text-white rounded-full bg-blue-600" >
                                           {user?.name?.charAt(0).toUpperCase()}
                                     </div>}
-                                    <div className="space-y-2 flex-1">
+                                    <div className="space-y-1 flex-1">
                                           <div className="flex  items-center justify-between">
                                                 <div className="flex items-center gap-2">
                                                       <h1 className="text-2xl font-bold">{user?.name}</h1>
@@ -181,11 +209,24 @@ export default function ProfilePage() {
                                                 </div>
 
                                           </div>
-                                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                                <div className="flex items-center gap-1">
+                                                      <Contact className="h-4 w-4" />
+                                                      {user?.phone_number}
+                                                </div>
+                                                <div className="flex items-center rounded-full size-1 bg-gray-500"></div>
+                                                <div className="flex items-center gap-1">
+                                                      <Mail className="h-4 w-4" />
+                                                      {user?.email}
+                                                </div>
+                                                <Pencil onClick={() => setEditContactOpen(true)} className="h-4 w-4" />
+                                          </div>
+                                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                                 <div className="flex items-center gap-1">
                                                       <MapPin className="h-4 w-4" />
                                                       Bangladesh
                                                 </div>
+                                                <div className="flex items-center rounded-full size-1 bg-gray-500"></div>
                                                 <div className="flex items-center gap-1">
                                                       <span>{user?.languages?.join(", ")}</span>
                                                       <Pencil onClick={() => setEditLanguagesOpen(true)} className="h-4 w-4" />
@@ -216,6 +257,28 @@ export default function ProfilePage() {
                                     </div>
                                     <DialogFooter>
                                           <Button onClick={user_name_update} type="submit">{loading ? "Updating..." : 'Save changes'}</Button>
+                                    </DialogFooter>
+                              </EditModal>
+
+                              <EditModal
+                                    open={editContactOpen}
+                                    onOpenChange={setEditContactOpen}
+                                    title="Edit Contact Details"
+                                    description="Update your contact details"
+                              >
+                                    <div className="grid gap-4 py-4">
+                                          <div className="grid gap-2">
+                                                <Label htmlFor="email">Email</Label>
+                                                <Input onChange={(e) => setEmail(e.target.value)} id="email" defaultValue={user?.email} />
+                                          </div>
+
+                                          <div className="grid gap-2">
+                                                <Label htmlFor="email">Phone Number</Label>
+                                                <Input onChange={(e) => setPhone(e.target.value)} id="email" defaultValue={user?.phone_number} />
+                                          </div>
+                                    </div>
+                                    <DialogFooter>
+                                          <Button onClick={update_contact} type="submit">{loading ? "Updating..." : 'Save changes'}</Button>
                                     </DialogFooter>
                               </EditModal>
 

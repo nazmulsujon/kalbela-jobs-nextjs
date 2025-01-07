@@ -1,17 +1,16 @@
-import axiosInstance from "@/lib/axiosInstance";
-
+import axiosInstance from "@/lib/axiosInstance"
 
 interface ApiResponse<T> {
-  data: T | null;
-  error: any | null;
+  data: T | null
+  error: any | null
 }
 
 interface AxiosError {
   response?: {
-    data: string | null;
-    status?: number;
-  };
-  message: string;
+    data: string | null
+    status?: number
+  }
+  message: string
 }
 
 const useApiForPost = () => {
@@ -33,21 +32,21 @@ const useApiForPost = () => {
         url,
         method,
         data,
-      });
+      })
 
-      return { data: response.data, error: null };
+      return { data: response.data, error: null }
     } catch (error) {
-      const axiosError = error as AxiosError;
+      const axiosError = error as AxiosError
       return {
         data: null,
         error: axiosError.response
           ? axiosError.response.data
           : axiosError.message,
-      };
+      }
     }
-  };
+  }
 
-  return { apiRequest };
-};
+  return { apiRequest }
+}
 
-export default useApiForPost;
+export default useApiForPost

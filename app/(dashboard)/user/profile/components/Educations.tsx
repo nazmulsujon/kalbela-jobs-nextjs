@@ -20,6 +20,12 @@ const Educations = () => {
             major: '',
             graduationYear: '',
       })
+
+      const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+            e.preventDefault()
+            console.log(formData, "form data")
+      }
+
       return (
             <div>
                   <Card>
@@ -48,7 +54,7 @@ const Educations = () => {
                         title="Edit Education"
                         description="Update your education information"
                   >
-                        <form className="space-y-6">
+                        <form onSubmit={handleSubmit} className="space-y-6">
 
                               {/* University Name */}
                               <div className="grid gap-2">
@@ -108,21 +114,13 @@ const Educations = () => {
                                     <Label htmlFor="graduationYear" className="font-medium">
                                           Year of Graduation
                                     </Label>
-                                    <Select
+                                    <Input
+                                          id="graduationYear"
                                           value={formData.graduationYear}
-                                          onValueChange={(value) => setFormData((prev) => ({ ...prev, graduationYear: value }))}
-                                    >
-                                          <SelectTrigger className="w-full">
-                                                <SelectValue placeholder="Select year" />
-                                          </SelectTrigger>
-                                          <SelectContent>
-                                                {YEARS.map((year) => (
-                                                      <SelectItem key={year} value={year}>
-                                                            {year}
-                                                      </SelectItem>
-                                                ))}
-                                          </SelectContent>
-                                    </Select>
+                                          onChange={(e) => setFormData((prev) => ({ ...prev, graduationYear: e.target.value }))}
+                                          placeholder="Enter year of graduation"
+                                          className="w-full"
+                                    />
                               </div>
 
                               <div className="grid gap-2">
