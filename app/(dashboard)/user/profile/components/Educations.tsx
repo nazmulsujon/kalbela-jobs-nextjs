@@ -12,23 +12,23 @@ const DEGREES = ["Bachelor's", "Master's", "Ph.D.", "Associate's", "Diploma", "H
 const YEARS = Array.from({ length: 50 }, (_, i) => (new Date().getFullYear() - i).toString())
 
 const Educations = () => {
-  const [editEducationOpen, setEditEducationOpen] = useState(false)
-  const [formData, setFormData] = useState({
-    country: '',
-    universityName: '',
-    degree: '',
-    major: '',
-    graduationYear: '',
-  })
-  return (
-    <div>
-      <Card>
-        <CardHeader>
-          <CardTitle>Education</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-start gap-4">
-            <GraduationCap className="h-5 w-5 mt-1" />
+
+      const [editEducationOpen, setEditEducationOpen] = useState(false)
+      const [formData, setFormData] = useState({
+            country: '',
+            universityName: '',
+            degree: '',
+            major: '',
+            graduationYear: '',
+      })
+
+      const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+            e.preventDefault()
+            console.log(formData, "form data")
+      }
+
+      return (
+
             <div>
               <h3 className="font-medium">Uttara University</h3>
               <p className="text-sm text-muted-foreground">B.Sc. Degree, cse</p>
@@ -42,13 +42,15 @@ const Educations = () => {
         </CardContent>
       </Card>
 
-      <EditModal
-        open={editEducationOpen}
-        onOpenChange={setEditEducationOpen}
-        title="Edit Education"
-        description="Update your education information"
-      >
-        <form className="space-y-6">
+
+                  <EditModal
+                        open={editEducationOpen}
+                        onOpenChange={setEditEducationOpen}
+                        title="Edit Education"
+                        description="Update your education information"
+                  >
+                        <form onSubmit={handleSubmit} className="space-y-6">
+
 
           {/* University Name */}
           <div className="grid gap-2">
@@ -103,27 +105,21 @@ const Educations = () => {
             </div>
           </div>
 
-          {/* Graduation Year */}
-          <div className="grid gap-2">
-            <Label htmlFor="graduationYear" className="font-medium">
-              Year of Graduation
-            </Label>
-            <Select
-              value={formData.graduationYear}
-              onValueChange={(value) => setFormData((prev) => ({ ...prev, graduationYear: value }))}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select year" />
-              </SelectTrigger>
-              <SelectContent>
-                {YEARS.map((year) => (
-                  <SelectItem key={year} value={year}>
-                    {year}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+
+                              {/* Graduation Year */}
+                              <div className="grid gap-2">
+                                    <Label htmlFor="graduationYear" className="font-medium">
+                                          Year of Graduation
+                                    </Label>
+                                    <Input
+                                          id="graduationYear"
+                                          value={formData.graduationYear}
+                                          onChange={(e) => setFormData((prev) => ({ ...prev, graduationYear: e.target.value }))}
+                                          placeholder="Enter year of graduation"
+                                          className="w-full"
+                                    />
+                              </div>
+
 
           <div className="grid gap-2">
             <Label htmlFor="major" className="font-medium">
