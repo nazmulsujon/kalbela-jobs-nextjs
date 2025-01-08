@@ -11,7 +11,14 @@ import {
 import DailogForm from "./DialogForm"
 import PrimaryBtn from "./PrimaryBtn"
 
-const ApplyModal: React.FC = () => {
+interface ApplyModalProps {
+      slug: string;
+      company: string;
+      user: any
+}
+
+
+const ApplyModal: React.FC<ApplyModalProps> = ({ slug, company, user }) => {
 
 
       return (
@@ -27,7 +34,7 @@ const ApplyModal: React.FC = () => {
 
                         <DialogContent className="w-[300px] max-w-full sm:w-[400px] md:w-[600px] lg:w-[744px]">
                               <DialogHeader>
-                                    <DailogForm />
+                                    <DailogForm slug={slug} company={company} user={user} />
                               </DialogHeader>
                         </DialogContent>
                   </Dialog>

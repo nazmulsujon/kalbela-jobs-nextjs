@@ -1,8 +1,6 @@
 "use client"
 
 import { useParams } from "next/navigation"
-import { dummyJobs } from "@/public/assets/dummyData"
-
 import { Badge } from "@/components/ui/badge"
 import { Card, CardTitle } from "@/components/ui/card"
 import ApplyModal from "@/components/ApplyModal"
@@ -11,7 +9,11 @@ import SecondaryBtn from "@/components/SecondaryBtn"
 import useApiRequest from "@/app/hooks/useApiRequest"
 import { useUserData } from "@/utils/encript_decript"
 import useApiForPost from "@/app/hooks/useApiForPost"
-import { ToastAction } from "@/components/ui/toast"
+
+interface ApplyModalProps {
+      slug: string;
+      company: string;
+}
 
 
 const JobsDetails = () => {
@@ -125,55 +127,58 @@ const JobsDetails = () => {
 
                               {/* Other details */}
                               <div className="flex items-center gap-4 pt-8 font-semibold">
-                                    <ApplyModal />
+                                    <ApplyModal slug={data?.data?.url} company={data?.data?.company_info?.company_id} user={user} />
                                     <SecondaryBtn onClick={() => save_jobs(data?.data._id)}> Save </SecondaryBtn>
                               </div>
                         </div>
 
                         {/* Right Section */}
-                        <div className="p-2 lg:w-96">
-                              <h1 className="mb-5 text-2xl font-semibold"> Find Out More ....</h1>
-                              <div className="my-5">
-                                    {dummyJobs?.slice(2, 3).map((jobPost, index) => (
-                                          <Card className="p-4" key={index}>
-                                                <div key={jobPost?.id}>
-                                                      <div>
-                                                            <CardTitle className="pb-1.5 text-2xl">
-                                                                  {jobPost?.title}
-                                                            </CardTitle>
-                                                            <div className="flex items-center justify-start gap-4 pb-2">
-                                                                  <Badge variant="secondary" className="py-0.5">
-                                                                        {jobPost?.workMode}
-                                                                  </Badge>
-                                                                  <Badge variant="secondary" className="py-0.5">
-                                                                        {jobPost?.jobType}
-                                                                  </Badge>
-                                                            </div>
-                                                            <div className="flex items-center gap-5">
-                                                                  <p>
-                                                                        <span>Salary :</span> {jobPost?.salary.slice(0, 9)}
-                                                                  </p>
-                                                                  |<p className="my-1">{jobPost.deadline}</p>
-                                                            </div>
-                                                            <p className="mt-1">{jobPost.description.slice(0, 100)}</p>
 
-                                                            {/* user Action Area */}
-                                                            <div
-                                                                  className={`flex items-center gap-4 pt-4 font-semibold`}
-                                                            >
-                                                                  <ApplyModal />
-
-                                                                  <SecondaryBtn onClick={() => save_jobs(jobPost?.id)}>Save</SecondaryBtn>
-                                                            </div>
-                                                      </div>
-                                                </div>
-                                          </Card>
-                                    ))}
-                              </div>
-                        </div>
                   </div>
             </MaxWidthWrapper >
       )
 }
 
 export default JobsDetails
+
+
+// < div className = "p-2 lg:w-96" >
+//                         <h1 className="mb-5 text-2xl font-semibold"> Find Out More ....</h1>
+//                         <div className="my-5">
+//                               {dummyJobs?.slice(2, 3).map((jobPost, index) => (
+//                                     <Card className="p-4" key={index}>
+//                                           <div key={jobPost?.id}>
+//                                                 <div>
+//                                                       <CardTitle className="pb-1.5 text-2xl">
+//                                                             {jobPost?.title}
+//                                                       </CardTitle>
+//                                                       <div className="flex items-center justify-start gap-4 pb-2">
+//                                                             <Badge variant="secondary" className="py-0.5">
+//                                                                   {jobPost?.workMode}
+//                                                             </Badge>
+//                                                             <Badge variant="secondary" className="py-0.5">
+//                                                                   {jobPost?.jobType}
+//                                                             </Badge>
+//                                                       </div>
+//                                                       <div className="flex items-center gap-5">
+//                                                             <p>
+//                                                                   <span>Salary :</span> {jobPost?.salary.slice(0, 9)}
+//                                                             </p>
+//                                                             |<p className="my-1">{jobPost.deadline}</p>
+//                                                       </div>
+//                                                       <p className="mt-1">{jobPost.description.slice(0, 100)}</p>
+
+//                                                       {/* user Action Area */}
+//                                                       <div
+//                                                             className={`flex items-center gap-4 pt-4 font-semibold`}
+//                                                       >
+//                                                             <ApplyModal slug={jobPost?.url} company={jobPost?.company} />
+
+//                                                             <SecondaryBtn onClick={() => save_jobs(jobPost?.id)}>Save</SecondaryBtn>
+//                                                       </div>
+//                                                 </div>
+//                                           </div>
+//                                     </Card>
+//                               ))}
+//                         </div>
+//                   </ >
