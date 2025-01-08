@@ -31,7 +31,7 @@ export function EditModal({
       return (
             <Dialog open={open} onOpenChange={onOpenChange}>
                   <form>
-                        <DialogContent className="sm:max-w-[425px] ">
+                        <DialogContent >
                               <DialogHeader>
                                     <DialogTitle>{title}</DialogTitle>
                                     {description && <DialogDescription>{description}</DialogDescription>}

@@ -7,19 +7,62 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import useApiForPost from "@/app/hooks/useApiForPost";
+import { useUserData } from "@/utils/encript_decript";
+import { useQuery } from "@tanstack/react-query";
 
 const DEGREES = ["Bachelor's", "Master's", "Ph.D.", "Associate's", "Diploma", "HSC", "SSC", "JSC", "PSC", "Other"]
 const YEARS = Array.from({ length: 50 }, (_, i) => (new Date().getFullYear() - i).toString())
 
 const Educations = () => {
       const [editEducationOpen, setEditEducationOpen] = useState(false)
+      const [user] = useUserData()
       const [formData, setFormData] = useState({
             country: '',
             universityName: '',
             degree: '',
             major: '',
             graduationYear: '',
+            'gpa/cgpa': '',
       })
+
+      const { apiRequest } = useApiForPost()
+
+
+      const { data: educations = [], isLoading, error, refetch } = useQuery({
+            queryKey: ["educations", user?._id],
+            queryFn: async () => {
+                  if (!user?._id) return [];
+                  const res = await fetch(`${process.env.NEXT_APP_BASE_URL}/api/v1/user/get-education?user_id=${user._id}`);
+
+                  if (!res.ok) {
+                        throw new Error("Failed to fetch workspace jobs");
+                  }
+
+                  const data = await res.json();
+                  return data.data;
+            },
+            enabled: !!user?._id,
+      });
+
+      const upload_education = async () => {
+
+            const { data, error } = await apiRequest<any>(
+                  `api/v1/user/upload-education`,
+                  "POST",
+                  {
+                        ...formData,
+                        user_id: user?._id
+                  }
+            )
+
+            if (data) {
+                  refetch()
+                  setEditEducationOpen(false)
+            }
+      }
+
+
       return (
             <div>
                   <Card>
@@ -27,14 +70,14 @@ const Educations = () => {
                               <CardTitle>Education</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                              <div className="flex items-start gap-4">
+                              {educations?.map((education: any) => <div className="flex items-start gap-4">
                                     <GraduationCap className="h-5 w-5 mt-1" />
                                     <div>
-                                          <h3 className="font-medium">Uttara University</h3>
-                                          <p className="text-sm text-muted-foreground">B.Sc. Degree, cse</p>
-                                          <p className="text-sm text-muted-foreground">Graduated 2018</p>
+                                          <h3 className="font-medium">{education?.universityName}</h3>
+                                          <p className="text-sm text-muted-foreground"><span className="capitalize">{education?.degree}</span>, {education?.major}</p>
+                                          <p className="text-sm text-muted-foreground">Graduated {education?.graduationYear}</p>
                                     </div>
-                              </div>
+                              </div>)}
                               <Button variant="outline" className="gap-2" onClick={() => setEditEducationOpen(true)}>
                                     <Pencil className="h-4 w-4" />
                                     Edit education
@@ -53,13 +96,13 @@ const Educations = () => {
                               {/* University Name */}
                               <div className="grid gap-2">
                                     <Label htmlFor="universityName" className="font-medium">
-                                          College/University Name
+                                          School/College/University Name
                                     </Label>
                                     <Input
                                           id="universityName"
                                           value={formData.universityName}
                                           onChange={(e) => setFormData((prev) => ({ ...prev, universityName: e.target.value }))}
-                                          placeholder="Enter university name"
+                                          placeholder="Enter school/college/university name"
                                           className="w-full"
                                     />
                               </div>
@@ -98,7 +141,7 @@ const Educations = () => {
                                                 value={formData.major}
                                                 onChange={(e) => setFormData((prev) => ({ ...prev, major: e.target.value }))}
                                                 placeholder="Enter major"
-                                                className="w-full"
+                                                className="w-full h-10"
                                           />
                                     </div>
                               </div>
@@ -126,21 +169,21 @@ const Educations = () => {
                               </div>
 
                               <div className="grid gap-2">
-                                    <Label htmlFor="major" className="font-medium">
+                                    <Label htmlFor="gpa/cgpa" className="font-medium">
                                           GPA or CGPA
                                     </Label>
                                     <Input
-                                          id="major"
-                                          value={formData.major}
-                                          onChange={(e) => setFormData((prev) => ({ ...prev, major: e.target.value }))}
-                                          placeholder="Enter major"
+                                          id="gpa/cgpa"
+                                          value={formData['gpa/cgpa']}
+                                          onChange={(e) => setFormData((prev) => ({ ...prev, 'gpa/cgpa': e.target.value }))}
+                                          placeholder="Enter GPA or CGPA"
                                           className="w-full"
                                     />
                               </div>
 
                               {/* Footer */}
                               <DialogFooter className="pt-4">
-                                    <Button type="submit" className="w-full sm:w-auto">
+                                    <Button onClick={upload_education} type="submit" className="w-full sm:w-auto">
                                           Save Changes
                                     </Button>
                               </DialogFooter>
