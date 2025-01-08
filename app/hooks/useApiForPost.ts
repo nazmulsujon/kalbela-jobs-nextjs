@@ -16,7 +16,7 @@ interface AxiosError {
 const useApiForPost = () => {
   const apiRequest = async <T, P = any>(
     url: string,
-    method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
+    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
     data: P | null = null, // Use P for request payload
     isProtected: boolean = false
   ): Promise<ApiResponse<T>> => {

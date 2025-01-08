@@ -1,22 +1,22 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
 import PhoneInput from "react-phone-input-2"
 import { z } from "zod"
-
 import "react-phone-input-2/lib/style.css"
-import { apply_form_Schema } from "@/schema/schema"
-import { Download } from "lucide-react"
-
+import { Download, Upload } from 'lucide-react'
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-
-import PrimaryBtn from "./PrimaryBtn"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useUserData } from "@/utils/encript_decript"
-
+import useApiRequest from "@/app/hooks/useApiRequest"
+import useApiForPost from "@/app/hooks/useApiForPost"
+import uploadImage from "@/app/hooks/useUploadImage"
 
 type FormData = z.infer<typeof apply_form_Schema>
 
@@ -31,190 +31,213 @@ const DailogForm: React.FC = () => {
       })
 
       const [user] = useUserData()
+      const [isUploading, setIsUploading] = useState(false)
+      const { data, loading, error } = useApiRequest<any>(
+            `user/get-resume?user_id=${user?._id}`,
+            "GET"
+      )
 
+      useEffect(() => {
+            setIsUploading(data?.data.length > 0 ? false : true)
+      }, [data?.data])
 
-
-      const addFile = (newFile: string) => {
-            // @ts-ignore
-            setResumeStore((prev) => [...prev, { file: newFile }])
-      }
-
-      const onSubmit = (data: FormData) => {
-            const formData = new FormData()
-            formData.append("email", data.email)
-            formData.append("phone", data.phone)
-            if (data.resume instanceof File) {
-                  formData.append("resume", data.resume)
+      const handleResumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            const file = e.target.files?.[0]
+            if (file) {
+                  const validTypes = [
+                        "application/pdf",
+                  ]
+                  if (!validTypes.includes(file.type)) {
+                        e.target.value = ""
+                        alert("Invalid file type. Please upload a PDF, DOC, or DOCX file.")
+                  }
             }
-            formData.append("age", data.age)
-            formData.append("salary", data.salary)
-
-            console.log("Form data:", Object.fromEntries(formData))
-            addFile(data.resume)
       }
+
+
+      const { apiRequest } = useApiForPost()
+
+
+      const onSubmit = async (upload_data: FormData) => {
+
+
+            let resume = upload_data.resume;
+
+
+            // Check if resume is a File
+            if (resume[0] instanceof File) {
+                  resume = uploadImage(resume[0]);
+            }
+
+            const data_formate = {
+                  ...upload_data,
+                  resume,
+                  user_id: user?._id,
+                  job_id: 'need job id',
+                  org_id: 'need org id'
+            }
+            const { data, error } = await apiRequest<any>(
+                  `api/v1/user/save-jobs`,
+                  "POST",
+                  data_formate
+            )
+
+      };
+
+
+
 
       return (
-            <div className="mx-auto mt-7 h-[500px] w-full max-w-2xl overflow-y-auto rounded bg-white p-6 dark:bg-gray-800">
-                  <div className="space-y-6">
-                        {/* Profile Section */}
-                        <div className="flex flex-col items-center gap-4 sm:flex-row">
-                              <div className="h-16 w-16 overflow-hidden rounded-full">
-                                    <img
-                                          src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                                          alt="Elias Sokar"
-                                          width={64}
-                                          height={64}
-                                          className="h-full w-full object-cover"
-                                    />
-                              </div>
-                              <div>
-                                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                                          {user?.name}
-                                    </h3>
-                                    <p className="text-md text-gray-700 dark:text-gray-300">
-                                          {user?.title}
-                                    </p>
-
-                              </div>
-                        </div>
-
-                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
-                              {/* Email Input field */}
-                              <div>
-                                    <Label
-                                          htmlFor="email"
-                                          className="text-md border-gray-900 font-medium"
-                                    >
-                                          Email Address
-                                    </Label>
-                                    <Input
-                                          type="email"
-                                          id="email"
-                                          placeholder="elias@example.com"
-                                          defaultValue={user?.email}
-                                          {...register("email")}
-                                          className="border-[0.5px] border-gray-900"
-                                          aria-invalid={errors.email ? "true" : "false"}
-                                    />
-                                    {errors.email && (
-                                          <p className="mt-1 text-sm text-red-500" role="alert">
-                                                {errors.email.message}
-                                          </p>
-                                    )}
-                              </div>
-
-                              {/* Phone Number Input field */}
-                              <div>
-                                    <Label
-                                          htmlFor="phone"
-                                          className="text-md border-gray-900 font-medium"
-                                    >
-                                          Phone Number
-                                    </Label>
-                                    <Controller
-                                          name="phone"
-                                          control={control}
-                                          render={({ field }) => (
-                                                <PhoneInput
-                                                      country="bd"
-                                                      inputProps={{
-                                                            id: "phone",
-                                                            "aria-invalid": errors.phone ? "true" : "false",
-                                                      }}
-                                                      placeholder="+880 177 503 ----"
-                                                      value={field.value}
-                                                      onChange={(value) => field.onChange(value)}
-                                                      inputStyle={{
-                                                            width: "100%",
-                                                            height: "40px",
-                                                            fontSize: "16px",
-                                                            paddingLeft: "48px",
-                                                            borderRadius: "0.375rem",
-                                                            backgroundColor: "transparent",
-                                                            color: "inherit",
-                                                            border: "1px solid black",
-                                                      }}
-                                                      containerClass="dark:bg-gray-800"
-                                                      inputClass="dark:text-white"
-                                                      buttonClass="dark:bg-gray-700"
-                                                      dropdownClass="dark:bg-gray-700 dark:text-white"
-                                                />
-                                          )}
-                                    />
-                                    {errors.phone && (
-                                          <p className="mt-1 text-sm text-red-500" role="alert">
-                                                {errors.phone.message}
-                                          </p>
-                                    )}
-                              </div>
-
-                              {/* Resume Upload Section */}
-                              <div>
-                                    <Label htmlFor="resume" className="text-lg font-bold">
-                                          Resume
-                                    </Label>
-                                    <Input
-                                          type="file"
-                                          id="resume"
-                                          accept=".pdf,.doc,.docx"
-                                          {...register("resume", {
-                                                onChange: (e) => {
-                                                      const file = e.target.files?.[0]
-                                                      if (file) {
-                                                            const validTypes = [
-                                                                  "application/pdf",
-                                                                  "application/msword",
-                                                                  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                                                            ]
-                                                            if (!validTypes.includes(file.type)) {
-                                                                  e.target.value = ""
-                                                            }
-                                                      }
-                                                },
-                                          })}
-                                          className="border-[0.5px] border-gray-900"
-                                    />
-                              </div>
-
-                              {/* Additional Questions */}
-                              <div className="space-y-1">
-                                    <h4 className="text-lg font-bold text-gray-900 dark:text-white">
-                                          Additional Questions
-                                    </h4>
-
+            < >
+                  <CardHeader>
+                        <CardTitle className="text-2xl font-bold">Job Application</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                              <div className="flex items-center space-x-4">
+                                    <Avatar className="w-16 h-16 border">
+                                          <AvatarImage src={user?.profile_picture} alt={user?.fullName} />
+                                          <AvatarFallback>{user?.fullName?.charAt(0)}</AvatarFallback>
+                                    </Avatar>
                                     <div>
-                                          <Label
-                                                htmlFor="salary"
-                                                className="text-md border-gray-900 font-medium"
-                                          >
-                                                Your Salary Expectation
-                                          </Label>
+                                          <h3 className="text-lg font-semibold">{user?.fullName}</h3>
+                                          <p className="text-sm text-muted-foreground">{user?.title}</p>
+                                    </div>
+                              </div>
+
+                              <div className="space-y-4">
+                                    <div className="space-y-2">
+                                          <Label htmlFor="email">Email Address</Label>
+                                          <Input
+                                                type="email"
+                                                id="email"
+                                                placeholder="you@example.com"
+                                                defaultValue={user?.email}
+                                                {...register("email")}
+                                          />
+                                          {errors.email && (
+                                                <p className="text-sm text-destructive">{errors.email.message}</p>
+                                          )}
+                                    </div>
+
+                                    <div className="space-y-2">
+                                          <Label htmlFor="phone">Phone Number</Label>
+                                          <Controller
+                                                name="phone"
+                                                control={control}
+                                                render={({ field }) => (
+                                                      <PhoneInput
+                                                            country="bd"
+                                                            inputProps={{
+                                                                  id: "phone",
+                                                                  className: "w-full p-2 pl-14 border border-gray-300 "
+                                                            }}
+                                                            containerClass="w-full"
+                                                            inputStyle={{
+                                                                  width: "100%",
+                                                                  height: "40px",
+                                                                  fontSize: "16px",
+                                                                  borderRadius: "0.375rem",
+                                                            }}
+                                                            buttonStyle={{
+                                                                  borderTopLeftRadius: "0.375rem",
+                                                                  borderBottomLeftRadius: "0.375rem",
+                                                            }}
+                                                            {...field}
+                                                      />
+                                                )}
+                                          />
+                                          {errors.phone && (
+                                                <p className="text-sm text-destructive">{errors.phone.message}</p>
+                                          )}
+                                    </div>
+
+                                    <div className="space-y-2">
+                                          <Label htmlFor="resume">Resume</Label>
+                                          {loading ? (
+                                                <p>Loading resumes...</p>
+                                          ) : (
+                                                <div className="space-y-2">
+                                                      {data?.data?.length > 0 && (
+                                                            <Select
+                                                                  disabled={isUploading}
+                                                                  onValueChange={(value) => {
+
+                                                                        register("resume", { value });
+                                                                  }}
+                                                            >
+                                                                  <SelectTrigger>
+                                                                        <SelectValue placeholder="Select an existing resume" />
+                                                                  </SelectTrigger>
+                                                                  <SelectContent>
+                                                                        {data?.data?.map((resume: any, index: number) => (
+                                                                              <SelectItem key={index} value={resume.resume_url}>
+                                                                                    {resume.resume_name}
+                                                                              </SelectItem>
+                                                                        ))}
+                                                                  </SelectContent>
+                                                            </Select>
+                                                      )}
+
+                                                      <div className="flex items-center space-x-2">
+                                                            <input
+                                                                  type="checkbox"
+                                                                  id="uploadToggle"
+                                                                  checked={isUploading}
+                                                                  onChange={(e) => setIsUploading(e.target.checked)}
+                                                                  className="rounded border-gray-300 text-primary focus:ring-primary"
+                                                            />
+                                                            <Label htmlFor="uploadToggle" className="text-sm">
+                                                                  Upload a new resume
+                                                            </Label>
+                                                      </div>
+
+                                                      {isUploading && (
+                                                            <div className="flex items-center space-x-2">
+                                                                  <Input
+                                                                        type="file"
+                                                                        id="resume"
+                                                                        accept=".pdf"
+                                                                        {...register("resume", { onChange: handleResumeChange })}
+                                                                  />
+
+                                                            </div>
+                                                      )}
+                                                </div>
+                                          )}
+                                          {error && <p className="text-sm text-destructive">Failed to load resumes. Try again later.</p>}
+                                    </div>
+
+                                    <div className="space-y-2">
+                                          <Label htmlFor="salary">Salary Expectation</Label>
                                           <Input
                                                 type="text"
                                                 id="salary"
                                                 placeholder="Your salary expectation"
                                                 {...register("salary")}
-                                                className="border-[0.5px] border-gray-900"
-                                                aria-invalid={errors.salary ? "true" : "false"}
                                           />
                                           {errors.salary && (
-                                                <p className="mt-1 text-sm text-red-500" role="alert">
-                                                      {errors.salary.message}
-                                                </p>
+                                                <p className="text-sm text-destructive">{errors.salary.message}</p>
                                           )}
                                     </div>
                               </div>
 
-                              {/* Submit Button */}
-                              <div className="pt-3">
-                                    <PrimaryBtn type="submit" className="w-1/3 py-1.5">
-                                          Submit Application
-                                    </PrimaryBtn>
-                              </div>
+                              <Button type="submit" className="w-full">
+                                    Submit Application
+                              </Button>
                         </form>
-                  </div>
-            </div>
+                  </CardContent>
+            </>
       )
 }
 
 export default DailogForm
+
+
+
+const apply_form_Schema = z.object({
+      email: z.string().email({ message: "Invalid email address" }),
+      phone: z.string().min(10, { message: "Phone number must be at least 10 digits" }),
+      resume: z.any().optional(),
+      salary: z.string().min(1, { message: "Salary expectation is required" }),
+})

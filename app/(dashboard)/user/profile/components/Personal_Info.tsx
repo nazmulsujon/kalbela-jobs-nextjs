@@ -25,6 +25,7 @@ import useUploadImage from "@/app/hooks/useUploadImage"
 import uploadImage from "@/app/hooks/useUploadImage"
 import useApiForPost from "@/app/hooks/useApiForPost"
 import About from "./About"
+import { Skeleton } from "@/components/ui/skeleton"
 
 
 
@@ -33,6 +34,8 @@ import About from "./About"
 export default function ProfilePage() {
 
       const [user, setUserData] = useUserData()
+
+      console.log("user", user);
 
       const [editDetailsOpen, setEditDetailsOpen] = useState(false)
       const [editNameOpen, setEditNameOpen] = useState(false)
@@ -43,7 +46,7 @@ export default function ProfilePage() {
       const [loading, setLoading] = useState(false)
       const [error_message, set_error_message] = useState("")
 
-      const [name, setName] = useState(user?.name)
+      const [name, setName] = useState(user?.fullName)
       const [languages, setLanguages] = useState(user?.languages || []);
       const [new_language, setNewLanguage] = useState(user?.languages);
       const [editContactOpen, setEditContactOpen] = useState(false)
@@ -113,7 +116,7 @@ export default function ProfilePage() {
                   `api/v1/user/update-profile?id=${user?._id}`,
                   "PUT",
                   {
-                        name
+                        fullName: name
                   }
             )
 
@@ -185,26 +188,41 @@ export default function ProfilePage() {
 
 
 
+
       return (
             <div >
                   <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-6">
                         <div className="space-y-6">
                               {/* Header Section */}
-                              <div className="flex items-center gap-4">
-                                    {user?.profile_picture ? <Image
+                              {user ? <div className="flex items-center gap-4">
+                                    <div
+                                          className="relative group w-20 h-20 flex items-center justify-center text-3xl text-white rounded-full bg-blue-600 cursor-pointer"
                                           onClick={() => setEditImageOpen(true)}
-                                          src={user?.profile_picture}
-                                          alt="Bright Future Logo"
-                                          width={80}
-                                          height={80}
-                                          className="w-20 h-20 flex items-center justify-center text-3xl text-white rounded-full bg-blue-600"
-                                    /> : <div onClick={() => setEditImageOpen(true)} className="w-20 h-20 flex items-center justify-center text-3xl text-white rounded-full bg-blue-600" >
-                                          {user?.name?.charAt(0).toUpperCase()}
-                                    </div>}
+                                    >
+                                          {user?.profile_picture ? (
+                                                <Image
+                                                      src={user?.profile_picture}
+                                                      alt="Bright Future Logo"
+                                                      width={80}
+                                                      height={80}
+                                                      className="w-20 h-20 rounded-full"
+                                                />
+                                          ) : (
+                                                <span className="flex items-center justify-center">
+                                                      {user?.fullName?.charAt(0).toUpperCase()}
+                                                </span>
+                                          )}
+
+                                          {/* Update text on hover */}
+                                          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 rounded-full transition-opacity">
+                                                <span className="text-sm text-white font-medium">Update</span>
+                                          </div>
+                                    </div>
+
                                     <div className="space-y-1 flex-1">
                                           <div className="flex  items-center justify-between">
                                                 <div className="flex items-center gap-2">
-                                                      <h1 className="text-2xl font-bold">{user?.name}</h1>
+                                                      <h1 className="text-2xl font-bold">{user?.fullName ? user?.fullName : "Update Your Name"}</h1>
                                                       <Pencil onClick={() => setEditNameOpen(true)} className="h-4 w-4" />
                                                 </div>
 
@@ -212,12 +230,12 @@ export default function ProfilePage() {
                                           <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                                 <div className="flex items-center gap-1">
                                                       <Contact className="h-4 w-4" />
-                                                      {user?.phone_number}
+                                                      {user?.phone_number ? user?.phone_number : "Update Phone Number"}
                                                 </div>
                                                 <div className="flex items-center rounded-full size-1 bg-gray-500"></div>
                                                 <div className="flex items-center gap-1">
                                                       <Mail className="h-4 w-4" />
-                                                      {user?.email}
+                                                      {user?.email ? user?.email : "Update Email"}
                                                 </div>
                                                 <Pencil onClick={() => setEditContactOpen(true)} className="h-4 w-4" />
                                           </div>
@@ -228,13 +246,20 @@ export default function ProfilePage() {
                                                 </div>
                                                 <div className="flex items-center rounded-full size-1 bg-gray-500"></div>
                                                 <div className="flex items-center gap-1">
-                                                      <span>{user?.languages?.join(", ")}</span>
+                                                      <span>{user?.languages?.length ? user?.languages?.join(", ") : "Update Languages"}</span>
                                                       <Pencil onClick={() => setEditLanguagesOpen(true)} className="h-4 w-4" />
                                                 </div>
                                           </div>
                                     </div>
+                              </div> : <div className="flex items-center gap-4">
+                                    <Skeleton className="w-20 h-20 rounded-full" />
+                                    <div className="space-y-2 flex-1">
+                                          <Skeleton className="h-8 w-3/4" />
+                                          <Skeleton className="h-4 w-full" />
+                                          <Skeleton className="h-4 w-5/6" />
+                                    </div>
                               </div>
-
+                              }
 
 
                               <About />
@@ -252,7 +277,7 @@ export default function ProfilePage() {
                                     <div className="grid gap-4 py-4">
                                           <div className="grid gap-2">
                                                 <Label htmlFor="name">Name</Label>
-                                                <Input onChange={(e) => setName(e.target.value)} id="name" defaultValue={user?.name} />
+                                                <Input onChange={(e) => setName(e.target.value)} id="name" defaultValue={user?.fullName} />
                                           </div>
                                     </div>
                                     <DialogFooter>
@@ -269,12 +294,12 @@ export default function ProfilePage() {
                                     <div className="grid gap-4 py-4">
                                           <div className="grid gap-2">
                                                 <Label htmlFor="email">Email</Label>
-                                                <Input onChange={(e) => setEmail(e.target.value)} id="email" defaultValue={user?.email} />
+                                                <Input required onChange={(e) => setEmail(e.target.value)} id="email" defaultValue={user?.email} />
                                           </div>
 
                                           <div className="grid gap-2">
                                                 <Label htmlFor="email">Phone Number</Label>
-                                                <Input onChange={(e) => setPhone(e.target.value)} id="email" defaultValue={user?.phone_number} />
+                                                <Input required onChange={(e) => setPhone(e.target.value)} id="email" defaultValue={user?.phone_number} />
                                           </div>
                                     </div>
                                     <DialogFooter>
@@ -368,17 +393,26 @@ export default function ProfilePage() {
                         </div>
 
 
-                        <Card className="h-fit">
+                        <Card className="h-fit group">
                               <CardHeader>
                                     <CardTitle>Quick Links</CardTitle>
                               </CardHeader>
                               <CardContent>
-                                    <Link href="#" className="flex items-center gap-2 text-muted-foreground hover:text-foreground">
+                                    <Link
+                                          href="#"
+                                          className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-300 ease-in-out"
+                                    >
                                           <LinkIcon className="h-4 w-4" />
                                           Portfolio
                                     </Link>
+                                    <button
+                                          className="hidden gap-2 items-center justify-center mt-4 transition-all duration-300 ease-in-out opacity-0 transform scale-95 group-hover:flex group-hover:opacity-100 group-hover:scale-100"
+                                    >
+                                          <Plus className="h-4 w-4" /> Update
+                                    </button>
                               </CardContent>
                         </Card>
+
                   </div>
             </div>
       )

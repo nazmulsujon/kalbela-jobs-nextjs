@@ -6,13 +6,16 @@ import { useUserData } from "@/utils/encript_decript"
 const page = () => {
 
       const [user] = useUserData()
+
+
+
       return (
             <div className="flex flex-1 flex-col overflow-x-hidden">
 
                   <div className="py-6">
                         <div className="mx-auto ">
                               <div className="md:flex md:items-center">
-                                    <p className="text-base font-bold text-gray-900">Hey {user?.name} -</p>
+                                    <p className="text-base font-bold text-gray-900">Hey {user?.fullName} -</p>
                                     <p className="mt-1 text-base font-medium text-gray-500 md:ml-2 md:mt-0">
                                           here's what's happening with your store today
                                     </p>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
       Bookmark,
       Building2,
@@ -28,6 +28,9 @@ import {
       SelectTrigger,
       SelectValue,
 } from "@/components/ui/select"
+import useApiRequest from "@/app/hooks/useApiRequest"
+import { useUserData } from "@/utils/encript_decript"
+import Link from "next/link"
 
 type Job = {
       id: number
@@ -38,75 +41,84 @@ type Job = {
       status: "Applied" | "In Review" | "Interview" | "Offer" | "Rejected"
 }
 
-const initialJobs: Job[] = [
-      {
-            id: 1,
-            title: "Frontend Developer",
-            company: "TechCorp",
-            location: "New York, NY",
-            appliedDate: "2023-06-01",
-            status: "In Review",
-      },
-      {
-            id: 2,
-            title: "UX Designer",
-            company: "DesignHub",
-            location: "San Francisco, CA",
-            appliedDate: "2023-05-28",
-            status: "Interview",
-      },
-      {
-            id: 3,
-            title: "Data Scientist",
-            company: "DataWorks",
-            location: "Boston, MA",
-            appliedDate: "2023-05-25",
-            status: "Applied",
-      },
-      {
-            id: 4,
-            title: "Product Manager",
-            company: "InnovateCo",
-            location: "Austin, TX",
-            appliedDate: "2023-05-20",
-            status: "Offer",
-      },
-      {
-            id: 5,
-            title: "DevOps Engineer",
-            company: "CloudSys",
-            location: "Seattle, WA",
-            appliedDate: "2023-05-15",
-            status: "Rejected",
-      },
-]
+// const initialJobs: Job[] = [
+//       {
+//             id: 1,
+//             title: "Frontend Developer",
+//             company: "TechCorp",
+//             location: "New York, NY",
+//             appliedDate: "2023-06-01",
+//             status: "In Review",
+//       },
+//       {
+//             id: 2,
+//             title: "UX Designer",
+//             company: "DesignHub",
+//             location: "San Francisco, CA",
+//             appliedDate: "2023-05-28",
+//             status: "Interview",
+//       },
+//       {
+//             id: 3,
+//             title: "Data Scientist",
+//             company: "DataWorks",
+//             location: "Boston, MA",
+//             appliedDate: "2023-05-25",
+//             status: "Applied",
+//       },
+//       {
+//             id: 4,
+//             title: "Product Manager",
+//             company: "InnovateCo",
+//             location: "Austin, TX",
+//             appliedDate: "2023-05-20",
+//             status: "Offer",
+//       },
+//       {
+//             id: 5,
+//             title: "DevOps Engineer",
+//             company: "CloudSys",
+//             location: "Seattle, WA",
+//             appliedDate: "2023-05-15",
+//             status: "Rejected",
+//       },
+// ]
+
+
 
 export default function AppliedJobs() {
+
+      const [user] = useUserData()
+      const { data, loading, error } = useApiRequest<any>(
+            `user/get-saved-jobs?user_id=${user?._id}`,
+            "GET"
+      )
+
+      const [initialJobs, setInitialJobs] = useState<Job[]>([])
       const [jobs, setJobs] = useState(initialJobs)
+      useEffect(() => {
+            setInitialJobs(data?.data)
+            setJobs(data?.data)
+      }, [data]);
+
+
       const [searchTerm, setSearchTerm] = useState("")
       const [statusFilter, setStatusFilter] = useState<string | undefined>()
       const [savedJobs, setSavedJobs] = useState<number[]>([])
 
-      const filteredJobs = jobs.filter(
-            (job) =>
-                  job.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-                  (!statusFilter || statusFilter === "all" || job.status === statusFilter)
+      const filteredJobs = jobs?.filter(
+            searchTerm.length === 0
+                  ? (job: any) => job
+                  : (job: any) => job?.job_post?.job_title?.toLowerCase()?.includes(searchTerm.toLowerCase())
       )
 
-      const getStatusColor = (status: Job["status"]) => {
+
+      const getStatusColor = (status: boolean) => {
             switch (status) {
-                  case "Applied":
+                  case true:
                         return "bg-blue-100 text-blue-800"
-                  case "In Review":
-                        return "bg-yellow-100 text-yellow-800"
-                  case "Interview":
-                        return "bg-purple-100 text-purple-800"
-                  case "Offer":
-                        return "bg-green-100 text-green-800"
-                  case "Rejected":
+                  case false:
                         return "bg-red-100 text-red-800"
-                  default:
-                        return "bg-gray-100 text-gray-800"
             }
       }
 
@@ -150,27 +162,21 @@ export default function AppliedJobs() {
                         </Select>
                   </div>
                   <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                        {filteredJobs.map((job) => (
-                              <Card key={job.id} className="flex flex-col">
+                        {filteredJobs?.map((job: any) => (
+                              <Card key={job._id} className="flex flex-col">
                                     <CardHeader>
                                           <CardTitle className="flex items-start justify-between">
-                                                <span className="text-xl font-semibold">{job.title}</span>
+                                                <span className="text-xl font-semibold">{job?.job_post?.job_title}</span>
                                                 <div className="flex items-center space-x-2">
-                                                      <Badge className={getStatusColor(job.status)}>
-                                                            {job.status}
+                                                      <Badge className={getStatusColor(job.job_post.status)}>
+                                                            {job.job_post.status ? 'Active' : 'Inactive'}
                                                       </Badge>
-                                                      <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            onClick={() => toggleSaveJob(job.id)}
+                                                      <Link
+                                                            href={`/search-details/job-details/${job?.job_post?.url}`}
                                                             className="h-auto p-0"
                                                       >
-                                                            {savedJobs.includes(job.id) ? (
-                                                                  <Bookmark className="h-5 w-5 text-blue-500" />
-                                                            ) : (
-                                                                  <Bookmark className="h-5 w-5" />
-                                                            )}
-                                                      </Button>
+                                                            <Bookmark className="h-5 w-5 text-blue-500" />
+                                                      </Link>
                                                 </div>
                                           </CardTitle>
                                     </CardHeader>
@@ -178,23 +184,22 @@ export default function AppliedJobs() {
                                           <div className="space-y-2 text-sm">
                                                 <div className="flex items-center">
                                                       <Building2 size={16} className="mr-2 text-gray-500" />
-                                                      <span>{job.company}</span>
+                                                      <span>{job?.job_post?.company_info?.name}</span>
                                                 </div>
                                                 <div className="flex items-center">
                                                       <MapPin size={16} className="mr-2 text-gray-500" />
-                                                      <span>{job.location}</span>
+                                                      <span>{job?.job_post?.location?.remote ? "Remote" : job?.job_post?.location?.division}</span>
                                                 </div>
                                                 <div className="flex items-center">
                                                       <Calendar size={16} className="mr-2 text-gray-500" />
-                                                      <span>Applied on {job.appliedDate}</span>
+                                                      <span>Saved on {new Date(job?.updated_at).toDateString()}</span>
                                                 </div>
                                           </div>
                                     </CardContent>
                                     <CardFooter className="flex justify-between">
-                                          <Button variant="outline" size="sm">
+                                          <Link href={`/search-details/job-details/${job?.job_post?.url}`} >
                                                 View Details
-                                          </Button>
-                                          {/* <Button variant="secondary" size="sm">Update Status</Button> */}
+                                          </Link>
                                     </CardFooter>
                               </Card>
                         ))}
