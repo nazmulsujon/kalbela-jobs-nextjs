@@ -1,6 +1,8 @@
+'use client'
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Award, GraduationCap, Pencil } from "lucide-react";
+import { GraduationCap, Pencil, Trash2 } from 'lucide-react';
 import { useState } from "react";
 import { EditModal } from "./CommonModal";
 import { Input } from "@/components/ui/input";
@@ -18,6 +20,7 @@ const Educations = () => {
       const [editEducationOpen, setEditEducationOpen] = useState(false)
       const [user] = useUserData()
       const [formData, setFormData] = useState({
+            id: '',
             country: '',
             universityName: '',
             degree: '',
@@ -28,7 +31,6 @@ const Educations = () => {
 
       const { apiRequest } = useApiForPost()
 
-
       const { data: educations = [], isLoading, error, refetch } = useQuery({
             queryKey: ["educations", user?._id],
             queryFn: async () => {
@@ -36,7 +38,7 @@ const Educations = () => {
                   const res = await fetch(`${process.env.NEXT_APP_BASE_URL}/api/v1/user/get-education?user_id=${user._id}`);
 
                   if (!res.ok) {
-                        throw new Error("Failed to fetch workspace jobs");
+                        throw new Error("Failed to fetch education data");
                   }
 
                   const data = await res.json();
@@ -45,23 +47,60 @@ const Educations = () => {
             enabled: !!user?._id,
       });
 
-      const upload_education = async () => {
+      const handleEducationAction = async (action: 'add' | 'edit' | 'delete') => {
+            let endpoint = '';
+            let method = 'POST';
+            let body;
+
+            switch (action) {
+                  case 'add':
+                        endpoint = `api/v1/user/upload-education`;
+                        body = { ...formData, user_id: user?._id };
+                        break;
+                  case 'edit':
+                        endpoint = `api/v1/user/update-education?education_id=${formData.id}`;
+                        method = 'PATCH';
+                        body = { ...formData, user_id: user?._id };
+                        break;
+                  case 'delete':
+                        endpoint = `api/v1/user/delete-education?education_id=${formData.id}`;
+                        method = 'DELETE';
+                        break;
+            }
 
             const { data, error } = await apiRequest<any>(
-                  `api/v1/user/upload-education`,
-                  "POST",
-                  {
-                        ...formData,
-                        user_id: user?._id
-                  }
-            )
+                  endpoint,
+                  method as any,
+                  body
+            );
 
             if (data) {
-                  refetch()
-                  setEditEducationOpen(false)
+                  refetch();
+                  setEditEducationOpen(false);
+                  setFormData({
+                        id: '',
+                        country: '',
+                        universityName: '',
+                        degree: '',
+                        major: '',
+                        graduationYear: '',
+                        'gpa/cgpa': '',
+                  });
             }
-      }
+      };
 
+      const openEditModal = (education: any) => {
+            setFormData({
+                  id: education._id,
+                  country: education.country || '',
+                  universityName: education.universityName,
+                  degree: education.degree,
+                  major: education.major,
+                  graduationYear: education.graduationYear,
+                  'gpa/cgpa': education['gpa/cgpa'] || '',
+            })
+            setEditEducationOpen(true)
+      }
 
       return (
             <div>
@@ -70,17 +109,45 @@ const Educations = () => {
                               <CardTitle>Education</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                              {educations?.map((education: any) => <div className="flex items-start gap-4">
-                                    <GraduationCap className="h-5 w-5 mt-1" />
-                                    <div>
-                                          <h3 className="font-medium">{education?.universityName}</h3>
-                                          <p className="text-sm text-muted-foreground"><span className="capitalize">{education?.degree}</span>, {education?.major}</p>
-                                          <p className="text-sm text-muted-foreground">Graduated {education?.graduationYear}</p>
+                              {educations?.map((education: any) => (
+                                    <div key={education._id} className="flex items-start justify-between gap-4">
+                                          <div className="flex items-start gap-4">
+                                                <GraduationCap className="h-5 w-5 mt-1" />
+                                                <div>
+                                                      <h3 className="font-medium">{education?.universityName}</h3>
+                                                      <p className="text-sm text-muted-foreground">
+                                                            <span className="capitalize">{education?.degree}</span>, {education?.major}
+                                                      </p>
+                                                      <p className="text-sm text-muted-foreground">Graduated {education?.graduationYear}</p>
+                                                </div>
+                                          </div>
+                                          <div className="flex gap-2">
+                                                <Button variant="ghost" size="icon" onClick={() => openEditModal(education)}>
+                                                      <Pencil className="h-4 w-4" />
+                                                </Button>
+                                                <Button variant="ghost" size="icon" onClick={() => {
+                                                      setFormData((prev) => ({ ...prev, id: education._id }));
+                                                      handleEducationAction('delete');
+                                                }}>
+                                                      <Trash2 className="h-4 w-4" />
+                                                </Button>
+                                          </div>
                                     </div>
-                              </div>)}
-                              <Button variant="outline" className="gap-2" onClick={() => setEditEducationOpen(true)}>
+                              ))}
+                              <Button variant="outline" className="gap-2" onClick={() => {
+                                    setFormData({
+                                          id: '',
+                                          country: '',
+                                          universityName: '',
+                                          degree: '',
+                                          major: '',
+                                          graduationYear: '',
+                                          'gpa/cgpa': '',
+                                    })
+                                    setEditEducationOpen(true)
+                              }}>
                                     <Pencil className="h-4 w-4" />
-                                    Edit education
+                                    Add education
                               </Button>
                         </CardContent>
                   </Card>
@@ -88,11 +155,13 @@ const Educations = () => {
                   <EditModal
                         open={editEducationOpen}
                         onOpenChange={setEditEducationOpen}
-                        title="Edit Education"
-                        description="Update your education information"
+                        title={formData.id ? "Edit Education" : "Add Education"}
+                        description={formData.id ? "Update your education information" : "Add new education information"}
                   >
-                        <form className="space-y-6">
-
+                        <form className="space-y-6" onSubmit={(e) => {
+                              e.preventDefault()
+                              handleEducationAction(formData.id ? 'edit' : 'add')
+                        }}>
                               {/* University Name */}
                               <div className="grid gap-2">
                                     <Label htmlFor="universityName" className="font-medium">
@@ -183,14 +252,12 @@ const Educations = () => {
 
                               {/* Footer */}
                               <DialogFooter className="pt-4">
-                                    <Button onClick={upload_education} type="submit" className="w-full sm:w-auto">
-                                          Save Changes
+                                    <Button type="submit" className="w-full sm:w-auto">
+                                          {formData.id ? 'Save Changes' : 'Add Education'}
                                     </Button>
                               </DialogFooter>
                         </form>
                   </EditModal>
-
-
             </div>
       );
 };

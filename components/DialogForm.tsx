@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
 import PhoneInput from "react-phone-input-2"
@@ -13,14 +13,20 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useUserData } from "@/utils/encript_decript"
 import useApiRequest from "@/app/hooks/useApiRequest"
-import useApiForPost from "@/app/hooks/useApiForPost"
+import { useUserData } from "@/utils/encript_decript"
 import uploadImage from "@/app/hooks/useUploadImage"
+import useApiForPost from "@/app/hooks/useApiForPost"
 
 type FormData = z.infer<typeof apply_form_Schema>
 
-const DailogForm: React.FC = () => {
+interface ApplyModalProps {
+      slug: string;
+      company: string;
+      user: any
+}
+
+const DailogForm: React.FC<ApplyModalProps> = ({ user, slug, company }) => {
       const {
             register,
             handleSubmit,
@@ -28,24 +34,26 @@ const DailogForm: React.FC = () => {
             formState: { errors },
       } = useForm<FormData>({
             resolver: zodResolver(apply_form_Schema),
+            defaultValues: {
+                  phone: user?.phone_number || "", // Set the default value for the phone field
+            },
+
       })
 
-      const [user] = useUserData()
+
       const [isUploading, setIsUploading] = useState(false)
       const { data, loading, error } = useApiRequest<any>(
             `user/get-resume?user_id=${user?._id}`,
             "GET"
       )
 
-      useEffect(() => {
-            setIsUploading(data?.data.length > 0 ? false : true)
-      }, [data?.data])
-
       const handleResumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             const file = e.target.files?.[0]
             if (file) {
                   const validTypes = [
                         "application/pdf",
+                        "application/msword",
+                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                   ]
                   if (!validTypes.includes(file.type)) {
                         e.target.value = ""
@@ -54,48 +62,59 @@ const DailogForm: React.FC = () => {
             }
       }
 
-
       const { apiRequest } = useApiForPost()
 
-
-      const onSubmit = async (upload_data: FormData) => {
-
-
-            let resume = upload_data.resume;
-
-
-            // Check if resume is a File
-            if (resume[0] instanceof File) {
-                  resume = uploadImage(resume[0]);
+      const onSubmit = async (apply_data: FormData) => {
+            console.log("Form data:", apply_data)
+            let resume = null
+            if (isUploading) {
+                  resume = await uploadImage(apply_data.resume_file[0])
+            }
+            else {
+                  resume = apply_data?.resume_url
+            }
+            const upload_data = {
+                  resume_url: resume,
+                  user_phone_number: apply_data.phone,
+                  user_email: apply_data.email,
+                  job_slug: slug,
+                  user_id: user._id,
+                  company_id: company,
+                  expected_salary: apply_data.salary,
             }
 
-            const data_formate = {
-                  ...upload_data,
-                  resume,
-                  user_id: user?._id,
-                  job_id: 'need job id',
-                  org_id: 'need org id'
+            console.log("upload_data", upload_data);
+
+            if (!user._id) {
+                  alert('need to login')
+            }
+            if (!slug) {
+                  alert('Something went wrong')
             }
             const { data, error } = await apiRequest<any>(
-                  `api/v1/user/save-jobs`,
+                  `api/v1/user/apply-job`,
                   "POST",
-                  data_formate
+                  upload_data
             )
+            if (error) {
+                  alert(error.message)
+            }
+            else {
+                  alert(data.message)
+            }
 
-      };
 
-
-
+      }
 
       return (
-            < >
+            <div >
                   <CardHeader>
                         <CardTitle className="text-2xl font-bold">Job Application</CardTitle>
                   </CardHeader>
                   <CardContent>
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                               <div className="flex items-center space-x-4">
-                                    <Avatar className="w-16 h-16 border">
+                                    <Avatar className="w-16 h-16">
                                           <AvatarImage src={user?.profile_picture} alt={user?.fullName} />
                                           <AvatarFallback>{user?.fullName?.charAt(0)}</AvatarFallback>
                                     </Avatar>
@@ -128,22 +147,15 @@ const DailogForm: React.FC = () => {
                                                 render={({ field }) => (
                                                       <PhoneInput
                                                             country="bd"
+                                                            value={field.value}
+                                                            onChange={(phone) => field.onChange(phone)}
                                                             inputProps={{
                                                                   id: "phone",
-                                                                  className: "w-full p-2 pl-14 border border-gray-300 "
+                                                                  className:
+                                                                        "w-full p-2 pl-14 border border-gray-300 rounded-md focus:ring focus:ring-indigo-500",
                                                             }}
                                                             containerClass="w-full"
-                                                            inputStyle={{
-                                                                  width: "100%",
-                                                                  height: "40px",
-                                                                  fontSize: "16px",
-                                                                  borderRadius: "0.375rem",
-                                                            }}
-                                                            buttonStyle={{
-                                                                  borderTopLeftRadius: "0.375rem",
-                                                                  borderBottomLeftRadius: "0.375rem",
-                                                            }}
-                                                            {...field}
+                                                            buttonClass="rounded-l-md"
                                                       />
                                                 )}
                                           />
@@ -162,8 +174,8 @@ const DailogForm: React.FC = () => {
                                                             <Select
                                                                   disabled={isUploading}
                                                                   onValueChange={(value) => {
-
-                                                                        register("resume", { value });
+                                                                        // @ts-ignore
+                                                                        register("resume_url", { value });
                                                                   }}
                                                             >
                                                                   <SelectTrigger>
@@ -197,8 +209,8 @@ const DailogForm: React.FC = () => {
                                                                   <Input
                                                                         type="file"
                                                                         id="resume"
-                                                                        accept=".pdf"
-                                                                        {...register("resume", { onChange: handleResumeChange })}
+                                                                        accept=".pdf,.doc,.docx"
+                                                                        {...register("resume_file", { onChange: handleResumeChange })}
                                                                   />
 
                                                             </div>
@@ -227,17 +239,17 @@ const DailogForm: React.FC = () => {
                               </Button>
                         </form>
                   </CardContent>
-            </>
+            </div>
       )
 }
 
 export default DailogForm
 
 
-
 const apply_form_Schema = z.object({
       email: z.string().email({ message: "Invalid email address" }),
       phone: z.string().min(10, { message: "Phone number must be at least 10 digits" }),
-      resume: z.any().optional(),
+      resume_file: z.any().optional(),
+      resume_url: z.string().optional(),
       salary: z.string().min(1, { message: "Salary expectation is required" }),
 })

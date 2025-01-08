@@ -163,13 +163,13 @@ export default function AppliedJobs() {
                   </div>
                   <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                         {filteredJobs?.map((job: any) => (
-                              <Card key={job._id} className="flex flex-col">
+                              <Card key={job?._id} className="flex flex-col">
                                     <CardHeader>
                                           <CardTitle className="flex items-start justify-between">
                                                 <span className="text-xl font-semibold">{job?.job_post?.job_title}</span>
                                                 <div className="flex items-center space-x-2">
-                                                      <Badge className={getStatusColor(job.job_post.status)}>
-                                                            {job.job_post.status ? 'Active' : 'Inactive'}
+                                                      <Badge className={getStatusColor(job?.job_post?.status)}>
+                                                            {job?.job_post?.status ? 'Active' : 'Inactive'}
                                                       </Badge>
                                                       <Link
                                                             href={`/search-details/job-details/${job?.job_post?.url}`}

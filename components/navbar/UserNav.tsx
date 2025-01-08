@@ -22,9 +22,9 @@ const UserNav = () => {
                   {user ? <div>
                         <DropdownMenuTrigger asChild>
                               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                                    <Avatar className="h-8 w-8">
-                                          <AvatarImage src="/avatars/01.png" alt={user?.fullName} />
-                                          <AvatarFallback>{user?.fullName?.slice(0, 1)}</AvatarFallback>
+                                    <Avatar className="h-8 w-8 border">
+                                          <AvatarImage src={user?.profile_picture} alt={user?.fullName} />
+                                          <AvatarFallback>{user?.fullName?.charAt(0)}</AvatarFallback>
                                     </Avatar>
                               </Button>
                         </DropdownMenuTrigger>

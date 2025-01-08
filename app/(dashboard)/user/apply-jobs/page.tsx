@@ -1,62 +1,57 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ChevronLeft, ChevronRight, Search, Briefcase, Calendar, Building2, MapPin, Filter } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Search } from 'lucide-react'
 import { JobCard } from './job-card'
+import useApiRequest from '@/app/hooks/useApiRequest'
+import { useUserData } from '@/utils/encript_decript'
 
 type Job = {
-      id: number
-      title: string
-      company: string
-      location: string
-      salary: string
-      postedDate: string
-      logo: string
+      _id: string
+      job_post: {
+            job_title: string
+            company_name: string
+            job_location: string
+            salary: string
+            posted_date: string
+            company_logo: string
+      }
+      created_at: any
       status: 'Applied' | 'In Review' | 'Interview' | 'Offer' | 'Rejected'
 }
 
-const savedJobs: Job[] = [
-      {
-            id: 1,
-            title: "Senior Frontend Developer",
-            company: "TechCorp",
-            location: "San Francisco, CA",
-            salary: "$120,000 - $150,000",
-            postedDate: "2023-12-20",
-            logo: "/placeholder.svg?height=40&width=40",
-            status: "Applied"
-      },
-      {
-            id: 2,
-            title: "UX Designer",
-            company: "DesignHub",
-            location: "New York, NY",
-            salary: "$90,000 - $120,000",
-            postedDate: "2023-12-18",
-            logo: "/placeholder.svg?height=40&width=40",
-            status: "In Review"
-      },
-      {
-            id: 3,
-            title: "Full Stack Developer",
-            company: "WebSolutions",
-            location: "Remote",
-            salary: "$100,000 - $130,000",
-            postedDate: "2023-12-15",
-            logo: "/placeholder.svg?height=40&width=40",
-            status: "Interview"
-      },
-]
+type ApiResponse = {
+      data: Job[]
+      total: number
+}
+
+const ITEMS_PER_PAGE = 10
 
 export default function AppliedJobs() {
+      const [user] = useUserData()
       const [searchTerm, setSearchTerm] = useState('')
-      const [statusFilter, setStatusFilter] = useState<string | undefined>()
+      const [statusFilter, setStatusFilter] = useState<string>('all')
       const [sortBy, setSortBy] = useState<'date' | 'company'>('date')
+      const [currentPage, setCurrentPage] = useState(1)
+
+      const { data, loading, error } = useApiRequest<ApiResponse>(
+            `user/get-applied-jobs?user_id=${user?._id}&page=${currentPage}&limit=${ITEMS_PER_PAGE}`,
+            "GET"
+      )
+
+      const [jobs, setJobs] = useState<Job[]>([])
+      const [totalJobs, setTotalJobs] = useState(0)
+
+      useEffect(() => {
+            if (data) {
+                  setJobs(data.data)
+                  setTotalJobs(data.total)
+            }
+      }, [data])
 
       const getStatusColor = (status: Job['status']) => {
             switch (status) {
@@ -69,18 +64,23 @@ export default function AppliedJobs() {
             }
       }
 
-      const filteredJobs = savedJobs.filter(job =>
-            job.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-            (!statusFilter || statusFilter === 'all' || job.status === statusFilter)
-      ).sort((a, b) =>
-            sortBy === 'date'
-                  ? new Date(b.postedDate).getTime() - new Date(a.postedDate).getTime()
-                  : a.company.localeCompare(b.company)
+      const filteredJobs = jobs.filter(job =>
+            (searchTerm === '' || job.job_post.job_title.toLowerCase().includes(searchTerm.toLowerCase())) &&
+            (statusFilter === 'all' || job.status === statusFilter)
       )
 
-      return (
+      const sortedJobs = [...filteredJobs].sort((a, b) => {
+            if (sortBy === 'date') {
+                  return new Date(b.job_post.posted_date).getTime() - new Date(a.job_post.posted_date).getTime()
+            } else {
+                  return a.job_post.company_name.localeCompare(b.job_post.company_name)
+            }
+      })
 
-            <div >
+      const totalPages = Math.ceil(totalJobs / ITEMS_PER_PAGE)
+
+      return (
+            <div>
                   <h1 className="text-3xl font-bold mb-6">Applied Jobs</h1>
                   <Card className="mb-6">
                         <CardContent className="p-4">
@@ -95,7 +95,7 @@ export default function AppliedJobs() {
                                           />
                                           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
                                     </div>
-                                    <Select onValueChange={setStatusFilter}>
+                                    <Select value={statusFilter} onValueChange={setStatusFilter}>
                                           <SelectTrigger className="w-full sm:w-[180px]">
                                                 <SelectValue placeholder="Filter by status" />
                                           </SelectTrigger>
@@ -108,42 +108,52 @@ export default function AppliedJobs() {
                                                 <SelectItem value="Rejected">Rejected</SelectItem>
                                           </SelectContent>
                                     </Select>
-                              </div>
-                              <div className="flex justify-between items-center">
-                                    <div className="flex items-center gap-2">
-                                          <Filter size={20} className="text-gray-500" />
-                                          <span className="text-sm font-medium">Sort by:</span>
-                                          <Select value={sortBy} onValueChange={(value) => setSortBy(value as 'date' | 'company')}>
-                                                <SelectTrigger className="w-[120px]">
-                                                      <SelectValue />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                      <SelectItem value="date">Date</SelectItem>
-                                                      <SelectItem value="company">Company</SelectItem>
-                                                </SelectContent>
-                                          </Select>
-                                    </div>
-                                    <span className="text-sm text-gray-600">{filteredJobs.length} jobs found</span>
+                                    <Select value={sortBy} onValueChange={(value: 'date' | 'company') => setSortBy(value)}>
+                                          <SelectTrigger className="w-full sm:w-[180px]">
+                                                <SelectValue placeholder="Sort by" />
+                                          </SelectTrigger>
+                                          <SelectContent>
+                                                <SelectItem value="date">Sort by Date</SelectItem>
+                                                <SelectItem value="company">Sort by Company</SelectItem>
+                                          </SelectContent>
+                                    </Select>
                               </div>
                         </CardContent>
                   </Card>
-                  <div className="space-y-4">
-                        {filteredJobs.map((job) => (
-                              <JobCard key={job.id} job={job} statusColor={getStatusColor(job.status)} />
-                        ))}
-                  </div>
+                  {loading ? (
+                        <div className="text-center">Loading...</div>
+                  ) : error ? (
+                        <div className="text-center text-red-500">Error: {error}</div>
+                  ) : (
+                        <div className="space-y-4">
+                              {sortedJobs?.map((job: any) => (
+                                    <JobCard key={job?._id} job_data={job} statusColor={getStatusColor(job.status)} />
+                              ))}
+                        </div>
+                  )}
                   <div className="flex justify-between items-center mt-8">
-                        <Button variant="outline" size="sm" className="flex items-center">
+                        <Button
+                              variant="outline"
+                              size="sm"
+                              className="flex items-center"
+                              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                              disabled={currentPage === 1}
+                        >
                               <ChevronLeft size={16} className="mr-2" />
                               Previous
                         </Button>
-                        <span className="text-sm text-gray-600">Page 1 of 1</span>
-                        <Button variant="outline" size="sm" className="flex items-center">
+                        <span className="text-sm text-gray-600">Page {currentPage} of {totalPages}</span>
+                        <Button
+                              variant="outline"
+                              size="sm"
+                              className="flex items-center"
+                              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                              disabled={currentPage === totalPages}
+                        >
                               Next
                               <ChevronRight size={16} className="ml-2" />
                         </Button>
                   </div>
             </div>
-
       )
 }
