@@ -57,9 +57,9 @@ const About = () => {
             return <AboutSkeleton />;
       }
 
-      console.log(user.title.length, user.description.length);
 
-      const isEmpty = user.title.length === 0 && user.description.length === 11;
+
+      const isEmpty = user?.title?.length === 0 && user?.description?.length === 11;
 
       return (
             <div>
@@ -110,7 +110,7 @@ const About = () => {
                                           placeholder="e.g., Senior Software Engineer"
                                     />
                               </div>
-                              <div className="grid gap-2">
+                              <div className="grid gap-2 mb-8">
                                     <Label htmlFor="about">About</Label>
                                     <ReactQuill
                                           value={description}

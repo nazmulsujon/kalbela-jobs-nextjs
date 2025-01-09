@@ -1,12 +1,13 @@
 import "@/styles/globals.css"
 import { Metadata } from "next"
+
+import { siteConfig } from "@/config/site"
 import { fontPoppins } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
 import { TailwindIndicator } from "@/components/TailwindIndicator"
 import { ThemeProvider } from "@/components/ThemeProvider"
 import Footer from "@/components/footer/Footer"
 import Navbar from "@/components/navbar/Navbar"
-import { siteConfig } from "@/config/site"
 
 export const metadata: Metadata = {
       metadataBase: new URL(siteConfig.url),

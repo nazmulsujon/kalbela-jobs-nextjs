@@ -83,7 +83,22 @@
       "calt" 1;
   }
 }
+body {
+      font-family: 'Open Sans', sans-serif;
+}
 
+/* You can apply different fonts to specific sections */
+h1,
+h2,
+h3,
+.montserrat-font {
+      font-family: 'Montserrat', sans-serif;
+}
+
+p,
+.tajawal-font {
+      font-family: 'Tajawal', sans-serif;
+}
 
 
 @layer utilities {

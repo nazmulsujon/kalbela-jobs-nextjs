@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useParams } from "next/navigation"
@@ -14,6 +13,7 @@ import useApiForPost from "@/app/hooks/useApiForPost"
 import Head from "next/head"
 import { dummyJobs } from "@/public/assets/dummyData"
 import { CalendarIcon, MapPinIcon, BriefcaseIcon, CurrencyIcon as CurrencyDollarIcon } from 'lucide-react'
+import ShareButton from "@/components/ShareButton"
 
 const JobsDetails = () => {
       const { slug } = useParams()
@@ -61,12 +61,19 @@ const JobsDetails = () => {
       }
 
       const jobData = data?.data
+      const jobUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/jobs/${slug}`
 
       return (
             <MaxWidthWrapper>
                   <Head>
                         <title>{jobData?.job_title || "Job Details"} | YourJobSite</title>
                         <meta name="description" content={`${jobData?.job_title} - ${jobData?.company_info?.name}. ${jobData?.job_description?.slice(0, 160)}...`} />
+                        <meta property="og:title" content={`${jobData?.job_title} | YourJobSite`} />
+                        <meta property="og:description" content={`${jobData?.job_title} - ${jobData?.company_info?.name}. ${jobData?.job_description?.slice(0, 160)}...`} />
+                        <meta property="og:image" content={jobData?.company_info?.logo || `${process.env.NEXT_PUBLIC_SITE_URL}/default-job-image.jpg`} />
+                        <meta property="og:url" content={jobUrl} />
+                        <meta property="og:type" content="website" />
+                        <meta name="twitter:card" content="summary_large_image" />
                         <meta name="viewport" content="width=device-width, initial-scale=1" />
                         <link rel="icon" href={jobData?.company_info?.logo} />
                         <script type="application/ld+json">
@@ -107,9 +114,12 @@ const JobsDetails = () => {
                         {/* Left Section */}
                         <div className="content-container flex-1 space-y-6 text-[18px]">
                               <Card className="p-6 shadow-lg">
-                                    <h1 className="mb-5 text-2xl font-bold md:text-4xl text-primary">
-                                          {jobData?.job_title}
-                                    </h1>
+                                    <div className="flex justify-between items-start mb-4">
+                                          <h1 className="text-2xl font-bold md:text-4xl text-primary">
+                                                {jobData?.job_title}
+                                          </h1>
+                                          <ShareButton url={jobUrl} title={`${jobData?.job_title} at ${jobData?.company_info?.name}`} />
+                                    </div>
                                     <div className="flex flex-wrap gap-4 mb-4">
                                           <Badge variant="secondary" className="text-sm py-1 px-3">
                                                 <BriefcaseIcon className="w-4 h-4 mr-2" />
