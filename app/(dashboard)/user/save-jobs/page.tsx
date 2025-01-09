@@ -172,7 +172,7 @@ export default function AppliedJobs() {
                                                             {job?.job_post?.status ? 'Active' : 'Inactive'}
                                                       </Badge>
                                                       <Link
-                                                            href={`/search-details/job-details/${job?.job_post?.url}`}
+                                                            href={`/jobs/${job?.job_post?.url}`}
                                                             className="h-auto p-0"
                                                       >
                                                             <Bookmark className="h-5 w-5 text-blue-500" />
@@ -197,7 +197,7 @@ export default function AppliedJobs() {
                                           </div>
                                     </CardContent>
                                     <CardFooter className="flex justify-between">
-                                          <Link href={`/search-details/job-details/${job?.job_post?.url}`} >
+                                          <Link href={`/jobs/${job?.job_post?.url}`} >
                                                 View Details
                                           </Link>
                                     </CardFooter>
