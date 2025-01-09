@@ -1,16 +1,18 @@
+
 import "@/styles/globals.css"
 import { Metadata } from "next"
 
 import { siteConfig } from "@/config/site"
 import { fontPoppins } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
-import { TailwindIndicator } from "@/components/TailwindIndicator"
 import { ThemeProvider } from "@/components/ThemeProvider"
 import Navbar from "@/components/navbar/Navbar"
 
 import { Sidebar } from "./components/Sideber"
 import MaxWidthWrapper from "@/components/MaxWidthWrapper"
 import { ToastContainer } from "react-toastify"
+
+import BottomNav from "../../../components/BottomNav"
 
 export const metadata: Metadata = {
   title: {
@@ -31,11 +33,12 @@ export const metadata: Metadata = {
   ],
 }
 
-interface RootLayoutProps {
+interface DashboardLayoutProps {
   children: React.ReactNode
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default function DashboardLayout({ children }: DashboardLayoutProps) {
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
@@ -54,7 +57,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <MaxWidthWrapper>
               <div className="mx-auto flex flex-col lg:flex-row">
                 <div className="lg:fixed w-full lg:h-screen lg:w-[250px]">
-                  <Sidebar />
+                  <aside className="hidden w-64 shrink-0 border-r lg:block min-h-screen">
+                    <Sidebar />
+                  </aside>
                 </div>
                 <main className="flex-1 p-6 lg:pl-[270px] overflow-y-auto px-4 md:px-8 mx-auto sm:px-6 w-auto">
                   {children}
@@ -63,8 +68,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
               </div>
             </MaxWidthWrapper>
           </div>
-
-          <TailwindIndicator />
+          <BottomNav />
         </ThemeProvider>
       </body>
     </html>
