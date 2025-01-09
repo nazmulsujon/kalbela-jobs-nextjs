@@ -10,6 +10,7 @@ import Navbar from "@/components/navbar/Navbar"
 
 import { Sidebar } from "./components/Sideber"
 import MaxWidthWrapper from "@/components/MaxWidthWrapper"
+import { ToastContainer } from "react-toastify"
 
 export const metadata: Metadata = {
   title: {
@@ -57,6 +58,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                 </div>
                 <main className="flex-1 p-6 lg:pl-[270px] overflow-y-auto px-4 md:px-8 mx-auto sm:px-6 w-auto">
                   {children}
+                  <ToastContainer />
                 </main>
               </div>
             </MaxWidthWrapper>

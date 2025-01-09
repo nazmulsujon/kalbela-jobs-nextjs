@@ -21,7 +21,7 @@ import MaxWidthWrapper from "@/components/MaxWidthWrapper"
 import PrimaryBtn from "@/components/PrimaryBtn"
 
 const locationSuggestions = [
-  "dhaka city",
+  "dhaka",
   "chattogram",
   "khulna",
   "rajshahi",
