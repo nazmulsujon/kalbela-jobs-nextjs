@@ -67,11 +67,12 @@ interface RootLayoutProps {
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
+
   return (
     <html lang="en" suppressHydrationWarning className={cn("antialiased", fontPoppins.variable)}>
       <body className="min-h-screen bg-background font-sans">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="relative flex min-h-screen flex-col">
+          <div className="relative flex min-h-screen flex-col justify-between bg-light-theme dark:bg-dark-theme">
             <header className="sticky top-0 z-50">
               <Navbar />
             </header>

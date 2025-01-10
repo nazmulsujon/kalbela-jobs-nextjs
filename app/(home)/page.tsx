@@ -6,6 +6,7 @@ import HeroSection from "./components/HeroSection"
 import InterviewQuestions from "./components/InterviewQuestions"
 import JobType from "./components/JobType"
 import TopCompanies from "./components/TopCompanies"
+import Marquee3D from "./components/Marquee3D"
 
 export const metadata: Metadata = {
   title: "Kalbela Jobs Portal - Find Your Dream Job",
@@ -28,9 +29,19 @@ export const metadata: Metadata = {
 const HomePage = () => {
   return (
     <Fragment>
-      <HeroSection />
-      <JobType />
-      <FeaturedJobs />
+
+      <div className="relative">
+        <div className="z-50">
+          <HeroSection />
+          <JobType />
+        </div>
+        <div className="absolute top-0 right-0 w-full z-0 pointer-events-none">
+          <Marquee3D />
+        </div>
+
+        <FeaturedJobs />
+      </div>
+
       <TopCompanies />
       <InterviewQuestions />
     </Fragment>
