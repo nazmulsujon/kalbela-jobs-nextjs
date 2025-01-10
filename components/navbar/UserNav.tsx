@@ -19,7 +19,7 @@ const UserNav = () => {
       const [user] = useUserData()
       return (
             <DropdownMenu>
-                  {user ? <div>
+                  {user ? <div className="mt-1">
                         <DropdownMenuTrigger asChild>
                               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                                     <Avatar className="h-8 w-8 border">

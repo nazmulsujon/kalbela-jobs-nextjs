@@ -1,49 +1,42 @@
-'use client'
-
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Share2 } from 'lucide-react'
-
+import { Share2 } from "lucide-react";
 
 interface ShareButtonProps {
-      url: string
-      title: string
+      url: string;
+      title: string;
 }
 
 const ShareButton: React.FC<ShareButtonProps> = ({ url, title }) => {
-      const [isShared, setIsShared] = useState(false)
-
       const handleShare = async () => {
             if (navigator.share) {
                   try {
                         await navigator.share({
-                              title: title,
-                              url: url,
-                        })
-                        setIsShared(true)
-
+                              title,
+                              text: `Check out this job opportunity: ${title}`,
+                              url,
+                        });
                   } catch (error) {
-                        console.error("Error sharing:", error)
-
+                        console.error("Error sharing:", error);
                   }
             } else {
-                  navigator.clipboard.writeText(url)
-                  setIsShared(true)
-
+                  // Fallback: Redirect to a generic sharing URL or log an error
+                  window.open(
+                        `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                              url
+                        )}`,
+                        "_blank"
+                  );
             }
-      }
+      };
 
       return (
-            <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex items-center gap-2"
+            <button
                   onClick={handleShare}
+                  className="flex items-center gap-2 p-2 border rounded-md hover:bg-gray-100"
             >
                   <Share2 className="w-4 h-4" />
-                  {isShared ? "Shared!" : "Share"}
-            </Button>
-      )
-}
+                  Share
+            </button>
+      );
+};
 
-export default ShareButton
+export default ShareButton;

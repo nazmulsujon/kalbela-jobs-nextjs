@@ -33,7 +33,8 @@ const JobcardLarge: React.FC<JobcardLargeProps> = ({ job }) => {
                                           {job.description}
                                     </p>
                               </header>
-                              <div className="mt-2 flex flex-wrap gap-2">
+                              <div className="mt-4 flex whitespace-nowrap  lg:flex-wrap gap-2 w-full overflow-x-auto lg:overflow-x-visible">
+
                                     {job.skills?.map((skill: string, idx: number) => (
                                           <span
                                                 key={idx}
