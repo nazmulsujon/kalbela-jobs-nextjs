@@ -1,15 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import {
-      Bookmark,
-      Building2,
-      Calendar,
-      ChevronLeft,
-      ChevronRight,
-      MapPin,
-      Search,
-} from "lucide-react"
+import { Bookmark, Building2, Calendar, ChevronLeft, ChevronRight, Loader2, MapPin, Search, XCircle } from 'lucide-react'
+import Link from "next/link"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -30,110 +23,87 @@ import {
 } from "@/components/ui/select"
 import useApiRequest from "@/app/hooks/useApiRequest"
 import { useUserData } from "@/utils/encript_decript"
-import Link from "next/link"
 
 type Job = {
-      id: number
-      title: string
-      company: string
-      location: string
-      appliedDate: string
-      status: "Applied" | "In Review" | "Interview" | "Offer" | "Rejected"
+      _id: string
+      job_post: {
+            job_title: string
+            status: boolean
+            url: string
+            company_info: {
+                  name: string
+            }
+            location: {
+                  remote: boolean
+                  division: string
+            }
+      }
+      created_at: string
 }
 
-// const initialJobs: Job[] = [
-//       {
-//             id: 1,
-//             title: "Frontend Developer",
-//             company: "TechCorp",
-//             location: "New York, NY",
-//             appliedDate: "2023-06-01",
-//             status: "In Review",
-//       },
-//       {
-//             id: 2,
-//             title: "UX Designer",
-//             company: "DesignHub",
-//             location: "San Francisco, CA",
-//             appliedDate: "2023-05-28",
-//             status: "Interview",
-//       },
-//       {
-//             id: 3,
-//             title: "Data Scientist",
-//             company: "DataWorks",
-//             location: "Boston, MA",
-//             appliedDate: "2023-05-25",
-//             status: "Applied",
-//       },
-//       {
-//             id: 4,
-//             title: "Product Manager",
-//             company: "InnovateCo",
-//             location: "Austin, TX",
-//             appliedDate: "2023-05-20",
-//             status: "Offer",
-//       },
-//       {
-//             id: 5,
-//             title: "DevOps Engineer",
-//             company: "CloudSys",
-//             location: "Seattle, WA",
-//             appliedDate: "2023-05-15",
-//             status: "Rejected",
-//       },
-// ]
-
-
+const ITEMS_PER_PAGE = 9
 
 export default function AppliedJobs() {
-
       const [user] = useUserData()
-      const { data, loading, error } = useApiRequest<any>(
-            `user/get-saved-jobs?user_id=${user?._id}`,
+      const { data, loading, error } = useApiRequest<{ data: Job[] }>(
+            user ? `user/get-saved-jobs?user_id=${user._id}` : '',
             "GET"
       )
 
-      const [initialJobs, setInitialJobs] = useState<Job[]>([])
-      const [jobs, setJobs] = useState(initialJobs)
-      useEffect(() => {
-            setInitialJobs(data?.data)
-            setJobs(data?.data)
-      }, [data]);
-
-
+      const [jobs, setJobs] = useState<Job[]>([])
       const [searchTerm, setSearchTerm] = useState("")
-      const [statusFilter, setStatusFilter] = useState<string | undefined>()
-      const [savedJobs, setSavedJobs] = useState<number[]>([])
+      const [statusFilter, setStatusFilter] = useState<string>("all")
+      const [currentPage, setCurrentPage] = useState(1)
 
-      const filteredJobs = jobs?.filter(
-            searchTerm.length === 0
-                  ? (job: any) => job
-                  : (job: any) => job?.job_post?.job_title?.toLowerCase()?.includes(searchTerm.toLowerCase())
+      useEffect(() => {
+            if (data?.data) {
+                  setJobs(data.data)
+            }
+      }, [data])
+
+      const filteredJobs = jobs.filter((job) => {
+            const matchesSearch = job?.job_post?.job_title?.toLowerCase()?.includes(searchTerm.toLowerCase())
+            const matchesStatus = statusFilter === "all" ||
+                  (statusFilter === "active" && job?.job_post?.status) ||
+                  (statusFilter === "inactive" && !job?.job_post?.status)
+            return matchesSearch && matchesStatus
+      })
+
+      const totalPages = Math.ceil(filteredJobs.length / ITEMS_PER_PAGE)
+      const paginatedJobs = filteredJobs.slice(
+            (currentPage - 1) * ITEMS_PER_PAGE,
+            currentPage * ITEMS_PER_PAGE
       )
 
-
       const getStatusColor = (status: boolean) => {
-            switch (status) {
-                  case true:
-                        return "bg-blue-100 text-blue-800"
-                  case false:
-                        return "bg-red-100 text-red-800"
-            }
+            return status
+                  ? "bg-green-100 text-green-800"
+                  : "bg-red-100 text-red-800"
       }
 
-      const toggleSaveJob = (jobId: number) => {
-            setSavedJobs((prev) =>
-                  prev.includes(jobId)
-                        ? prev.filter((id) => id !== jobId)
-                        : [...prev, jobId]
+
+      if (loading) {
+            return (
+                  <div className="flex items-center justify-center h-[50vh]">
+                        <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+                  </div>
+            )
+      }
+
+      if (error) {
+            return (
+                  <div className="flex flex-col items-center justify-center h-[50vh]">
+                        <XCircle className="w-16 h-16 text-red-500 mb-4" />
+                        <h2 className="text-2xl font-bold mb-2">Error</h2>
+                        <p className="text-gray-600">An error occurred while fetching your saved jobs.</p>
+                  </div>
             )
       }
 
       return (
-            <div className="  ">
-                  <h1 className="mb-6 text-3xl font-bold">Saved Jobs</h1>
-                  <div className="mb-6 flex flex-col gap-4 sm:flex-row">
+            <div className="container mx-auto px-4 py-8">
+                  <h1 className="mb-8 text-4xl font-bold text-center">Saved Jobs</h1>
+                  <div className="mb-8 flex flex-col gap-4 sm:flex-row">
                         <div className="relative flex-grow">
                               <Input
                                     type="text"
@@ -147,74 +117,89 @@ export default function AppliedJobs() {
                                     size={20}
                               />
                         </div>
-                        <Select onValueChange={setStatusFilter}>
+                        <Select value={statusFilter} onValueChange={setStatusFilter}>
                               <SelectTrigger className="w-full sm:w-[180px]">
                                     <SelectValue placeholder="Filter by status" />
                               </SelectTrigger>
                               <SelectContent>
                                     <SelectItem value="all">All Statuses</SelectItem>
-                                    <SelectItem value="Applied">Applied</SelectItem>
-                                    <SelectItem value="In Review">In Review</SelectItem>
-                                    <SelectItem value="Interview">Interview</SelectItem>
-                                    <SelectItem value="Offer">Offer</SelectItem>
-                                    <SelectItem value="Rejected">Rejected</SelectItem>
+                                    <SelectItem value="active">Active</SelectItem>
+                                    <SelectItem value="inactive">Inactive</SelectItem>
                               </SelectContent>
                         </Select>
                   </div>
-                  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                        {filteredJobs?.map((job: any) => (
-                              <Card key={job?._id} className="flex flex-col">
-                                    <CardHeader>
-                                          <CardTitle className="flex items-start justify-between">
-                                                <span className="text-xl font-semibold">{job?.job_post?.job_title}</span>
-                                                <div className="flex items-center space-x-2">
-                                                      <Badge className={getStatusColor(job?.job_post?.status)}>
-                                                            {job?.job_post?.status ? 'Active' : 'Inactive'}
-                                                      </Badge>
-                                                      <Link
-                                                            href={`/jobs/${job?.job_post?.url}`}
-                                                            className="h-auto p-0"
-                                                      >
-                                                            <Bookmark className="h-5 w-5 text-blue-500" />
-                                                      </Link>
+                  {paginatedJobs.length === 0 ? (
+                        <div className="text-center text-gray-600">
+                              No jobs found matching your criteria.
+                        </div>
+                  ) : (
+                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                              {paginatedJobs.map((job) => (
+                                    <Card key={job._id} className="flex flex-col">
+                                          <CardHeader>
+                                                <CardTitle className="flex items-start justify-between">
+                                                      <span className="text-xl font-semibold">{job.job_post.job_title}</span>
+                                                      <div className="flex items-center space-x-2">
+                                                            <Badge className={getStatusColor(job.job_post.status)}>
+                                                                  {job.job_post.status ? 'Active' : 'Inactive'}
+                                                            </Badge>
+                                                            <Button variant="ghost" size="icon" className="h-auto p-0">
+                                                                  <Bookmark className="h-5 w-5 text-blue-500" />
+                                                                  <span className="sr-only">Bookmark</span>
+                                                            </Button>
+                                                      </div>
+                                                </CardTitle>
+                                          </CardHeader>
+                                          <CardContent className="flex-grow">
+                                                <div className="space-y-2 text-sm">
+                                                      <div className="flex items-center">
+                                                            <Building2 size={16} className="mr-2 text-gray-500" />
+                                                            <span>{job?.job_post?.company_info?.name}</span>
+                                                      </div>
+                                                      <div className="flex items-center">
+                                                            <MapPin size={16} className="mr-2 text-gray-500" />
+                                                            <span>{job?.job_post?.location?.remote ? "Remote" : job?.job_post?.location?.division || "Dhaka"}</span>
+                                                      </div>
+                                                      <div className="flex items-center">
+                                                            <Calendar size={16} className="mr-2 text-gray-500" />
+                                                            <span>Saved on {new Date(job?.created_at).toDateString()}</span>
+                                                      </div>
                                                 </div>
-                                          </CardTitle>
-                                    </CardHeader>
-                                    <CardContent className="flex-grow">
-                                          <div className="space-y-2 text-sm">
-                                                <div className="flex items-center">
-                                                      <Building2 size={16} className="mr-2 text-gray-500" />
-                                                      <span>{job?.job_post?.company_info?.name}</span>
-                                                </div>
-                                                <div className="flex items-center">
-                                                      <MapPin size={16} className="mr-2 text-gray-500" />
-                                                      <span>{job?.job_post?.location?.remote ? "Remote" : job?.job_post?.location?.division}</span>
-                                                </div>
-                                                <div className="flex items-center">
-                                                      <Calendar size={16} className="mr-2 text-gray-500" />
-                                                      <span>Saved on {new Date(job?.updated_at).toDateString()}</span>
-                                                </div>
-                                          </div>
-                                    </CardContent>
-                                    <CardFooter className="flex justify-between">
-                                          <Link href={`/jobs/${job?.job_post?.url}`} >
-                                                View Details
-                                          </Link>
-                                    </CardFooter>
-                              </Card>
-                        ))}
-                  </div>
-                  <div className="mt-8 flex items-center justify-between">
-                        <Button variant="outline" size="sm" className="flex items-center">
-                              <ChevronLeft size={16} className="mr-2" />
-                              Previous
-                        </Button>
-                        <span className="text-sm text-gray-600">Page 1 of 1</span>
-                        <Button variant="outline" size="sm" className="flex items-center">
-                              Next
-                              <ChevronRight size={16} className="ml-2" />
-                        </Button>
-                  </div>
+                                          </CardContent>
+                                          <CardFooter>
+                                                <Link href={`/jobs/${job.job_post.url}`} className="w-full">
+                                                      <Button variant="outline" className="w-full">View Details</Button>
+                                                </Link>
+                                          </CardFooter>
+                                    </Card>
+                              ))}
+                        </div>
+                  )}
+                  {totalPages > 1 && (
+                        <div className="mt-8 flex items-center justify-between">
+                              <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                                    disabled={currentPage === 1}
+                              >
+                                    <ChevronLeft size={16} className="mr-2" />
+                                    Previous
+                              </Button>
+                              <span className="text-sm text-gray-600">
+                                    Page {currentPage} of {totalPages}
+                              </span>
+                              <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                                    disabled={currentPage === totalPages}
+                              >
+                                    Next
+                                    <ChevronRight size={16} className="ml-2" />
+                              </Button>
+                        </div>
+                  )}
             </div>
       )
 }

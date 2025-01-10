@@ -13,6 +13,7 @@ import { useEffect, useRef, useState } from "react"
 import { EditModal } from "./CommonModal"
 import { DialogFooter, DialogHeader } from "@/components/ui/dialog"
 import { DialogContent, DialogTitle } from "@radix-ui/react-dialog"
+import "react-phone-input-2/lib/style.css"
 
 import { set_user_data, useUserData } from "@/utils/encript_decript"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -26,6 +27,8 @@ import uploadImage from "@/app/hooks/useUploadImage"
 import useApiForPost from "@/app/hooks/useApiForPost"
 import About from "./About"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Controller, useForm } from "react-hook-form"
+import PhoneInput from "react-phone-input-2"
 
 
 
@@ -34,9 +37,6 @@ import { Skeleton } from "@/components/ui/skeleton"
 export default function ProfilePage() {
 
       const [user, setUserData] = useUserData()
-
-      console.log("user", user);
-
       const [editDetailsOpen, setEditDetailsOpen] = useState(false)
       const [editNameOpen, setEditNameOpen] = useState(false)
       const [editImageOpen, setEditImageOpen] = useState(false)
@@ -50,8 +50,10 @@ export default function ProfilePage() {
       const [languages, setLanguages] = useState(user?.languages || []);
       const [new_language, setNewLanguage] = useState(user?.languages);
       const [editContactOpen, setEditContactOpen] = useState(false)
-      const [phone, setPhone] = useState(user?.phone)
+      const [phone, setPhone] = useState<any>(user?.phone)
       const [email, setEmail] = useState(user?.email)
+
+
 
       useEffect(() => {
             setNewLanguage(user?.languages);
@@ -163,7 +165,7 @@ export default function ProfilePage() {
                   `api/v1/user/update-profile?id=${user?._id}`,
                   "PUT",
                   {
-                        phone_number: phone,
+                        phone_number: `+${phone}`,
                         email
                   }
             )
@@ -191,7 +193,7 @@ export default function ProfilePage() {
 
       return (
             <div >
-                  <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6 mb-14 lg:mb-0">
                         <div className="space-y-6">
                               {/* Header Section */}
                               {user ? <div className="flex items-center gap-4">
@@ -227,25 +229,27 @@ export default function ProfilePage() {
                                                 </div>
 
                                           </div>
-                                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                          <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
                                                 <div className="flex items-center gap-1">
                                                       <Contact className="h-4 w-4" />
                                                       {user?.phone_number ? user?.phone_number : "Update Phone Number"}
                                                 </div>
-                                                <div className="flex items-center rounded-full size-1 bg-gray-500"></div>
+
                                                 <div className="flex items-center gap-1">
+                                                      <div className="flex items-center rounded-full size-1 bg-gray-500"></div>
                                                       <Mail className="h-4 w-4" />
                                                       {user?.email ? user?.email : "Update Email"}
                                                 </div>
                                                 <Pencil onClick={() => setEditContactOpen(true)} className="h-4 w-4" />
                                           </div>
-                                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                          <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
                                                 <div className="flex items-center gap-1">
                                                       <MapPin className="h-4 w-4" />
                                                       Bangladesh
                                                 </div>
-                                                <div className="flex items-center rounded-full size-1 bg-gray-500"></div>
-                                                <div className="flex items-center gap-1">
+
+                                                <div className="flex flex-wrap items-center gap-1">
+                                                      <div className="flex items-center rounded-full size-1 bg-gray-500"></div>
                                                       <span>{user?.languages?.length ? user?.languages?.join(", ") : "Update Languages"}</span>
                                                       <Pencil onClick={() => setEditLanguagesOpen(true)} className="h-4 w-4" />
                                                 </div>
@@ -299,7 +303,22 @@ export default function ProfilePage() {
 
                                           <div className="grid gap-2">
                                                 <Label htmlFor="email">Phone Number</Label>
-                                                <Input required onChange={(e) => setPhone(e.target.value)} id="email" defaultValue={user?.phone_number} />
+                                                {/* <Input required onChange={(e) => setPhone(e.target.value)} id="email" defaultValue={user?.phone_number} /> */}
+
+
+                                                <PhoneInput
+                                                      country="bd"
+                                                      value={phone}
+                                                      onChange={(e) => setPhone(e)}
+                                                      inputProps={{
+                                                            id: "phone",
+                                                            className:
+                                                                  "w-full p-2 pl-14 border border-gray-300 rounded-md focus:ring focus:ring-indigo-500",
+                                                      }}
+                                                      containerClass="w-full"
+                                                      buttonClass="rounded-l-md"
+                                                />
+
                                           </div>
                                     </div>
                                     <DialogFooter>

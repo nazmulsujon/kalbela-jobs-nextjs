@@ -40,7 +40,7 @@ const FeaturedJobs: React.FC = () => {
                                           <Link
                                                 href={`/jobs/${job.url}`}
                                                 key={job._id}
-                                                className="group relative flex flex-col items-start overflow-hidden rounded-sm border p-4 md:flex-row"
+                                                className="group relative flex flex-col items-center overflow-hidden rounded-sm border p-4 md:flex-row"
                                           >
                                                 <img
                                                       src={job.company_info?.logo}

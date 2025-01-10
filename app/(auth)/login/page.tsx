@@ -63,8 +63,8 @@ const RegistrationPage = () => {
 
       return (
             <section className="bg-white">
-                  <div className="grid h-screen grid-cols-1 lg:grid-cols-2">
-                        <div className="relative flex items-end bg-gray-50 px-4 pb-10 pt-60 sm:px-6 sm:pb-16 md:justify-center lg:px-8 lg:pb-24">
+                  <div className="grid h-screen grid-cols-1 md:grid-cols-2">
+                        <div className="relative lg:flex hidden items-end bg-gray-50 px-4 pb-10 pt-60 sm:px-6 sm:pb-16 md:justify-center lg:px-8 lg:pb-24 md:block">
                               <div className="absolute inset-0">
                                     <Lottie
                                           className="h-full w-full object-cover"

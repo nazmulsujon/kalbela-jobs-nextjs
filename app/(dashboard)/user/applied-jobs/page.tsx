@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ChevronLeft, ChevronRight, Search } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Loader2, Search, XCircle } from 'lucide-react'
 import { JobCard } from './job-card'
 import useApiRequest from '@/app/hooks/useApiRequest'
 import { useUserData } from '@/utils/encript_decript'
@@ -65,15 +65,15 @@ export default function AppliedJobs() {
       }
 
       const filteredJobs = jobs.filter(job =>
-            (searchTerm === '' || job.job_post.job_title.toLowerCase().includes(searchTerm.toLowerCase())) &&
-            (statusFilter === 'all' || job.status === statusFilter)
+            (searchTerm === '' || job?.job_post?.job_title?.toLowerCase()?.includes(searchTerm.toLowerCase())) &&
+            (statusFilter === 'all' || job?.status === statusFilter)
       )
 
       const sortedJobs = [...filteredJobs].sort((a, b) => {
             if (sortBy === 'date') {
-                  return new Date(b.job_post.posted_date).getTime() - new Date(a.job_post.posted_date).getTime()
+                  return new Date(b?.job_post?.posted_date).getTime() - new Date(a?.job_post?.posted_date).getTime()
             } else {
-                  return a.job_post.company_name.localeCompare(b.job_post.company_name)
+                  return a?.job_post?.company_name?.localeCompare(b?.job_post?.company_name)
             }
       })
 
@@ -121,9 +121,15 @@ export default function AppliedJobs() {
                         </CardContent>
                   </Card>
                   {loading ? (
-                        <div className="text-center">Loading...</div>
+                        <div className="flex items-center justify-center h-[50vh]">
+                              <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+                        </div>
                   ) : error ? (
-                        <div className="text-center text-red-500">Error: {error}</div>
+                        <div className="flex flex-col items-center justify-center h-[50vh]">
+                              <XCircle className="w-16 h-16 text-red-500 mb-4" />
+                              <h2 className="text-2xl font-bold mb-2">Something went wrong</h2>
+                              <p className="text-gray-600">Please try again later.</p>
+                        </div>
                   ) : (
                         <div className="space-y-4">
                               {sortedJobs?.map((job: any) => (

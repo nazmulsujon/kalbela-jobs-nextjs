@@ -12,7 +12,7 @@ import NoVacancies from "@/app/(home)/search-details/components/NoVacancies"
 import CardSkeleton from "./CardSkeleton"
 
 const CompanyJobs = ({ jobs, loading }: { jobs: any; loading: boolean }) => {
-      console.log("jobs from ------", jobs)
+
 
       return (
             <div className="my-10">
