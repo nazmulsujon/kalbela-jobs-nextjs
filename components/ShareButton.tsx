@@ -6,6 +6,7 @@ interface ShareButtonProps {
 }
 
 const ShareButton: React.FC<ShareButtonProps> = ({ url, title }) => {
+      console.log(url, title, 'ur;l');
       const handleShare = async () => {
             if (navigator.share) {
                   try {

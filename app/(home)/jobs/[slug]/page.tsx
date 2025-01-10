@@ -16,6 +16,7 @@ import ShareButton from "@/components/ShareButton"
 import JobDetailsSkeleton from "./components/JobDetailsSkeleton"
 import { toast } from "react-toastify"
 
+
 const JobsDetails = () => {
       const { slug } = useParams()
       const [user] = useUserData()
@@ -62,7 +63,8 @@ const JobsDetails = () => {
       }
 
       const jobData = data?.data
-      const jobUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/jobs/${slug}`
+      const jobUrl = `https://kalbelajob.com/jobs/${slug}`
+
 
       return (
             <MaxWidthWrapper>
@@ -71,7 +73,7 @@ const JobsDetails = () => {
                         <meta name="description" content={`${jobData?.job_title} - ${jobData?.company_info?.name}. ${jobData?.job_description?.slice(0, 160)}...`} />
                         <meta property="og:title" content={`${jobData?.job_title} | YourJobSite`} />
                         <meta property="og:description" content={`${jobData?.job_title} - ${jobData?.company_info?.name}. ${jobData?.job_description?.slice(0, 160)}...`} />
-                        <meta property="og:image" content={jobData?.company_info?.logo || `${process.env.NEXT_PUBLIC_SITE_URL}/default-job-image.jpg`} />
+                        <meta property="og:image" content={jobData?.company_info?.logo || ``} />
                         <meta property="og:url" content={jobUrl} />
                         <meta property="og:type" content="website" />
                         <meta name="twitter:card" content="summary_large_image" />
