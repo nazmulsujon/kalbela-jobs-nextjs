@@ -71,10 +71,8 @@ const Navbar: React.FC = () => {
             <section
                   className={`${isScrolled
                         ? "border-b bg-white/75 backdrop-blur-lg dark:border-b-gray-500 dark:bg-black"
-                        : isHomePage
-                              ? ""
-                              : "dark:bg-[#121a2d]"
-                        } shadow-none`}
+                        : `bg-[#E3EDFF] ${isHomePage ? "bg-[#E3EDFF]" : "dark:bg-[#121a2d]"} shadow-none`
+                        }`}
             >
                   <MaxWidthWrapper className="flex h-[64px] items-center justify-between">
                         <Button
