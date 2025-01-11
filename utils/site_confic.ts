@@ -1,14 +1,14 @@
 export const siteConfig = {
   name: "KalbelaJob",
   description: "Discover the perfect job for you with KalbelaJob - Your trusted job search platform",
-  url: "https://kalbelajob.com",
-  ogImage: "https://kalbelajob.com/og-image.jpg",
+  url: "https://kalbelajobs.com",
+  ogImage: "https://kalbelajobs.com/og-image.jpg",
   links: {
     twitter: "https://twitter.com/kalbelajob",
     github: "https://github.com/kalbelajob",
   },
   author: "KalbelaJob Team",
-  authorUrl: "https://kalbelajob.com/team",
+  authorUrl: "https://kalbelajobs.com/team",
   twitterHandle: "@kalbelajob",
   keywords: [
     "job search",

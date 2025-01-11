@@ -63,7 +63,7 @@ const JobsDetails = () => {
       }
 
       const jobData = data?.data
-      const jobUrl = `https://kalbelajob.com/jobs/${slug}`
+      const jobUrl = `https://kalbelajobs.com/jobs/${slug}`
 
 
       return (

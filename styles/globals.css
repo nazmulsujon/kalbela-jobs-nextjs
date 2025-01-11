@@ -91,13 +91,19 @@ body {
 h1,
 h2,
 h3,
+button,
+a,
+Link,
+h4,
+h5,
+Button,
 .montserrat-font {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Montserrat','Tajawal',sans-serif;
 }
 
 p,
 .tajawal-font {
-      font-family: 'Tajawal', sans-serif;
+      font-family: 'Montserrat', 'Tajawal', sans-serif;
 }
 
 

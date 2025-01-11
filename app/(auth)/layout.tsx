@@ -35,8 +35,18 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <>
                   <html lang="en" suppressHydrationWarning>
                         <head>
-                              <meta name="theme-color" content="red" media="(prefers-color-scheme: light)" />
-                              <meta name="theme-color" content="black" media="(prefers-color-scheme: dark)" />
+                              <meta name="theme-color" content="#DEEBFF" media="(prefers-color-scheme: light)" />
+                              <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                              <meta charSet="UTF-8" />
+                              <meta name="description" content='Kalbela Jobs - A platform for job seekers and employers to connect and find each other.' />
+                              <meta name="keywords" content='Jobs, Job Seeker, Employer, Job Portal, Job Posting' />
+                              <meta name="author" content='Kalbela Jobs' />
+                              <link rel="icon" href="/favicon.ico" />
+                              <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+                              <link rel="shortcut icon" href="/favicon-16x16.png" />
+                              <link rel="manifest" href="/manifest.json" />
+
+
                         </head>
                         <body
                               className={cn(
