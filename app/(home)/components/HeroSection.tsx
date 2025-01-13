@@ -90,7 +90,7 @@ const HeroSection = () => {
           Jobs – where your next opportunity awaits.
         </p>
 
-        <div className="flex w-full max-w-3xl items-center space-x-2 rounded-sm border border-gray-200 bg-white px-4 py-3 text-gray-900 shadow-md dark:border-gray-700 dark:bg-gray-800 dark:text-slate-200 md:px-6">
+        <div className="flex w-full max-w-3xl items-center space-x-2 rounded-sm border border-gray-200 bg-white px-4 py-3 text-gray-900 shadow-md dark:border-gray-700 dark:bg-gray-800 dark:text-slate-200 md:px-6 z-40">
           <div className="relative flex w-full items-center space-x-2">
             <Search className="size-6 text-gray-500 dark:text-slate-200" />
             <Input
