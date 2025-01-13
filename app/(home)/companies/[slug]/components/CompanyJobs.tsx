@@ -45,14 +45,16 @@ const CompanyJobs = ({ jobs, loading }: { jobs: any; loading: boolean }) => {
                                                       key={job._id}
                                                       className="job-card w-full border border-b shadow-sm dark:bg-white"
                                                 >
+
                                                       <div className="flex items-center justify-between p-4">
                                                             <div className="space-y-1">
-                                                                  <h1 className="text-xl font-bold text-gray-900">
+                                                                  <Link href={`/jobs/${job.url}`}>     <h1 className="text-xl font-bold text-gray-900">
                                                                         {job.job_title}{" "}
                                                                         <span className="text-sm font-normal">
                                                                               ({job.experience_level})
                                                                         </span>
                                                                   </h1>
+                                                                  </Link>
                                                                   <p className="text-[15px] text-gray-700">
                                                                         {job.company_info?.name} • {job.job_type} •{" "}
                                                                         {job.location?.remote

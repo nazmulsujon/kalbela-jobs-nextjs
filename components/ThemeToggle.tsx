@@ -11,12 +11,14 @@ export function ThemeToggle() {
 
 
       React.useEffect(() => {
-            if (theme === "system") {
-                  setTheme("light")
-            }
+
             if (theme === "light") {
                   document.documentElement.classList.remove("dark")
-            } else {
+            }
+            else if (theme === "system") {
+                  setTheme("light")
+            }
+            else {
                   document.documentElement.classList.add("dark")
             }
       }, [theme, setTheme])
