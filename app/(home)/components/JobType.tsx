@@ -68,36 +68,36 @@ const JobType: React.FC = () => {
           <CarouselContent className="flex">
             {loading
               ? Array.from({ length: 8 }).map((_, index) => (
-                  <Skeleton key={index} className="mx-2 h-[60px] w-[180px]" />
-                ))
+                <Skeleton key={index} className="mx-2 h-[60px] w-[180px]" />
+              ))
               : data?.data?.map((type: any) => (
-                  <CarouselItem
-                    key={type._id}
-                    className="lg:basis-1/8 min-w-40 basis-1/2 md:min-w-48 md:basis-1/6"
+                <CarouselItem
+                  key={type._id}
+                  className="lg:basis-1/8 min-w-40 basis-1/2 md:min-w-48 md:basis-1/6"
+                >
+                  <Button
+                    variant="link"
+                    onClick={() => handleRedirect(type.name)}
+                    className={cn(
+                      "flex h-full w-full items-center justify-between rounded-sm border p-2 hover:no-underline"
+                    )}
                   >
-                    <Button
-                      variant="link"
-                      onClick={() => handleRedirect(type.name)}
-                      className={cn(
-                        "flex h-full w-full items-center justify-between rounded-sm border p-2 hover:no-underline"
-                      )}
-                    >
-                      <div className="flex size-10 h-auto items-center justify-center">
-                        <img
-                          className="mr-1 size-8 md:size-10"
-                          src={type.image}
-                          style={{ aspectRatio: "3/2" }}
-                          alt={`${type.label} image`}
-                          loading="lazy"
-                        />
-                      </div>
-                      <h3 className="max-w-sm truncate text-sm font-medium">
-                        {type.name}
-                      </h3>
-                      <ChevronRightIcon className="size-4 text-slate-400" />
-                    </Button>
-                  </CarouselItem>
-                ))}
+                    <div className="flex size-10 h-auto items-center justify-center">
+                      <img
+                        className="mr-1 size-8 md:size-10"
+                        src={type.image}
+                        style={{ aspectRatio: "3/2" }}
+                        alt={`${type.label} image`}
+                        loading="lazy"
+                      />
+                    </div>
+                    <h3 className="max-w-sm truncate text-sm font-medium">
+                      {type.name}
+                    </h3>
+                    <ChevronRightIcon className="size-4 text-slate-400" />
+                  </Button>
+                </CarouselItem>
+              ))}
           </CarouselContent>
 
           <div className="h-6 w-6">
