@@ -58,9 +58,8 @@ export function Navigations() {
           >
             Categories
             <ChevronDown
-              className={`h-2.5 w-2.5 transform transition-transform ${
-                activeDropdown === "categories" ? "rotate-180" : ""
-              }`}
+              className={`h-2.5 w-2.5 transform transition-transform ${activeDropdown === "categories" ? "rotate-180" : ""
+                }`}
             />
           </PrimaryBtn>
 
@@ -69,7 +68,9 @@ export function Navigations() {
               id="categories-dropdown"
               className="absolute top-full mt-2 w-fit text-nowrap rounded-sm bg-white shadow-lg transition-opacity duration-300"
             >
-              <ul className="py-1">
+              <ul className="py-1 max-h-[19.5rem] overflow-y-auto"
+                style={{ scrollbarWidth: "none" }}
+              >
                 {loading && (
                   <li className="p-4 text-gray-500">Loading categories...</li>
                 )}
@@ -108,9 +109,8 @@ export function Navigations() {
           >
             Career Resources
             <ChevronDown
-              className={`h-2.5 w-2.5 transform transition-transform ${
-                activeDropdown === "resources" ? "rotate-180" : ""
-              }`}
+              className={`h-2.5 w-2.5 transform transition-transform ${activeDropdown === "resources" ? "rotate-180" : ""
+                }`}
             />
           </PrimaryBtn>
 
@@ -119,7 +119,9 @@ export function Navigations() {
               id="resources-dropdown"
               className="absolute top-full mt-2 w-fit text-nowrap rounded-sm bg-white shadow-lg transition-opacity duration-300"
             >
-              <ul className="py-1">
+              <ul className="py-1 max-h-[19.5rem] overflow-y-auto min-w-52"
+                style={{ scrollbarWidth: "none" }}
+              >
                 {loading2 && (
                   <li className="p-4 text-gray-500">Loading resources...</li>
                 )}
