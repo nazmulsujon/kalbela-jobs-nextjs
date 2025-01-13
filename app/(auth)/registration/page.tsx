@@ -191,7 +191,7 @@ const RegistrationPage = () => {
                                                             htmlFor=""
                                                             className="text-base font-medium text-gray-900"
                                                       >
-                                                            {" "}
+
                                                             Fast &amp; Last name{" "}
                                                       </label>
                                                       <div className="relative mt-2.5 text-gray-400 focus-within:text-gray-600">

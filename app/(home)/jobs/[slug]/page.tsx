@@ -9,12 +9,12 @@ import SecondaryBtn from "@/components/SecondaryBtn"
 import useApiRequest from "@/app/hooks/useApiRequest"
 import { useUserData } from "@/utils/encript_decript"
 import useApiForPost from "@/app/hooks/useApiForPost"
-import Head from "next/head"
 import { dummyJobs } from "@/public/assets/dummyData"
 import { CalendarIcon, MapPinIcon, BriefcaseIcon, CurrencyIcon as CurrencyDollarIcon } from 'lucide-react'
 import ShareButton from "@/components/ShareButton"
 import JobDetailsSkeleton from "./components/JobDetailsSkeleton"
 import { toast } from "react-toastify"
+import Head from "next/head"
 
 
 const JobsDetails = () => {
@@ -68,6 +68,7 @@ const JobsDetails = () => {
 
       return (
             <MaxWidthWrapper>
+
                   <Head>
                         <title>{jobData?.job_title || "Job Details"} | YourJobSite</title>
                         <meta name="description" content={`${jobData?.job_title} - ${jobData?.company_info?.name}. ${jobData?.job_description?.slice(0, 160)}...`} />
@@ -206,7 +207,7 @@ const JobSection = ({ title, content, children }: { title: string, content?: str
       <div>
             <h2 className="text-xl font-semibold mb-2">{title}</h2>
             {content ? (
-                  <div dangerouslySetInnerHTML={{ __html: content }} className="text-muted-foreground" />
+                  <div dangerouslySetInnerHTML={{ __html: content }} className="text-muted-foreground capitalize" />
             ) : children}
       </div>
 )
