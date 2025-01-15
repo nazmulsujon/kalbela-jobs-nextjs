@@ -44,6 +44,14 @@ export function Navigations() {
             router.push(`/search-details?${queryParams}`)
       }
 
+      const handleRedirectToCareerResources = (resource: string) => {
+            const queryParams = new URLSearchParams({
+                  resource: resource,
+            }).toString()
+            router.push(`/career-resources?${queryParams}`)
+      }
+
+
       return (
             <section className="text-gray-900 dark:text-slate-200">
                   <nav className="flex justify-center gap-4">
@@ -149,6 +157,9 @@ export function Navigations() {
                                                 {careerResources?.data?.map((resource: any) => (
                                                       <li key={resource?._id}>
                                                             <Button
+                                                                  onClick={() => {
+                                                                        handleRedirectToCareerResources(resource?.slug)
+                                                                  }}
                                                                   variant="link"
                                                                   className="block w-full px-4 text-left text-sm text-gray-700 hover:bg-gray-100 hover:no-underline"
                                                             >
