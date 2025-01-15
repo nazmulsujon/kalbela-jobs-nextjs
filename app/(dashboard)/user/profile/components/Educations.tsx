@@ -13,7 +13,7 @@ import useApiForPost from "@/app/hooks/useApiForPost";
 import { useUserData } from "@/utils/encript_decript";
 import { useQuery } from "@tanstack/react-query";
 
-const DEGREES = ["Bachelor's", "Master's", "Ph.D.", "Associate's", "Diploma", "HSC", "SSC", "JSC", "PSC", "Other"]
+const DEGREES = ["Bachelor's", "Master's", "Ph.D.", "Associate's", "Diploma", "HSC", "SSC", "Vocational", "JSC", "PSC", "Other"]
 const YEARS = Array.from({ length: 50 }, (_, i) => (new Date().getFullYear() - i).toString())
 
 const Educations = () => {
@@ -23,6 +23,7 @@ const Educations = () => {
             id: '',
             country: '',
             universityName: '',
+            'location/board': '',
             degree: '',
             major: '',
             graduationYear: '',
@@ -97,6 +98,7 @@ const Educations = () => {
                   degree: education.degree,
                   major: education.major,
                   graduationYear: education.graduationYear,
+                  'location/board': education['location/board'] || '',
                   'gpa/cgpa': education['gpa/cgpa'] || '',
             })
             setEditEducationOpen(true)
@@ -142,6 +144,7 @@ const Educations = () => {
                                           degree: '',
                                           major: '',
                                           graduationYear: '',
+                                          'location/board': '',
                                           'gpa/cgpa': '',
                                     })
                                     setEditEducationOpen(true)
@@ -237,17 +240,31 @@ const Educations = () => {
                                     </Select>
                               </div>
 
-                              <div className="grid gap-2">
-                                    <Label htmlFor="gpa/cgpa" className="font-medium">
-                                          GPA or CGPA
-                                    </Label>
-                                    <Input
-                                          id="gpa/cgpa"
-                                          value={formData['gpa/cgpa']}
-                                          onChange={(e) => setFormData((prev) => ({ ...prev, 'gpa/cgpa': e.target.value }))}
-                                          placeholder="Enter GPA or CGPA"
-                                          className="w-full"
-                                    />
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div className="grid gap-2">
+                                          <Label htmlFor="gpa/cgpa" className="font-medium">
+                                                GPA or CGPA
+                                          </Label>
+                                          <Input
+                                                id="gpa/cgpa"
+                                                value={formData['gpa/cgpa']}
+                                                onChange={(e) => setFormData((prev) => ({ ...prev, 'gpa/cgpa': e.target.value }))}
+                                                placeholder="Enter GPA or CGPA"
+                                                className="w-full"
+                                          />
+                                    </div>
+                                    <div className="grid gap-2">
+                                          <Label htmlFor="location/board" className="font-medium">
+                                                Location / Board
+                                          </Label>
+                                          <Input
+                                                id="location/board"
+                                                value={formData['location/board']}
+                                                onChange={(e) => setFormData((prev) => ({ ...prev, 'location/board': e.target.value }))}
+                                                placeholder="Enter location or board"
+                                                className="w-full"
+                                          />
+                                    </div>
                               </div>
 
                               {/* Footer */}
