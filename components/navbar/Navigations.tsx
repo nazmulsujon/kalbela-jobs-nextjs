@@ -36,11 +36,18 @@ export function Navigations() {
     }, 300)
   }
 
-  const handleRedirect = (category: string) => {
+  const handleRedirectToSearchDetails = (category: string) => {
     const queryParams = new URLSearchParams({
       category: category,
     }).toString()
     router.push(`/search-details?${queryParams}`)
+  }
+
+  const handleRedirectToCareerResources = (resource: string) => {
+    const queryParams = new URLSearchParams({
+      resource: resource,
+    }).toString()
+    router.push(`/career-resources?${queryParams}`)
   }
 
   return (
@@ -83,7 +90,7 @@ export function Navigations() {
                   <li key={navigation?._id}>
                     <Button
                       onClick={() => {
-                        handleRedirect(navigation?.slag)
+                        handleRedirectToSearchDetails(navigation?.slag)
                       }}
                       variant="link"
                       className="block w-full px-4 text-left text-sm text-gray-700 hover:bg-gray-100 hover:no-underline"
@@ -103,16 +110,17 @@ export function Navigations() {
           onMouseEnter={() => handleMouseEnter("resources")}
           onMouseLeave={handleMouseLeave}
         >
-          <PrimaryBtn
-            type="button"
-            className="inline-flex items-center justify-center gap-2 rounded-sm border-0 bg-slate-50 py-1.5 text-sm font-semibold text-black shadow transition-all duration-500 hover:bg-slate-100"
-          >
-            Career Resources
-            <ChevronDown
-              className={`h-2.5 w-2.5 transform transition-transform ${activeDropdown === "resources" ? "rotate-180" : ""
-                }`}
-            />
-          </PrimaryBtn>
+          <Link href="/career-resources">
+            <PrimaryBtn
+              type="button"
+              className="inline-flex items-center justify-center gap-2 rounded-sm border-0 bg-slate-50 py-1.5 text-sm font-semibold text-black shadow transition-all duration-500 hover:bg-slate-100"
+            >
+              Career Resources
+              <ChevronDown
+                className={`h-2.5 w-2.5 transform transition-transform ${activeDropdown === "resources" ? "rotate-180" : ""
+                  }`}
+              />
+            </PrimaryBtn></Link>
 
           {activeDropdown === "resources" && (
             <div
@@ -131,6 +139,9 @@ export function Navigations() {
                 {careerResources?.data?.map((resource: any) => (
                   <li key={resource?._id}>
                     <Button
+                      onClick={() => {
+                        handleRedirectToCareerResources(resource?.slug)
+                      }}
                       variant="link"
                       className="block w-full px-4 text-left text-sm text-gray-700 hover:bg-gray-100 hover:no-underline"
                     >
