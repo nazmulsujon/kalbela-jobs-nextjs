@@ -75,7 +75,8 @@ export function Navigations() {
                               {activeDropdown === "categories" && (
                                     <div
                                           id="categories-dropdown"
-                                          className="absolute top-full mt-2 w-[45rem] border text-nowrap rounded-sm bg-white shadow-lg transition-opacity duration-300"
+                                          className="absolute top-full mt-2 w-[45rem] border
+bg-white/30 backdrop-blur-lg backdrop-brightness-125 text-nowrap rounded-sm  shadow-lg transition-opacity duration-300"
                                     >
                                           <ul
                                                 className="py-1 px-4 max-h-[19rem] grid grid-cols-3  overflow-y-auto"
@@ -91,7 +92,7 @@ export function Navigations() {
                                                 )}
                                                 {data?.data?.map((section: any) => (
                                                       <div>
-                                                            <h2 className="mb-2 text-sm py-2 px-2  font-bold text-gray-900">{section.megaCategory}</h2>
+                                                            <h2 className="mb-2 text-sm py-2 px-2  font-bold ">{section.megaCategory}</h2>
                                                             <hr className="mb-2 border-gray-200" />
                                                             <ul className="space-y-1 mb-4">
                                                                   {section.categories.map((category: any) => (
@@ -100,7 +101,7 @@ export function Navigations() {
 
                                                                                     className={cn(
                                                                                           "w-full text-left rounded-md px-3 py-2 text-sm",
-                                                                                          "bg-white text-gray-700 hover:bg-gray-100 hover:text-gray-900",
+                                                                                          "  hover:bg-gray-100 hover:text-gray-900",
                                                                                           "transition-colors duration-200",
                                                                                           "focus:outline-none focus:ring-2 focus:ring-gray-200"
                                                                                     )}

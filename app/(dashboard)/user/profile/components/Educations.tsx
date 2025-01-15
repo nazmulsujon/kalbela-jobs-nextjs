@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { GraduationCap, Pencil, Trash2 } from 'lucide-react';
+import { Eye, GraduationCap, Pencil, Trash2 } from 'lucide-react';
 import { useState } from "react";
 import { EditModal } from "./CommonModal";
 import { Input } from "@/components/ui/input";
@@ -85,6 +85,7 @@ const Educations = () => {
                         degree: '',
                         major: '',
                         graduationYear: '',
+                        'location/board': '',
                         'gpa/cgpa': '',
                   });
             }
@@ -174,7 +175,7 @@ const Educations = () => {
                                           id="universityName"
                                           value={formData.universityName}
                                           onChange={(e) => setFormData((prev) => ({ ...prev, universityName: e.target.value }))}
-                                          placeholder="Enter school/college/university name"
+                                          placeholder="Enter school / college / university name"
                                           className="w-full"
                                     />
                               </div>
@@ -203,56 +204,62 @@ const Educations = () => {
                                           </Select>
                                     </div>
 
-                                    {/* Major */}
                                     <div className="grid gap-2">
-                                          <Label htmlFor="major" className="font-medium">
-                                                Major
+                                          <Label htmlFor="graduationYear" className="font-medium">
+                                                Year of Graduation
                                           </Label>
-                                          <Input
-                                                id="major"
-                                                value={formData.major}
-                                                onChange={(e) => setFormData((prev) => ({ ...prev, major: e.target.value }))}
-                                                placeholder="Enter major"
-                                                className="w-full h-10"
-                                          />
+                                          <Select
+                                                value={formData.graduationYear}
+                                                onValueChange={(value) => setFormData((prev) => ({ ...prev, graduationYear: value }))}
+                                          >
+                                                <SelectTrigger className="w-full">
+                                                      <SelectValue placeholder="Select year" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                      {YEARS.map((year) => (
+                                                            <SelectItem key={year} value={year}>
+                                                                  {year}
+                                                            </SelectItem>
+                                                      ))}
+                                                </SelectContent>
+                                          </Select>
                                     </div>
+
+                              </div>
+
+                              <div className="grid gap-2">
+                                    <Label htmlFor="major" className="font-medium">
+                                          Major
+                                    </Label>
+                                    <Input
+                                          id="major"
+                                          value={formData.major}
+                                          onChange={(e) => setFormData((prev) => ({ ...prev, major: e.target.value }))}
+                                          placeholder="Enter major"
+                                          className="w-full h-10"
+                                    />
                               </div>
 
                               {/* Graduation Year */}
-                              <div className="grid gap-2">
-                                    <Label htmlFor="graduationYear" className="font-medium">
-                                          Year of Graduation
-                                    </Label>
-                                    <Select
-                                          value={formData.graduationYear}
-                                          onValueChange={(value) => setFormData((prev) => ({ ...prev, graduationYear: value }))}
-                                    >
-                                          <SelectTrigger className="w-full">
-                                                <SelectValue placeholder="Select year" />
-                                          </SelectTrigger>
-                                          <SelectContent>
-                                                {YEARS.map((year) => (
-                                                      <SelectItem key={year} value={year}>
-                                                            {year}
-                                                      </SelectItem>
-                                                ))}
-                                          </SelectContent>
-                                    </Select>
-                              </div>
+
 
                               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <div className="grid gap-2">
-                                          <Label htmlFor="gpa/cgpa" className="font-medium">
-                                                GPA or CGPA
-                                          </Label>
-                                          <Input
-                                                id="gpa/cgpa"
-                                                value={formData['gpa/cgpa']}
-                                                onChange={(e) => setFormData((prev) => ({ ...prev, 'gpa/cgpa': e.target.value }))}
-                                                placeholder="Enter GPA or CGPA"
-                                                className="w-full"
-                                          />
+                                    <div className="flex items-end gap-2">
+                                          <div className="grid gap-2">
+                                                <Label htmlFor="gpa/cgpa" className="font-medium">
+                                                      GPA or CGPA
+                                                </Label>
+                                                <Input
+                                                      id="gpa/cgpa"
+                                                      value={formData['gpa/cgpa']}
+                                                      onChange={(e) => setFormData((prev) => ({ ...prev, 'gpa/cgpa': e.target.value }))}
+                                                      placeholder="Enter GPA or CGPA"
+                                                      className="w-full"
+                                                />
+                                          </div>
+                                          <Eye className='mb-2' />
                                     </div>
+
                                     <div className="grid gap-2">
                                           <Label htmlFor="location/board" className="font-medium">
                                                 Location / Board
