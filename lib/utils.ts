@@ -16,13 +16,29 @@ export const selectCustomStyles = (theme: string) => ({
         ? "0 0 0 1px #f2f2f2"
         : "0 0 0 1px #001968"
       : "none",
+    padding: 0,
+    minHeight: "38px",
     "&:hover": {
       borderColor: theme === "dark" ? "#f2f2f2" : "#001968",
     },
   }),
+  valueContainer: (provided: any) => ({
+    ...provided,
+    padding: "0 8px",
+    display: "flex",
+    alignItems: "center",
+    height: "100%",
+  }),
   singleValue: (provided: any) => ({
     ...provided,
     color: theme === "dark" ? "#FFFFFF" : "#000000",
+    display: "flex",
+    alignItems: "center",
+    margin: 0,
+  }),
+  indicatorsContainer: (provided: any) => ({
+    ...provided,
+    height: "100%",
   }),
   menu: (provided: any) => ({
     ...provided,

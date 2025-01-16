@@ -78,7 +78,7 @@ const HeroSection = () => {
   }
 
   return (
-    <div className="z-50">
+    <div className="z-40">
       <MaxWidthWrapper className="flex flex-col items-center space-y-4 py-6 md:py-10 md:pb-10 lg:pb-16">
         <h1 className="text-center text-3xl font-bold md:text-4xl">
           Find your dream job
