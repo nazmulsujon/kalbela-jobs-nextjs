@@ -27,6 +27,9 @@ const SearchDetails: React.FC = () => {
   const { theme } = useTheme()
   const customStyles = selectCustomStyles(theme || "light")
 
+
+
+
   const searchParams = useSearchParams()
 
   const searchQuery = searchParams.get("query")
@@ -49,9 +52,6 @@ const SearchDetails: React.FC = () => {
     job_type,
     category,
   })
-
-  console.log("jobs", jobs)
-  console.log("category", category)
 
   const handleLoadMore = () => {
     if (hasMore) setPageNumber((prev) => prev + 1)
@@ -99,7 +99,7 @@ const SearchDetails: React.FC = () => {
           />
         </aside>
 
-        <div className="flex-grow">
+        <div className="flex-grow lg:w-3/4">
           <div className="mb-4 flex items-center justify-between">
             <p className="text-sm">{`1 - ${jobs.length} of ${totalJobs} Jobs`}</p>
             <div className="w-44 max-w-44">
@@ -125,7 +125,9 @@ const SearchDetails: React.FC = () => {
               {jobs.length > 0 ? (
                 jobs.map((job, index) => <JobcardLarge job={job} key={index} />)
               ) : (
-                <NoVacancies />
+                <div className="min-h-[60vh] flex justify-center items-center">
+                  <NoVacancies />
+                </div>
               )}
             </div>
           )}
