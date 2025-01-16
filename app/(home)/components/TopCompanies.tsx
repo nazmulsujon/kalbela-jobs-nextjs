@@ -77,7 +77,7 @@ const topCompaniessArr = [
 
 const TopCompanies: React.FC = () => {
       const [api, setApi] = useState<CarouselApi | null>(null)
-      const { data, loading, error } = useApiRequest<any>("workspace", "GET")
+      const { data, loading, error } = useApiRequest<any>("workspace/feature", "GET")
 
       console.log("company data", data)
 
