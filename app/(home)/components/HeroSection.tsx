@@ -84,7 +84,7 @@ const HeroSection = () => {
           Find your dream job
         </h1>
 
-        <p className="!mb-2 max-w-4xl text-balance text-center text-xs md:text-sm">
+        <p className="!mb-2 max-w-4xl text-balance text-center text-xs md:text-sm font-medium">
           Your Career Starts Here with Kalbela Jobs! Discover the latest job
           opportunities in Bangladesh and worldwide, all in one place. Kalbela
           Jobs – where your next opportunity awaits.
@@ -98,7 +98,7 @@ const HeroSection = () => {
               value={searchQuery}
               onChange={handleSkillChange}
               placeholder="Enter skills / designations / companies"
-              className="w-full border-none placeholder-gray-500 shadow-none outline-none focus-visible:ring-0 dark:placeholder-slate-200"
+              className="w-full border-none placeholder-gray-500 shadow-none outline-none focus-visible:ring-0 dark:placeholder-slate-200 !placeholder:font-medium font-medium"
             />
             {showSkillDropdown && filteredSkills.length > 0 && (
               <ul
@@ -134,7 +134,7 @@ const HeroSection = () => {
             />
 
             <Select onValueChange={(value: any) => setLocation(value)}>
-              <SelectTrigger className="w-40 border-none shadow-none outline-none focus:ring-0 dark:bg-gray-800">
+              <SelectTrigger className="w-40 border-none shadow-none outline-none focus:ring-0 dark:bg-gray-800 font-medium dark:text-slate-200 text-gray-600">
                 <SelectValue placeholder="Select location" />
               </SelectTrigger>
               <SelectContent className="max-h-72 bg-white text-gray-900 dark:bg-gray-800 dark:text-slate-200">
