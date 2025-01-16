@@ -49,7 +49,7 @@ const ResourcesTabs = () => {
     <Tabs value={selectedTab} onValueChange={handleTabChange} className="w-full">
       <TabsList>
         {careerResources?.data?.map((resource: any) => (
-          <TabsTrigger key={resource._id} value={resource.slug}>
+          <TabsTrigger className="font-semibold" key={resource._id} value={resource.slug}>
             {resource.name}
           </TabsTrigger>
         ))}
