@@ -38,7 +38,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
                               <meta name="theme-color" content="#DEEBFF" media="(prefers-color-scheme: light)" />
                               <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                               <meta charSet="UTF-8" />
-                              <meta name="description" content='Kalbela Jobs - A platform for job seekers and employers to connect and find each other.' />
+                              <meta title="Sign In - Kalbela Jobs" />
+                              <meta name="description" content='Sign In - Kalbela Jobs' />
                               <meta name="keywords" content='Jobs, Job Seeker, Employer, Job Portal, Job Posting' />
                               <meta name="author" content='Kalbela Jobs' />
                               <link rel="icon" href="/favicon.ico" />
