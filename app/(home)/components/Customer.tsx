@@ -29,7 +29,7 @@ const Customer = () => {
             </div>
           </div>
           <h2 className="mt-8 text-3xl font-bold leading-tight  lg:mt-12 sm:text-4xl lg:text-5xl">
-            Join <span className="border-b-8 border-yellow-300">5,482</span> other Candidates
+            Join <span className="border-b-8 border-[#001968]">5,482</span> other Candidates
           </h2>
 
         </div>

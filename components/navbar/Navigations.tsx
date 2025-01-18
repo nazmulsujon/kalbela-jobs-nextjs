@@ -6,6 +6,7 @@ import useApiRequest from "@/app/hooks/useApiRequest"
 
 import PrimaryBtn from "../PrimaryBtn"
 import { Button } from "../ui/button"
+import Link from "next/link"
 
 export function Navigations() {
   const router = useRouter()
@@ -88,8 +89,8 @@ export function Navigations() {
                     Failed to load categories
                   </li>
                 )}
-                {data?.data?.map((section: any) => (
-                  <div>
+                {data?.data?.map((section: any, index: number) => (
+                  <div key={index}>
                     <h2 className="mb-2 text-sm py-2 px-2  font-bold ">{section.megaCategory}</h2>
                     <hr className="mb-2 border-gray-200" />
                     <ul className="space-y-1 mb-4">
@@ -130,16 +131,18 @@ export function Navigations() {
           onMouseEnter={() => handleMouseEnter("resources")}
           onMouseLeave={handleMouseLeave}
         >
-          <PrimaryBtn
-            type="button"
-            className="inline-flex items-center justify-center gap-2 rounded-sm border-0 bg-slate-50 py-1.5 text-sm font-semibold text-black shadow transition-all duration-500 hover:bg-slate-100"
-          >
-            Career Resources
-            <ChevronDown
-              className={`h-2.5 w-2.5 transform transition-transform ${activeDropdown === "resources" ? "rotate-180" : ""
-                }`}
-            />
-          </PrimaryBtn>
+          <Link href="/career-resources">
+            <PrimaryBtn
+              type="button"
+              className="inline-flex items-center justify-center gap-2 rounded-sm border-0 bg-slate-50 py-1.5 text-sm font-semibold text-black shadow transition-all duration-500 hover:bg-slate-100"
+            >
+              Career Resources
+              <ChevronDown
+                className={`h-2.5 w-2.5 transform transition-transform ${activeDropdown === "resources" ? "rotate-180" : ""
+                  }`}
+              />
+            </PrimaryBtn>
+          </Link>
 
           {activeDropdown === "resources" && (
             <div
