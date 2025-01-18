@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from "clsx"
+import { format } from "date-fns"
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
@@ -72,3 +73,19 @@ export const selectCustomStyles = (theme: string) => ({
     },
   }),
 })
+
+export const formatDate = (dateString: string) => {
+  return format(new Date(dateString), "dd MMM, yyyy")
+}
+
+export const stripHtml = (html: string): string => {
+  const doc = new DOMParser().parseFromString(html, "text/html")
+  return doc.body.textContent || ""
+}
+
+export const truncateText = (text: string, maxLength: number): string => {
+  const plainText = stripHtml(text)
+  return plainText.length > maxLength
+    ? plainText.substring(0, maxLength) + "..."
+    : plainText
+}

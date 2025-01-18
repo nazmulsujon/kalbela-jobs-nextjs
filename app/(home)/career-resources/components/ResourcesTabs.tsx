@@ -14,10 +14,12 @@ const ResourcesTabs = () => {
     error,
   } = useApiRequest<any>("resource/category", "GET");
 
+  console.log("carrer resources", careerResources)
+
   const queryParams = useSearchParams();
   const router = useRouter();
 
-  const resourceSlugFromQuery = queryParams.get("resource") || 'resume-tips';
+  const resourceSlugFromQuery = queryParams.get("resource") || careerResources?.data[0]?.slug || 'resume-tips';
   const [selectedTab, setSelectedTab] = useState(resourceSlugFromQuery);
 
 
@@ -56,7 +58,7 @@ const ResourcesTabs = () => {
       </TabsList>
       {careerResources?.data?.map((resource: any) => (
         <TabsContent key={resource._id} value={resource.slug}>
-          <Resource resource={resource} />
+          <Resource resourceSlugFromQuery={resourceSlugFromQuery} resource={resource} />
         </TabsContent>
       ))}
     </Tabs>

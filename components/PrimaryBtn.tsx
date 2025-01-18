@@ -21,7 +21,7 @@ const PrimaryBtn: React.FC<PrimaryBtnProps> = ({
       disabled={disabled}
       className={cn(
         "rounded text-center px-5 py-1 shadow-none whitespace-normal font-medium text-sm border hover:shadow-xl transition-colors duration-200",
-        "bg-[#001968] text-white dark:bg-white dark:text-gray-900 dark:hover:bg-slate-100 ",
+        "bg-[#001968] text-white dark:bg-white dark:text-gray-900 dark:hover:bg-slate-100",
         className
       )}
       {...props}
