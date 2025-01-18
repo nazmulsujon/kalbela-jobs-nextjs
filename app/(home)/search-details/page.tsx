@@ -81,6 +81,8 @@ const SearchDetails: React.FC = () => {
                 setLocation={setLocation}
                 job_type={job_type}
                 setJobType={setJobType}
+                category={category}
+                setCategory={setCategory}
               />
             </div>
           </SheetContent>
@@ -96,6 +98,8 @@ const SearchDetails: React.FC = () => {
             setLocation={setLocation}
             job_type={job_type}
             setJobType={setJobType}
+            category={category}
+            setCategory={setCategory}
           />
         </aside>
 

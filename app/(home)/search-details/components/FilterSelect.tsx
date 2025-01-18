@@ -8,6 +8,8 @@ interface FilterSelectProps {
   setLocation: Dispatch<SetStateAction<string>>;
   job_type: string;
   setJobType: Dispatch<SetStateAction<string>>;
+  category: string;
+  setCategory: Dispatch<SetStateAction<string>>;
 }
 
 const FilterSelect: FC<FilterSelectProps> = ({
@@ -16,16 +18,24 @@ const FilterSelect: FC<FilterSelectProps> = ({
   setLocation,
   job_type,
   setJobType,
+  category,
+  setCategory,
 }) => {
   const { data: jobTypes } = useApiRequest<any>("job-type", "GET");
+  const { data: categories } = useApiRequest<any>("category", "GET");
+
+  console.log("category---->>>", categories)
 
   const handleFilterChange =
-    (key: "location" | "job_type") =>
+    (key: "location" | "job_type" | "category") =>
       (option: SingleValue<{ value: string; label: string; image?: string }>) => {
         if (key === "location") {
           setLocation(option?.value || "");
         } else if (key === "job_type") {
           setJobType(option?.value || "");
+        }
+        else if (key === "category") {
+          setCategory(option?.value || "");
         }
       };
 
@@ -41,7 +51,7 @@ const FilterSelect: FC<FilterSelectProps> = ({
         {data.image && (
           <img src={data.image} alt={data.label} className="w-6 h-6 rounded-full" />
         )}
-        <span>{data.label}</span>
+        <span className="max-w-full truncate">{data.label}</span>
       </div>
     );
   };
@@ -54,7 +64,7 @@ const FilterSelect: FC<FilterSelectProps> = ({
         {data.image && (
           <img src={data.image} alt={data.label} className="w-5 h-5 rounded-full" />
         )}
-        <span className="text-sm">{data.label}</span>
+        <span className="text-sm max-w-40 truncate">{data.label}</span>
       </div>
     );
   };
@@ -80,6 +90,37 @@ const FilterSelect: FC<FilterSelectProps> = ({
           options={[
             { value: "", label: "All", image: "/icons/all_job_type.jpg" },
             ...(jobTypes?.data?.map((item: any) => ({
+              value: item.slag,
+              label: item.name,
+              image: item.image || "",
+            })) || []),
+          ]}
+          className="capitalize w-full"
+          styles={customStyles}
+          components={{ Option: CustomOption, SingleValue: CustomSingleValue }}
+          isSearchable
+        />
+      </div>
+
+      {/* Categories */}
+      <div className="mb-4">
+        <h4 className="mb-1 text-sm font-medium">Categories</h4>
+        <Select
+          value={
+            category
+              ? categories?.data
+                ?.map((item: any) => ({
+                  value: item.slag,
+                  label: item.name,
+                  image: item.image || "",
+                }))
+                .find((item: any) => item.value === category) || null
+              : { value: "", label: "All", image: "/icons/category.png" }
+          }
+          onChange={handleFilterChange("category")}
+          options={[
+            { value: "", label: "All", image: "/icons/category.png" },
+            ...(categories?.data?.map((item: any) => ({
               value: item.slag,
               label: item.name,
               image: item.image || "",
