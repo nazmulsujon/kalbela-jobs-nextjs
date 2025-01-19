@@ -1,42 +1,106 @@
 import Link from "next/link"
-
-import { Accordion, AccordionItem } from "@/components/ui/accordion"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 import useApiRequest from "@/app/hooks/useApiRequest"
-import PrimaryBtn from "../PrimaryBtn"
-import SecondaryBtn from "../SecondaryBtn"
 import { useUserData } from "@/utils/encript_decript"
+import { useRouter } from "next/navigation"
+import { cn } from "@/lib/utils"
+import { Button } from "../ui/button"
 
 const MobileNav: React.FC = () => {
-      const { data, loading, error } = useApiRequest<any>("category", "GET")
-      const [user] = useUserData()
+  const router = useRouter()
+  const { data, loading, error } = useApiRequest<any>("category/top-five", "GET")
+  const {
+    data: careerResources,
+    loading: loading2,
+    error: error2,
+  } = useApiRequest<any>("resource/category", "GET")
+
+  const handleRedirectToSearchDetails = (category: string) => {
+    const queryParams = new URLSearchParams({
+      category: category,
+    }).toString()
+    router.push(`/search-details?${queryParams}`)
+  }
+
+  const handleRedirectToCareerResources = (resource: string) => {
+    const queryParams = new URLSearchParams({
+      resource: resource,
+    }).toString()
+    router.push(`/career-resources?${queryParams}`)
+  }
 
 
-      return (
-            <div className="bg-white text-gray-900 dark:bg-gray-900 dark:text-slate-200">
-                  <section>
-                        <Accordion type="single" collapsible className="space-y-3 py-3">
-                              {data?.data?.map((navigation: any) => (
-                                    <AccordionItem
-                                          className="border-b-0"
-                                          key={navigation._id}
-                                          value={navigation.name}
-                                    >
-                                          <Link href={navigation.slag} className="flex items-center">
-                                                {navigation.name}
-                                          </Link>
-                                    </AccordionItem>
-                              ))}
-                              {!user && <Link href="/login" className="flex items-center">
-                                    <PrimaryBtn className="py-2 w-full px-4">Login</PrimaryBtn>
-                              </Link>}
-                              {!user && <Link href="/registration" className="flex items-center">
-                                    <SecondaryBtn className="py-2 w-full px-4">Registration</SecondaryBtn>
-                              </Link>}
+  return (
+    <div className="bg-white text-gray-900 dark:bg-gray-900 dark:text-slate-200">
+      <Accordion type="single" collapsible className="w-full">
+        {loading && (
+          <div className="p-4 text-gray-500">Loading categories...</div>
+        )}
+        {error && (
+          <div className="p-4 text-red-500">Failed to load categories</div>
+        )}
+        {data?.data?.map((section: any, index: number) => (
+          <AccordionItem key={index} value={`item-${index}`}>
+            <AccordionTrigger className="hover:no-underline text-sm font-bold">
+              {section.megaCategory}
+            </AccordionTrigger>
+            <AccordionContent>
+              <ul className="space-y-1">
+                {section.categories.map((category: any) => (
+                  <li key={category._id}>
+                    <button
+                      onClick={() => handleRedirectToSearchDetails(category?.slag)}
+                      className={cn(
+                        "w-full text-left rounded-md px-3 py-2 text-sm",
+                        "hover:bg-gray-100 hover:text-gray-900",
+                        "transition-colors duration-200",
+                        "focus:outline-none focus:ring-2 focus:ring-gray-200"
+                      )}
+                    >
+                      <span>{category.name}</span>
+                      {category.jobCount > 0 && (
+                        <span className="ml-1.5 text-xs text-gray-400">
+                          ({category.jobCount})
+                        </span>
+                      )}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+        ))}
 
-                        </Accordion>
-                  </section>
-            </div>
-      )
+        <AccordionItem value="career-resources">
+          <AccordionTrigger className="hover:no-underline text-sm font-bold">
+            Career Resources
+          </AccordionTrigger>
+          <AccordionContent>
+            <ul className="space-y-1">
+              {careerResources?.data?.map((resource: any) => (
+                <li key={resource?._id}>
+                  <Button
+                    onClick={() => {
+                      handleRedirectToCareerResources(resource?.slug)
+                    }}
+                    variant="link"
+                    className="block w-full px-4 text-left text-sm hover:bg-gray-100 hover:text-gray-800 hover:no-underline"
+                  >
+                    {resource.name}
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </div>
+  )
 }
 
 export default MobileNav

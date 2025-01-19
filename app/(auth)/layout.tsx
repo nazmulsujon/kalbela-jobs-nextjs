@@ -10,65 +10,65 @@ import Navbar from "@/components/navbar/Navbar"
 import { ToastContainer } from "react-toastify"
 
 export const metadata: Metadata = {
-      title: {
-            default: siteConfig.name,
-            template: `%s - ${siteConfig.name}`,
-      },
-      description: siteConfig.description,
-      themeColor: [
-            { media: "(prefers-color-scheme: light)", color: "white" },
-            { media: "(prefers-color-scheme: dark)", color: "black" },
-      ],
-      icons: {
-            icon: "/favicon.ico",
-            shortcut: "/favicon-16x16.png",
-            apple: "/apple-touch-icon.png",
-      },
+  title: {
+    default: siteConfig.name,
+    template: `%s - ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "white" },
+    { media: "(prefers-color-scheme: dark)", color: "black" },
+  ],
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-16x16.png",
+    apple: "/apple-touch-icon.png",
+  },
 }
 
 interface RootLayoutProps {
-      children: React.ReactNode
+  children: React.ReactNode
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
-      return (
-            <>
-                  <html lang="en" suppressHydrationWarning>
-                        <head>
-                              <meta name="theme-color" content="#DEEBFF" media="(prefers-color-scheme: light)" />
-                              <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                              <meta charSet="UTF-8" />
-                              <meta title="Sign In - Kalbela Jobs" />
-                              <meta name="description" content='Sign In - Kalbela Jobs' />
-                              <meta name="keywords" content='Jobs, Job Seeker, Employer, Job Portal, Job Posting' />
-                              <meta name="author" content='Kalbela Jobs' />
-                              <link rel="icon" href="/favicon.ico" />
-                              <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-                              <link rel="shortcut icon" href="/favicon-16x16.png" />
-                              <link rel="manifest" href="/manifest.json" />
+  return (
+    <>
+      <html lang="en" suppressHydrationWarning>
+        <head>
+          <meta name="theme-color" content="#DEEBFF" media="(prefers-color-scheme: light)" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <meta charSet="UTF-8" />
+          <meta title="Sign In - Kalbela Jobs" />
+          <meta name="description" content='Sign In - Kalbela Jobs' />
+          <meta name="keywords" content='Jobs, Job Seeker, Employer, Job Portal, Job Posting' />
+          <meta name="author" content='Kalbela Jobs' />
+          <link rel="icon" href="/favicon.ico" />
+          <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+          <link rel="shortcut icon" href="/favicon-16x16.png" />
+          <link rel="manifest" href="/manifest.json" />
 
 
-                        </head>
-                        <body
-                              className={cn(
-                                    "min-h-screen bg-background font-sans antialiased",
-                                    fontPoppins.variable
-                              )}
-                        >
-                              <ThemeProvider attribute="class" enableSystem>
-                                    <div className="relative flex min-h-screen flex-col bg-light-theme dark:bg-dark-theme">
-                                          <header className="sticky top-0 z-50">
-                                                <Navbar />
-                                          </header>
-                                          <main>
-                                                <div className="flex-1">{children}</div>
-                                                <ToastContainer />
-                                          </main>
-                                    </div>
-                                    <TailwindIndicator />
-                              </ThemeProvider>
-                        </body>
-                  </html>
-            </>
-      )
+        </head>
+        <body
+          className={cn(
+            "min-h-screen bg-background font-sans antialiased",
+            fontPoppins.variable
+          )}
+        >
+          <ThemeProvider attribute="class" enableSystem>
+            <div className="relative flex min-h-screen flex-col bg-light-theme dark:bg-dark-theme">
+              <header className="sticky top-0 z-50">
+                <Navbar />
+              </header>
+              <main>
+                <div className="flex-1">{children}</div>
+                <ToastContainer />
+              </main>
+            </div>
+            <TailwindIndicator />
+          </ThemeProvider>
+        </body>
+      </html>
+    </>
+  )
 }
