@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import {
   Accordion,
@@ -10,8 +12,15 @@ import { useUserData } from "@/utils/encript_decript"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Button } from "../ui/button"
+import SecondaryBtn from "../SecondaryBtn"
+import PrimaryBtn from "../PrimaryBtn"
+import { useEffect, useState } from "react"
 
 const MobileNav: React.FC = () => {
+  const [user] = useUserData()
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
+  const [userLoading, setUserLoading] = useState(true)
+
   const router = useRouter()
   const { data, loading, error } = useApiRequest<any>("category/top-five", "GET")
   const {
@@ -19,6 +28,20 @@ const MobileNav: React.FC = () => {
     loading: loading2,
     error: error2,
   } = useApiRequest<any>("resource/category", "GET")
+
+  useEffect(() => {
+    ; (async () => {
+      try {
+        setUserLoading(true)
+        setIsAuthenticated(!!user)
+      } catch (error) {
+        console.error("Error fetching user data:", error)
+        setIsAuthenticated(false)
+      } finally {
+        setUserLoading(false)
+      }
+    })()
+  }, [])
 
   const handleRedirectToSearchDetails = (category: string) => {
     const queryParams = new URLSearchParams({
@@ -99,6 +122,13 @@ const MobileNav: React.FC = () => {
           </AccordionContent>
         </AccordionItem>
       </Accordion>
+
+      {!user && !userLoading && <Link href="/login" className="flex items-center">
+        <PrimaryBtn className="py-2 w-full px-4 my-3">Login</PrimaryBtn>
+      </Link>}
+      {!user && !userLoading && <Link href="/registration" className="flex items-center">
+        <SecondaryBtn className="py-2 w-full px-4">Registration</SecondaryBtn>
+      </Link>}
     </div>
   )
 }
