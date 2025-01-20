@@ -90,7 +90,7 @@ const Navbar: React.FC = () => {
 
         <div>
           <Link href="/">
-            <img className="mx-auto h-auto w-48" src="/logo.png" alt="logo" />
+            <img className="mx-auto h-auto w-36 md:w-48" src="/logo.png" alt="logo" />
           </Link>
         </div>
 
@@ -99,12 +99,11 @@ const Navbar: React.FC = () => {
         </div>
 
         <div className="flex items-center w-20  justify-end">
-          {loading ? (
-            <Skeleton className="h-8 w-8 rounded-full" />
-          ) : user ? (
-            <UserNav />
-          ) : (
-            <div className="lg:flex hidden items-center  justify-between space-x-4 md:me-0 md:flex">
+          <UserNav loading={loading} user={user} />
+
+          {
+            !user && !loading &&
+            <div className="hidden lg:flex items-center justify-between space-x-4 md:me-0 md:flex">
               <PrimaryBtn className="py-2 px-4" onClick={() => router.push("/login")}>
                 Login
               </PrimaryBtn>
@@ -112,7 +111,7 @@ const Navbar: React.FC = () => {
                 Registration
               </SecondaryBtn>
             </div>
-          )}
+          }
           <div className="ml-2">
             <ThemeToggle />
           </div>
@@ -133,7 +132,7 @@ const Navbar: React.FC = () => {
             <SheetHeader>
               <SheetTitle className="text-start">
                 <Link href="/">
-                  <img className="h-auto w-48" src="/logo.png" alt="logo" />
+                  <img className="h-auto w-36" src="/logo.png" alt="logo" />
                 </Link>
               </SheetTitle>
               <SheetDescription className="sr-only">

@@ -58,7 +58,7 @@ const VerticalMarquee = () => {
           <ReviewCard key={index} {...review} />
         ))}
       </Marquee>
-      <Marquee reverse pauseOnHover vertical className='[--duration:20s] hidden lg:block'
+      <Marquee reverse pauseOnHover vertical className='[--duration:20s]'
         style={{
           transform:
             'translateX(0px) translateY(0px) translateZ(0px) rotateX(0deg) rotateY(0deg) rotateZ(-9deg) scale(1.5)',

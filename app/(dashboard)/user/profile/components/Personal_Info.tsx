@@ -292,7 +292,7 @@ export default function ProfilePage() {
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
-                <Input required onChange={(e) => setEmail(e.target.value)} id="email" defaultValue={user?.email} />
+                <Input readOnly required onChange={(e) => setEmail(e.target.value)} id="email" defaultValue={user?.email} />
               </div>
 
               <div className="grid gap-2">
