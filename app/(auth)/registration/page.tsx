@@ -9,6 +9,7 @@ import { Eye, EyeOff } from "lucide-react"
 import PrimaryBtn from "@/components/PrimaryBtn"
 import SecondaryBtn from "@/components/SecondaryBtn"
 import useApiForPost from "@/app/hooks/useApiForPost"
+
 import AuthAnimation from "../components/AuthAnimation"
 
 interface FormData {
@@ -91,11 +92,7 @@ const RegistrationPage = () => {
             >
               <div className="space-y-5">
                 <div>
-                  <label
-                    htmlFor=""
-                    className="text-base font-medium"
-                  >
-
+                  <label htmlFor="" className="text-base font-medium">
                     Full Name <span className="text-red-500">*</span>
                   </label>
                   <div className="relative mt-2.5 text-gray-400 focus-within:text-gray-600">
@@ -126,10 +123,7 @@ const RegistrationPage = () => {
                   </div>
                 </div>
                 <div>
-                  <label
-                    htmlFor=""
-                    className="text-base font-medium"
-                  >
+                  <label htmlFor="" className="text-base font-medium">
                     {" "}
                     Email <span className="text-red-500">*</span>
                   </label>
@@ -161,10 +155,7 @@ const RegistrationPage = () => {
                   </div>
                 </div>
                 <div>
-                  <label
-                    htmlFor=""
-                    className="text-base font-medium"
-                  >
+                  <label htmlFor="" className="text-base font-medium">
                     {" "}
                     Password <span className="text-red-500">*</span>
                   </label>
@@ -247,12 +238,11 @@ const RegistrationPage = () => {
                 </div>
                 Sign in with Linkedin
               </SecondaryBtn>
-              <Link href="https://app.kalbelajobs.com/sign-up" className="flex items-center">
-                <SecondaryBtn
-
-
-                  className="relative w-full py-3"
-                >
+              <Link
+                href="https://app.kalbelajobs.com/sign-up"
+                className="flex items-center"
+              >
+                <SecondaryBtn className="relative w-full py-3">
                   <div className="absolute inset-y-0 left-0 px-4 py-2">
                     <img
                       className="h-6 w-6 text-[#2563EB]"

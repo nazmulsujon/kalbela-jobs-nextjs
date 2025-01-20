@@ -1,12 +1,13 @@
 import { useRef, useState } from "react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { ChevronDown } from "lucide-react"
+
 import { cn } from "@/lib/utils"
 import useApiRequest from "@/app/hooks/useApiRequest"
 
 import PrimaryBtn from "../PrimaryBtn"
 import { Button } from "../ui/button"
-import Link from "next/link"
 
 export function Navigations() {
   const router = useRouter()
@@ -15,7 +16,10 @@ export function Navigations() {
   >(null)
   const closeTimeoutRef = useRef<any>(null)
 
-  const { data, loading, error } = useApiRequest<any>("category/top-five", "GET")
+  const { data, loading, error } = useApiRequest<any>(
+    "category/top-five",
+    "GET"
+  )
 
   const {
     data: careerResources,
@@ -51,9 +55,8 @@ export function Navigations() {
     router.push(`/career-resources?${queryParams}`)
   }
 
-
   return (
-    <section className="text-gray-900 dark:text-slate-200 hidden lg:block">
+    <section className="hidden text-gray-900 dark:text-slate-200 lg:block">
       <nav className="flex justify-center gap-4">
         {/* Categories Dropdown */}
         <div
@@ -67,18 +70,19 @@ export function Navigations() {
           >
             Categories
             <ChevronDown
-              className={`h-2.5 w-2.5 transform transition-transform ${activeDropdown === "categories" ? "rotate-180" : ""
-                }`}
+              className={`h-2.5 w-2.5 transform transition-transform ${
+                activeDropdown === "categories" ? "rotate-180" : ""
+              }`}
             />
           </PrimaryBtn>
 
           {activeDropdown === "categories" && (
             <div
               id="categories-dropdown"
-              className="absolute top-full mt-2 w-[45rem] border bg-white/90 dark:bg-slate-700 text-nowrap rounded-sm shadow-lg z-50"
+              className="absolute top-full z-50 mt-2 w-[45rem] text-nowrap rounded-sm border bg-white/90 shadow-lg dark:bg-slate-700"
             >
               <ul
-                className="py-1 px-4 max-h-[19rem] grid grid-cols-3 overflow-y-auto"
+                className="grid max-h-[19rem] grid-cols-3 overflow-y-auto px-4 py-1"
                 style={{ scrollbarWidth: "none" }}
               >
                 {loading && (
@@ -91,9 +95,11 @@ export function Navigations() {
                 )}
                 {data?.data?.map((section: any, index: number) => (
                   <div key={index}>
-                    <h2 className="mb-2 text-sm py-2 px-2  font-bold ">{section.megaCategory}</h2>
+                    <h2 className="mb-2 px-2 py-2 text-sm font-bold">
+                      {section.megaCategory}
+                    </h2>
                     <hr className="mb-2 border-gray-200" />
-                    <ul className="space-y-1 mb-4">
+                    <ul className="mb-4 space-y-1">
                       {section.categories.map((category: any) => (
                         <li key={category._id}>
                           <button
@@ -101,8 +107,8 @@ export function Navigations() {
                               handleRedirectToSearchDetails(category?.slag)
                             }}
                             className={cn(
-                              "w-full text-left rounded-md px-3 py-2 text-sm",
-                              "  hover:bg-gray-100 hover:text-gray-900",
+                              "w-full rounded-md px-3 py-2 text-left text-sm",
+                              "hover:bg-gray-100 hover:text-gray-900",
                               "transition-colors duration-200",
                               "focus:outline-none focus:ring-2 focus:ring-gray-200"
                             )}
@@ -122,7 +128,6 @@ export function Navigations() {
               </ul>
             </div>
           )}
-
         </div>
 
         {/* Career Resources Dropdown */}
@@ -138,8 +143,9 @@ export function Navigations() {
             >
               Career Resources
               <ChevronDown
-                className={`h-2.5 w-2.5 transform transition-transform ${activeDropdown === "resources" ? "rotate-180" : ""
-                  }`}
+                className={`h-2.5 w-2.5 transform transition-transform ${
+                  activeDropdown === "resources" ? "rotate-180" : ""
+                }`}
               />
             </PrimaryBtn>
           </Link>
@@ -147,9 +153,10 @@ export function Navigations() {
           {activeDropdown === "resources" && (
             <div
               id="resources-dropdown"
-              className="absolute top-full mt-2 w-fit text-nowrap rounded-sm bg-white/90 dark:bg-slate-700 shadow-lg transition-opacity duration-300"
+              className="absolute top-full mt-2 w-fit text-nowrap rounded-sm bg-white/90 shadow-lg transition-opacity duration-300 dark:bg-slate-700"
             >
-              <ul className="py-1 max-h-[19.5rem] overflow-y-auto min-w-52"
+              <ul
+                className="max-h-[19.5rem] min-w-52 overflow-y-auto py-1"
                 style={{ scrollbarWidth: "none" }}
               >
                 {loading2 && (

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "pre-push": "npx prettier --check . && npm run build",
+    "pre-push": "npm run format:check || true && npm run format:write && npm run format:check && npm run lint:fix && npm run lint && npm run build",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

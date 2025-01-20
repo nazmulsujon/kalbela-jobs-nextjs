@@ -1,5 +1,6 @@
 import "@/styles/globals.css"
 import { Metadata } from "next"
+import { ToastContainer } from "react-toastify"
 
 import { siteConfig } from "@/config/site"
 import { fontPoppins } from "@/lib/fonts"
@@ -7,7 +8,6 @@ import { cn } from "@/lib/utils"
 import { TailwindIndicator } from "@/components/TailwindIndicator"
 import { ThemeProvider } from "@/components/ThemeProvider"
 import Navbar from "@/components/navbar/Navbar"
-import { ToastContainer } from "react-toastify"
 
 export const metadata: Metadata = {
   title: {
@@ -35,19 +35,27 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <>
       <html lang="en" suppressHydrationWarning>
         <head>
-          <meta name="theme-color" content="#DEEBFF" media="(prefers-color-scheme: light)" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <meta
+            name="theme-color"
+            content="#DEEBFF"
+            media="(prefers-color-scheme: light)"
+          />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+          />
           <meta charSet="UTF-8" />
           <meta title="Sign In - Kalbela Jobs" />
-          <meta name="description" content='Sign In - Kalbela Jobs' />
-          <meta name="keywords" content='Jobs, Job Seeker, Employer, Job Portal, Job Posting' />
-          <meta name="author" content='Kalbela Jobs' />
+          <meta name="description" content="Sign In - Kalbela Jobs" />
+          <meta
+            name="keywords"
+            content="Jobs, Job Seeker, Employer, Job Portal, Job Posting"
+          />
+          <meta name="author" content="Kalbela Jobs" />
           <link rel="icon" href="/favicon.ico" />
           <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
           <link rel="shortcut icon" href="/favicon-16x16.png" />
           <link rel="manifest" href="/manifest.json" />
-
-
         </head>
         <body
           className={cn(

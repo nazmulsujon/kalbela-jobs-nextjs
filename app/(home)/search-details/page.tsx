@@ -27,9 +27,6 @@ const SearchDetails: React.FC = () => {
   const { theme } = useTheme()
   const customStyles = selectCustomStyles(theme || "light")
 
-
-
-
   const searchParams = useSearchParams()
 
   const searchQuery = searchParams.get("query")
@@ -129,7 +126,7 @@ const SearchDetails: React.FC = () => {
               {jobs.length > 0 ? (
                 jobs.map((job, index) => <JobcardLarge job={job} key={index} />)
               ) : (
-                <div className="min-h-[60vh] flex justify-center items-center">
+                <div className="flex min-h-[60vh] items-center justify-center">
                   <NoVacancies />
                 </div>
               )}

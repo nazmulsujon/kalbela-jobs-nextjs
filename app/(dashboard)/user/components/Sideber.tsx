@@ -26,7 +26,11 @@ const sidebarItems = [
   { name: "Reports", href: "/user/reports", icon: FileText },
 ]
 
-export function Sidebar({ setIsDashboardSidebarOpen }: { setIsDashboardSidebarOpen?: React.Dispatch<React.SetStateAction<boolean>> }) {
+export function Sidebar({
+  setIsDashboardSidebarOpen,
+}: {
+  setIsDashboardSidebarOpen?: React.Dispatch<React.SetStateAction<boolean>>
+}) {
   const pathname = usePathname()
 
   return (
@@ -39,8 +43,9 @@ export function Sidebar({ setIsDashboardSidebarOpen }: { setIsDashboardSidebarOp
           <div className="space-y-1">
             {sidebarItems.map((item) => (
               <Button
-                onClick={() => setIsDashboardSidebarOpen && setIsDashboardSidebarOpen(false)}
-
+                onClick={() =>
+                  setIsDashboardSidebarOpen && setIsDashboardSidebarOpen(false)
+                }
                 key={item.name}
                 variant={pathname === item.href ? "secondary" : "ghost"}
                 className="w-full justify-start rounded-sm"
@@ -56,9 +61,8 @@ export function Sidebar({ setIsDashboardSidebarOpen }: { setIsDashboardSidebarOp
         </div>
       </div>
       <div className="mt-auto p-4">
-
         <SecondaryBtn
-          className="mt-2 flex justify-center space-x-4 items-center w-full py-2 text-red-500 hover:text-red-600"
+          className="mt-2 flex w-full items-center justify-center space-x-4 py-2 text-red-500 hover:text-red-600"
           onClick={() => {
             logout()
             window.location.href = "/login"
