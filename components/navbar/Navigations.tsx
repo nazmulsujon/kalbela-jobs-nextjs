@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils"
 import useApiRequest from "@/app/hooks/useApiRequest"
 
 import PrimaryBtn from "../PrimaryBtn"
+import SecondaryBtn from "../SecondaryBtn"
 import { Button } from "../ui/button"
 
 export function Navigations() {
@@ -64,17 +65,14 @@ export function Navigations() {
           onMouseEnter={() => handleMouseEnter("categories")}
           onMouseLeave={handleMouseLeave}
         >
-          <PrimaryBtn
-            type="button"
-            className="inline-flex items-center justify-center gap-2 rounded-sm border-0 bg-slate-50 py-1.5 text-sm font-semibold text-black shadow transition-all duration-500 hover:bg-slate-100"
-          >
-            Categories
+          <SecondaryBtn className="flex items-center gap-2 px-4 py-2">
+            Job Categories
             <ChevronDown
               className={`h-2.5 w-2.5 transform transition-transform ${
                 activeDropdown === "categories" ? "rotate-180" : ""
               }`}
             />
-          </PrimaryBtn>
+          </SecondaryBtn>
 
           {activeDropdown === "categories" && (
             <div
@@ -137,17 +135,14 @@ export function Navigations() {
           onMouseLeave={handleMouseLeave}
         >
           <Link href="/career-resources">
-            <PrimaryBtn
-              type="button"
-              className="inline-flex items-center justify-center gap-2 rounded-sm border-0 bg-slate-50 py-1.5 text-sm font-semibold text-black shadow transition-all duration-500 hover:bg-slate-100"
-            >
+            <SecondaryBtn className="flex items-center gap-2 px-4 py-2">
               Career Resources
               <ChevronDown
                 className={`h-2.5 w-2.5 transform transition-transform ${
                   activeDropdown === "resources" ? "rotate-180" : ""
                 }`}
               />
-            </PrimaryBtn>
+            </SecondaryBtn>
           </Link>
 
           {activeDropdown === "resources" && (

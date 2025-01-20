@@ -2,9 +2,11 @@ import { Fragment } from "react"
 import { Metadata } from "next"
 
 import FeaturedJobs from "./components/FeaturedJobs"
+import Govt_jobs from "./components/Govt_jobs"
 import HeroSection from "./components/HeroSection"
 import InterviewQuestions from "./components/InterviewQuestions"
 import JobType from "./components/JobType"
+import Job_type_tag from "./components/Job_type_tag"
 import NesLetter from "./components/NesLetter"
 import Testimonial from "./components/Testimonial"
 import TopCompanies from "./components/TopCompanies"
@@ -34,13 +36,15 @@ const HomePage = () => {
       <div className="relative">
         <div className="z-50">
           <HeroSection />
-          <JobType />
+          <Job_type_tag />
+          {/* <JobType /> */}
         </div>
         <div className="pointer-events-none absolute right-0 top-0 z-0 w-full">
           <VerticalMarquee />
         </div>
 
         <FeaturedJobs />
+        <Govt_jobs />
       </div>
 
       <TopCompanies />

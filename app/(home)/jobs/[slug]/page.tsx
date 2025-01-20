@@ -4,14 +4,20 @@ import Head from "next/head"
 import { useParams } from "next/navigation"
 import { dummyJobs } from "@/public/assets/dummyData"
 import { useUserData } from "@/utils/encript_decript"
+import { Avatar } from "@radix-ui/react-avatar"
 import {
+  Banknote,
+  Briefcase,
   BriefcaseIcon,
+  Building2,
   CalendarIcon,
   CurrencyIcon as CurrencyDollarIcon,
+  Info,
   MapPinIcon,
 } from "lucide-react"
 import { toast } from "react-toastify"
 
+import { AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardTitle } from "@/components/ui/card"
 import ApplyModal from "@/components/ApplyModal"
@@ -133,7 +139,7 @@ const JobsDetails = () => {
       <div className="flex flex-col gap-8 py-4 pb-14 md:gap-4 lg:flex-row">
         {/* Left Section */}
         <div className="flex-1 text-[18px]">
-          <Card className="border-none bg-transparent shadow-none md:border md:shadow-lg lg:p-6">
+          <Card className="border-0 border-gray-200 border-opacity-0 bg-transparent shadow-none dark:border-gray-500 lg:border lg:border-opacity-45 lg:p-6 lg:shadow-lg">
             <div className="mb-4 flex items-start justify-between">
               <h1 className="text-2xl font-bold text-primary md:text-4xl">
                 {jobData?.job_title}
@@ -169,11 +175,20 @@ const JobsDetails = () => {
                 variant="secondary"
                 className="border border-black border-opacity-30 px-3 py-1 text-sm dark:border-gray-400"
               >
-                <CurrencyDollarIcon className="mr-2 h-4 w-4" />
+                <Banknote className="mr-2 h-4 w-4" />
                 {jobData?.salary_negotiable
                   ? "Salary: Negotiable"
                   : `Salary: ${jobData?.salary_range?.min} - ${jobData?.salary_range?.max} ${jobData?.salary_range?.currency}`}
               </Badge>
+              {jobData?.gender && (
+                <Badge
+                  variant="secondary"
+                  className="border border-black border-opacity-30 px-3 py-1 text-sm dark:border-gray-400"
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  Gender: {jobData?.gender}
+                </Badge>
+              )}
             </div>
             <div className="space-y-4">
               <JobSection
@@ -199,13 +214,51 @@ const JobsDetails = () => {
                 content={jobData?.responsibilities}
               />
             </div>
+            <h2 className="my-2 text-xl font-semibold">Company Info</h2>
+            <div className="flex items-center gap-4">
+              <Avatar className="h-16 w-16">
+                <AvatarImage
+                  className="w-20 rounded border-2 border-gray-300 bg-white object-contain p-2 shadow-md"
+                  src={
+                    jobData?.company_info?.logo ||
+                    "https://via.placeholder.com/64"
+                  }
+                  alt={jobData?.company_info?.name || "Company Logo"}
+                />
+                <AvatarFallback className="text-lg">
+                  {jobData?.company_info?.name.charAt(0)}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <h4 className="text-xl font-medium">
+                  {jobData?.company_info?.name || "N/A"}
+                </h4>
+                <p className="text-sm uppercase text-muted-foreground">
+                  {jobData?.company_info?.industry || "N/A"} (
+                  {jobData?.company_info?.company_size || "N/A"})
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: jobData?.company_info?.about,
+                }}
+                className="tajawal-font jodit-wysiwyg mt-1 text-sm capitalize text-muted-foreground md:text-base"
+              />
+            </div>
+
             <div className="flex items-center gap-4 pt-8 font-semibold">
               <ApplyModal
                 slug={jobData?.url}
                 company={jobData?.company_info?.company_id}
                 user={user}
               />
-              <SecondaryBtn onClick={() => save_jobs(jobData?._id)}>
+              <SecondaryBtn
+                className="px-10 py-2"
+                onClick={() => save_jobs(jobData?._id)}
+              >
                 Save
               </SecondaryBtn>
             </div>
@@ -243,6 +296,7 @@ const JobsDetails = () => {
                     <p className="mb-4 text-sm">
                       {jobPost.description.slice(0, 100)}...
                     </p>
+
                     <SecondaryBtn
                       onClick={() => save_jobs(jobPost?.id)}
                       className="w-full"
@@ -274,7 +328,7 @@ const JobSection = ({
     {content ? (
       <div
         dangerouslySetInnerHTML={{ __html: content }}
-        className="tajawal-font text-sm capitalize text-muted-foreground md:text-base"
+        className="tajawal-font jodit-wysiwyg dark:text-gray-300! text-sm capitalize text-muted-foreground md:text-base"
       />
     ) : (
       children

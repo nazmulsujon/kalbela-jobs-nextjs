@@ -34,7 +34,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({ url, title }) => {
       onClick={handleShare}
       className="flex items-center gap-2 rounded-md border p-2 hover:bg-gray-100"
     >
-      <Share2 className="h-4 w-4" />
+      <Share2 className="h-4 w-4" /> <span className="text-sm">Share</span>
     </button>
   )
 }

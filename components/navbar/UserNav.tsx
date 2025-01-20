@@ -3,7 +3,7 @@
 import { Fragment } from "react"
 import Link from "next/link"
 import { logout } from "@/utils/encript_decript"
-import { User } from "lucide-react"
+import { Briefcase, LogIn, User, UserPlus } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -92,15 +92,33 @@ const UserNav = ({ loading, user }: { loading: boolean; user: any }) => {
               </DropdownMenuItem>
             </Fragment>
           ) : (
-            <div className="flex flex-col space-y-2 p-4">
-              <Link href="/login">
-                <PrimaryBtn className="px-4 py-2">Login</PrimaryBtn>
-              </Link>
-
-              <Link href="/registration">
-                <SecondaryBtn className="px-4 py-2">Registration</SecondaryBtn>
-              </Link>
-            </div>
+            <Fragment>
+              <DropdownMenuLabel>Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <Link href="/login" passHref>
+                  <DropdownMenuItem className="cursor-pointer">
+                    <LogIn className="mr-2 h-4 w-4" />
+                    <span>Login</span>
+                  </DropdownMenuItem>
+                </Link>
+                <Link href="/registration" passHref>
+                  <DropdownMenuItem className="cursor-pointer">
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    <span>Registration</span>
+                  </DropdownMenuItem>
+                </Link>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <Link href="https://app.kalbelajobs.com/admin" passHref>
+                  <DropdownMenuItem className="cursor-pointer">
+                    <Briefcase className="mr-2 h-4 w-4" />
+                    <span>For Employers</span>
+                  </DropdownMenuItem>
+                </Link>
+              </DropdownMenuGroup>
+            </Fragment>
           )}
         </DropdownMenuContent>
       </div>

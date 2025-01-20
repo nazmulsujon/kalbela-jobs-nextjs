@@ -63,7 +63,7 @@ const MobileNav: React.FC = () => {
   }
 
   return (
-    <div className="bg-white text-gray-900 dark:bg-gray-900 dark:text-slate-200">
+    <div className="text-gray-900 dark:bg-gray-900 dark:text-slate-200">
       <Accordion type="single" collapsible className="w-full">
         {loading && (
           <div className="p-4 text-gray-500">Loading categories...</div>
@@ -128,17 +128,6 @@ const MobileNav: React.FC = () => {
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-
-      {!user && !userLoading && (
-        <Link href="/login" className="flex items-center">
-          <PrimaryBtn className="my-3 w-full px-4 py-2">Login</PrimaryBtn>
-        </Link>
-      )}
-      {!user && !userLoading && (
-        <Link href="/registration" className="flex items-center">
-          <SecondaryBtn className="w-full px-4 py-2">Registration</SecondaryBtn>
-        </Link>
-      )}
     </div>
   )
 }
