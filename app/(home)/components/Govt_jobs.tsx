@@ -53,7 +53,7 @@ const Govt_jobs = () => {
                       alt={job?.title || "Company Logo"}
                     />
                   </Avatar>
-                  <div className="flex-grow">
+                  <div className="flex-grow text-center md:text-start">
                     <h3 className="font-semibold hover:text-blue-500">
                       {job.department}
                     </h3>

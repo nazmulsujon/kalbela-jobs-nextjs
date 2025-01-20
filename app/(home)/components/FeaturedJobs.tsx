@@ -41,7 +41,7 @@ const FeaturedJobs: React.FC = () => {
                 <Link
                   href={`/jobs/${job.url}`}
                   key={job._id}
-                  className="group relative flex flex-col items-center gap-2 overflow-hidden rounded-sm border p-4 md:flex-row"
+                  className="group relative flex flex-col items-center justify-center gap-2 overflow-hidden rounded-sm border p-4 md:flex-row"
                 >
                   <div className="h-16 w-16">
                     <img
@@ -53,8 +53,8 @@ const FeaturedJobs: React.FC = () => {
                       alt={job?.company_info?.name || "Company Logo"}
                     />
                   </div>
-                  <div className="flex-grow">
-                    <h3 className="font-semibold hover:text-blue-500">
+                  <div className="flex-grow text-center md:text-start">
+                    <h3 className="font-semibold capitalize hover:text-blue-500">
                       {job.company_info?.name}
                     </h3>
                     <p className="text-xs">{job.job_title}</p>
