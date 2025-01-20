@@ -86,8 +86,7 @@ const HeroSection = () => {
 
         <p className="!mb-2 max-w-4xl text-balance text-center text-xs font-medium md:text-sm">
           Your Career Starts Here with Kalbela Jobs! Discover the latest job
-          opportunities in Bangladesh and worldwide, all in one place. Kalbela
-          Jobs – where your next opportunity awaits.
+          opportunities in Bangladesh and worldwide.
         </p>
 
         <div className="z-40 flex w-full max-w-3xl items-center space-x-2 rounded-sm border border-gray-200 bg-white px-4 py-3 text-gray-900 shadow-md dark:border-gray-700 dark:bg-gray-800 dark:text-slate-200 md:px-6">

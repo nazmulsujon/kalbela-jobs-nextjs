@@ -6,7 +6,7 @@ import dynamic from "next/dynamic"
 import Link from "next/link"
 //@ts-ignore
 import { usePathname, useRouter } from "next/navigation"
-import { useUserData } from "@/utils/encript_decript"
+
 import { Menu } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -26,6 +26,7 @@ import SecondaryBtn from "../SecondaryBtn"
 import { ThemeToggle } from "../ThemeToggle"
 import { Skeleton } from "../ui/skeleton"
 import { Navigations } from "./Navigations"
+import { useUserData } from "@/utils/encript_decript"
 
 const UserNav = dynamic(() => import("./UserNav"), { ssr: false })
 
@@ -43,7 +44,7 @@ const Navbar: React.FC = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       try {
         setLoading(true)
         setIsAuthenticated(!!user)
@@ -68,13 +69,12 @@ const Navbar: React.FC = () => {
 
   return (
     <section
-      className={`${
-        isScrolled
-          ? "border-b bg-white/75 backdrop-blur-lg dark:border-b-gray-500 dark:bg-black"
-          : isHomePage
-            ? "bg-transparent"
-            : "dark:bg-[#121a2d]"
-      } shadow-none`}
+      className={`${isScrolled
+        ? "border-b bg-white/75 backdrop-blur-lg dark:border-b-gray-500 dark:bg-black"
+        : isHomePage
+          ? "bg-transparent"
+          : "dark:bg-[#121a2d]"
+        } shadow-none`}
     >
       <MaxWidthWrapper className="flex h-[64px] items-center justify-between">
         <Button
@@ -90,7 +90,7 @@ const Navbar: React.FC = () => {
 
         <div>
           <Link href="/">
-            <img className="mx-auto h-auto w-48" src="/logo.png" alt="logo" />
+            <img className="mx-auto h-auto w-36 md:w-48" src="/logo.png" alt="logo" />
           </Link>
         </div>
 
@@ -98,27 +98,20 @@ const Navbar: React.FC = () => {
           <Navigations />
         </div>
 
-        <div className="flex w-20 items-center justify-end">
-          {loading ? (
-            <Skeleton className="h-8 w-8 rounded-full" />
-          ) : user ? (
-            <UserNav />
-          ) : (
-            <div className="hidden items-center justify-between space-x-4 md:me-0 md:flex lg:flex">
-              <PrimaryBtn
-                className="px-4 py-2"
-                onClick={() => router.push("/login")}
-              >
+        <div className="flex items-center w-20  justify-end">
+          <UserNav loading={loading} user={user} />
+
+          {
+            !user && !loading &&
+            <div className="hidden lg:flex items-center justify-between space-x-4 md:me-0 md:flex">
+              <PrimaryBtn className="py-2 px-4" onClick={() => router.push("/login")}>
                 Login
               </PrimaryBtn>
-              <SecondaryBtn
-                className="px-4 py-2"
-                onClick={() => router.push("/registration")}
-              >
+              <SecondaryBtn className="py-2 px-4" onClick={() => router.push("/registration")}>
                 Registration
               </SecondaryBtn>
             </div>
-          )}
+          }
           <div className="ml-2">
             <ThemeToggle />
           </div>
@@ -139,7 +132,7 @@ const Navbar: React.FC = () => {
             <SheetHeader>
               <SheetTitle className="text-start">
                 <Link href="/">
-                  <img className="h-auto w-48" src="/logo.png" alt="logo" />
+                  <img className="h-auto w-36" src="/logo.png" alt="logo" />
                 </Link>
               </SheetTitle>
               <SheetDescription className="sr-only">

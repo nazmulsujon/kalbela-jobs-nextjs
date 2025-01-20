@@ -42,7 +42,7 @@ const JobType: React.FC = () => {
   }, [api])
 
   return (
-    <section>
+    <section className="hidden md:block">
       <MaxWidthWrapper>
         <Carousel
           opts={{ loop: true }}
