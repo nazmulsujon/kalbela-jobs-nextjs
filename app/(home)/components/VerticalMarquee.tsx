@@ -5,15 +5,15 @@ import ReviewCard from "./ReviewCard"
 const companies = [
   {
     name: "Kalbela Jobs",
-    logo: "/logo.png",
+    logo: "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
   },
   {
     name: "Kalbela Jobs",
-    logo: "/logo.png",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRM-yBp_-gccOtluIbkg2noeNA4qBcdwXdTxQ&s",
   },
   {
     name: "Kalbela Jobs",
-    logo: "/logo.png",
+    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/Walton_Group.svg/1200px-Walton_Group.svg.png",
   },
   {
     name: "Kalbela Jobs",

@@ -13,15 +13,15 @@ const ReviewCard = ({ name, logo }: { name: string; logo: string }) => {
     >
       <div className="flex flex-col items-center justify-center gap-2">
         <img
-          className="hidden rounded-full md:block lg:w-20"
+          className="hidden h-20 w-12 object-contain md:block lg:w-20"
           alt="logo"
           src={logo}
         />
-        <div className="flex flex-col">
+        {/* <div className="flex flex-col">
           <figcaption className="text-nowrap text-[7px] dark:text-white md:text-xs md:font-medium">
             {name}
           </figcaption>
-        </div>
+        </div> */}
       </div>
     </figure>
   )

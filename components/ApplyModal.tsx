@@ -28,7 +28,7 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ slug, company, user }) => {
         <div>
           {user ? (
             <DialogTrigger asChild>
-              <PrimaryBtn className="dark:border-2 dark:border-gray-600">
+              <PrimaryBtn className="px-10 py-2 dark:border-2 dark:border-gray-600">
                 Apply
               </PrimaryBtn>
             </DialogTrigger>
@@ -37,7 +37,7 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ slug, company, user }) => {
               onClick={() => {
                 toast.error("Please login first"), navigation.push("/login")
               }}
-              className="dark:border-2 dark:border-gray-600"
+              className="px-10 py-2 dark:border-2 dark:border-gray-600"
             >
               Apply
             </PrimaryBtn>

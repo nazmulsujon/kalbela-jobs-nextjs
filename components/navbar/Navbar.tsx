@@ -8,6 +8,7 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useUserData } from "@/utils/encript_decript"
 import { Menu } from "lucide-react"
+import { useTheme } from "next-themes"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -31,6 +32,8 @@ const UserNav = dynamic(() => import("./UserNav"), { ssr: false })
 
 const Navbar: React.FC = () => {
   const pathname = usePathname()
+  const { theme } = useTheme()
+  console.log(theme, "theme")
   const [user] = useUserData()
   const isHomePage = pathname === "/"
 
@@ -92,7 +95,7 @@ const Navbar: React.FC = () => {
           <Link href="/">
             <img
               className="mx-auto h-auto w-36 md:w-48"
-              src="/logo.png"
+              src={theme === "dark" ? "/logo_dark.png" : "/logo.png"}
               alt="logo"
             />
           </Link>
@@ -106,7 +109,7 @@ const Navbar: React.FC = () => {
           <UserNav loading={loading} user={user} />
 
           {!user && !loading && (
-            <div className="hidden items-center justify-between space-x-4 md:me-0 md:flex lg:flex">
+            <div className="hidden items-center justify-between space-x-4 md:me-0 lg:flex">
               <PrimaryBtn
                 className="px-4 py-2"
                 onClick={() => router.push("/login")}
@@ -118,6 +121,14 @@ const Navbar: React.FC = () => {
                 onClick={() => router.push("/registration")}
               >
                 Registration
+              </SecondaryBtn>
+              <SecondaryBtn
+                className="whitespace-nowrap px-4 py-2"
+                onClick={() =>
+                  window.open("https://app.kalbelajobs.com/admin", "_blank")
+                }
+              >
+                For Employers
               </SecondaryBtn>
             </div>
           )}
@@ -136,12 +147,16 @@ const Navbar: React.FC = () => {
 
           <SheetContent
             side="left"
-            className={`h-full w-80 overflow-y-auto bg-white pt-[14px] text-gray-800 dark:bg-gray-900 dark:text-slate-200`}
+            className={`h-full w-80 overflow-y-auto pt-[14px] text-gray-800 dark:bg-gray-900 dark:text-slate-200`}
           >
             <SheetHeader>
               <SheetTitle className="text-start">
                 <Link href="/">
-                  <img className="h-auto w-36" src="/logo.png" alt="logo" />
+                  <img
+                    className="h-auto w-36"
+                    src={theme === "dark" ? "/logo_dark.png" : "/logo.png"}
+                    alt="logo"
+                  />
                 </Link>
               </SheetTitle>
               <SheetDescription className="sr-only">

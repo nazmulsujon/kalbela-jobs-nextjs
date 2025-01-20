@@ -9,9 +9,9 @@ import { Skeleton } from "@/components/ui/skeleton"
 import MaxWidthWrapper from "@/components/MaxWidthWrapper"
 import useApiRequest from "@/app/hooks/useApiRequest"
 
-const FeaturedJobs: React.FC = () => {
+const Govt_jobs = () => {
   const { data, loading, error } = useApiRequest<any>(
-    "jobs/get-featured-jobs",
+    "jobs/get-all-govt-jobs",
     "GET"
   )
 
@@ -21,9 +21,10 @@ const FeaturedJobs: React.FC = () => {
     <section>
       <MaxWidthWrapper className="py-6 md:py-10">
         <h2 className="mb-4 flex items-center text-xl font-bold md:text-3xl">
-          <span className="mr-2 text-red-500">🔥</span> Featured Jobs
+          <span className="mr-2 text-red-500">🔥</span> Government Jobs
         </h2>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+
+        <div className="col-span-3 grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {loading
             ? Array.from({ length: 16 }).map((_, index) => (
                 <div
@@ -39,25 +40,24 @@ const FeaturedJobs: React.FC = () => {
               ))
             : data?.data?.map((job: any) => (
                 <Link
-                  href={`/jobs/${job.url}`}
+                  href={`/govt-jobs/${job._id}`}
                   key={job._id}
                   className="group relative flex flex-col items-center gap-2 overflow-hidden rounded-sm border p-4 md:flex-row"
                 >
-                  <div className="h-16 w-16">
-                    <img
-                      className="h-full w-20 rounded border-2 border-gray-300 bg-white object-contain p-2 shadow-md"
+                  <Avatar className="h-16 w-16">
+                    <AvatarImage
+                      className="w-20 rounded-full border-2 border-gray-300 bg-white object-contain p-2 shadow-md"
                       src={
-                        job?.company_info?.logo ||
-                        "https://via.placeholder.com/64"
+                        job?.org_logo_url || "https://via.placeholder.com/64"
                       }
-                      alt={job?.company_info?.name || "Company Logo"}
+                      alt={job?.title || "Company Logo"}
                     />
-                  </div>
+                  </Avatar>
                   <div className="flex-grow">
                     <h3 className="font-semibold hover:text-blue-500">
-                      {job.company_info?.name}
+                      {job.department}
                     </h3>
-                    <p className="text-xs">{job.job_title}</p>
+                    <p className="text-xs">{job.title}</p>
                   </div>
 
                   <div className="absolute inset-0 flex items-center justify-end bg-black bg-opacity-60 pe-2 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100">
@@ -71,4 +71,4 @@ const FeaturedJobs: React.FC = () => {
   )
 }
 
-export default FeaturedJobs
+export default Govt_jobs
