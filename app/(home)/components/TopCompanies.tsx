@@ -94,7 +94,7 @@ const TopCompanies: React.FC = () => {
       }
 
       return (
-            <section className="pb-6 md:pb-10 lg:pb-16">
+            <section className="py-6 md:py-10">
                   <MaxWidthWrapper>
                         <h2 className="mb-4 flex items-center text-xl font-bold md:mb-6 md:text-3xl">
                               Top companies hiring now

@@ -29,6 +29,10 @@ const JobsDetails = () => {
       const { apiRequest } = useApiForPost()
 
       const save_jobs = async (job_id: any) => {
+            if (!user) {
+                  toast.warning('You need to login to save jobs')
+                  return
+            }
             const upload_data = {
                   user_id: user._id,
                   job_id
@@ -68,7 +72,6 @@ const JobsDetails = () => {
 
       return (
             <MaxWidthWrapper>
-
                   <Head>
                         <title>{jobData?.job_title || "Job Details"} | YourJobSite</title>
                         <meta name="description" content={`${jobData?.job_title} - ${jobData?.company_info?.name}. ${jobData?.job_description?.slice(0, 160)}...`} />
@@ -114,30 +117,30 @@ const JobsDetails = () => {
                               })}
                         </script>
                   </Head>
-                  <div className="flex flex-col gap-8 py-6 pb-14 md:gap-4 lg:flex-row px-2">
+                  <div className="flex flex-col gap-8 py-4 pb-14 md:gap-4 lg:flex-row">
                         {/* Left Section */}
-                        <div className="content-container flex-1 space-y-6 text-[18px]">
-                              <Card className="p-6 shadow-lg">
+                        <div className="flex-1 text-[18px]">
+                              <Card className="lg:p-6 shadow-none border-none md:border md:shadow-lg bg-transparent ">
                                     <div className="flex justify-between items-start mb-4">
                                           <h1 className="text-2xl font-bold md:text-4xl text-primary">
                                                 {jobData?.job_title}
                                           </h1>
                                           <ShareButton url={jobUrl} title={`${jobData?.job_title} at ${jobData?.company_info?.name}`} />
                                     </div>
-                                    <div className="flex flex-wrap gap-4 mb-4">
-                                          <Badge variant="secondary" className="text-sm py-1 px-3">
+                                    <div className="flex flex-wrap md:gap-4 gap-1 mb-4">
+                                          <Badge variant="secondary" className="text-sm border border-opacity-30 border-black dark:border-gray-400 py-1 px-3">
                                                 <BriefcaseIcon className="w-4 h-4 mr-2" />
                                                 {jobData?.job_type}
                                           </Badge>
-                                          <Badge variant="secondary" className="text-sm py-1 px-3">
+                                          <Badge variant="secondary" className="text-sm border border-opacity-30 border-black dark:border-gray-400 py-1 px-3">
                                                 <MapPinIcon className="w-4 h-4 mr-2" />
                                                 {jobData?.location?.country}
                                           </Badge>
-                                          <Badge variant="secondary" className="text-sm py-1 px-3">
+                                          <Badge variant="secondary" className="text-sm border border-opacity-30 border-black dark:border-gray-400 py-1 px-3">
                                                 <CalendarIcon className="w-4 h-4 mr-2" />
                                                 Deadline: {jobData?.expiry_date}
                                           </Badge>
-                                          <Badge variant="secondary" className="text-sm py-1 px-3">
+                                          <Badge variant="secondary" className="text-sm border border-opacity-30 border-black dark:border-gray-400 py-1 px-3">
                                                 <CurrencyDollarIcon className="w-4 h-4 mr-2" />
                                                 {jobData?.salary_negotiable
                                                       ? "Salary: Negotiable"
@@ -170,7 +173,7 @@ const JobsDetails = () => {
 
                         {/* Right Section */}
                         <div className="lg:w-96">
-                              <Card className="p-6 shadow-lg">
+                              <div className=" ">
                                     <CardTitle className="mb-5 text-2xl font-bold">Similar Jobs</CardTitle>
                                     <div className="space-y-4">
                                           {dummyJobs?.slice(2, 5).map((jobPost, index) => (
@@ -196,7 +199,7 @@ const JobsDetails = () => {
                                                 </Card>
                                           ))}
                                     </div>
-                              </Card>
+                              </div>
                         </div>
                   </div>
             </MaxWidthWrapper>
@@ -207,7 +210,7 @@ const JobSection = ({ title, content, children }: { title: string, content?: str
       <div>
             <h2 className="text-xl font-semibold mb-2">{title}</h2>
             {content ? (
-                  <div dangerouslySetInnerHTML={{ __html: content }} className="text-muted-foreground capitalize" />
+                  <div dangerouslySetInnerHTML={{ __html: content }} className="text-muted-foreground tajawal-font text-sm md:text-base  capitalize" />
             ) : children}
       </div>
 )
