@@ -1,11 +1,11 @@
 "use client"
 
 import React, { useState } from "react"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+
 import ProfilePage from "./components/Personal_Info"
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-const queryClient = new QueryClient();
-
+const queryClient = new QueryClient()
 
 const CustomTabs = () => {
   const [activeTab, setActiveTab] = useState("personal_info")
@@ -16,7 +16,6 @@ const CustomTabs = () => {
     <QueryClientProvider client={queryClient}>
       <ProfilePage />
     </QueryClientProvider>
-
   )
 }
 

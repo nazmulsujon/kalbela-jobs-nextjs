@@ -1,6 +1,11 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useUserData } from "@/utils/encript_decript"
+
+import { cn } from "@/lib/utils"
 import {
   Accordion,
   AccordionContent,
@@ -8,13 +13,10 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import useApiRequest from "@/app/hooks/useApiRequest"
-import { useUserData } from "@/utils/encript_decript"
-import { useRouter } from "next/navigation"
-import { cn } from "@/lib/utils"
-import { Button } from "../ui/button"
-import SecondaryBtn from "../SecondaryBtn"
+
 import PrimaryBtn from "../PrimaryBtn"
-import { useEffect, useState } from "react"
+import SecondaryBtn from "../SecondaryBtn"
+import { Button } from "../ui/button"
 
 const MobileNav: React.FC = () => {
   const [user] = useUserData()
@@ -22,7 +24,10 @@ const MobileNav: React.FC = () => {
   const [userLoading, setUserLoading] = useState(true)
 
   const router = useRouter()
-  const { data, loading, error } = useApiRequest<any>("category/top-five", "GET")
+  const { data, loading, error } = useApiRequest<any>(
+    "category/top-five",
+    "GET"
+  )
   const {
     data: careerResources,
     loading: loading2,
@@ -30,7 +35,7 @@ const MobileNav: React.FC = () => {
   } = useApiRequest<any>("resource/category", "GET")
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       try {
         setUserLoading(true)
         setIsAuthenticated(!!user)
@@ -57,7 +62,6 @@ const MobileNav: React.FC = () => {
     router.push(`/career-resources?${queryParams}`)
   }
 
-
   return (
     <div className="bg-white text-gray-900 dark:bg-gray-900 dark:text-slate-200">
       <Accordion type="single" collapsible className="w-full">
@@ -69,7 +73,7 @@ const MobileNav: React.FC = () => {
         )}
         {data?.data?.map((section: any, index: number) => (
           <AccordionItem key={index} value={`item-${index}`}>
-            <AccordionTrigger className="hover:no-underline text-sm font-bold">
+            <AccordionTrigger className="text-sm font-bold hover:no-underline">
               {section.megaCategory}
             </AccordionTrigger>
             <AccordionContent>
@@ -77,9 +81,11 @@ const MobileNav: React.FC = () => {
                 {section.categories.map((category: any) => (
                   <li key={category._id}>
                     <button
-                      onClick={() => handleRedirectToSearchDetails(category?.slag)}
+                      onClick={() =>
+                        handleRedirectToSearchDetails(category?.slag)
+                      }
                       className={cn(
-                        "w-full text-left rounded-md px-3 py-2 text-sm",
+                        "w-full rounded-md px-3 py-2 text-left text-sm",
                         "hover:bg-gray-100 hover:text-gray-900",
                         "transition-colors duration-200",
                         "focus:outline-none focus:ring-2 focus:ring-gray-200"
@@ -100,7 +106,7 @@ const MobileNav: React.FC = () => {
         ))}
 
         <AccordionItem value="career-resources">
-          <AccordionTrigger className="hover:no-underline text-sm font-bold">
+          <AccordionTrigger className="text-sm font-bold hover:no-underline">
             Career Resources
           </AccordionTrigger>
           <AccordionContent>
@@ -123,12 +129,16 @@ const MobileNav: React.FC = () => {
         </AccordionItem>
       </Accordion>
 
-      {!user && !userLoading && <Link href="/login" className="flex items-center">
-        <PrimaryBtn className="py-2 w-full px-4 my-3">Login</PrimaryBtn>
-      </Link>}
-      {!user && !userLoading && <Link href="/registration" className="flex items-center">
-        <SecondaryBtn className="py-2 w-full px-4">Registration</SecondaryBtn>
-      </Link>}
+      {!user && !userLoading && (
+        <Link href="/login" className="flex items-center">
+          <PrimaryBtn className="my-3 w-full px-4 py-2">Login</PrimaryBtn>
+        </Link>
+      )}
+      {!user && !userLoading && (
+        <Link href="/registration" className="flex items-center">
+          <SecondaryBtn className="w-full px-4 py-2">Registration</SecondaryBtn>
+        </Link>
+      )}
     </div>
   )
 }

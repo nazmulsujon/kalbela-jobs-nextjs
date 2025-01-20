@@ -6,7 +6,7 @@ import dynamic from "next/dynamic"
 import Link from "next/link"
 //@ts-ignore
 import { usePathname, useRouter } from "next/navigation"
-
+import { useUserData } from "@/utils/encript_decript"
 import { Menu } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -26,7 +26,6 @@ import SecondaryBtn from "../SecondaryBtn"
 import { ThemeToggle } from "../ThemeToggle"
 import { Skeleton } from "../ui/skeleton"
 import { Navigations } from "./Navigations"
-import { useUserData } from "@/utils/encript_decript"
 
 const UserNav = dynamic(() => import("./UserNav"), { ssr: false })
 
@@ -44,7 +43,7 @@ const Navbar: React.FC = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       try {
         setLoading(true)
         setIsAuthenticated(!!user)
@@ -69,12 +68,13 @@ const Navbar: React.FC = () => {
 
   return (
     <section
-      className={`${isScrolled
-        ? "border-b bg-white/75 backdrop-blur-lg dark:border-b-gray-500 dark:bg-black"
-        : isHomePage
-          ? "bg-transparent"
-          : "dark:bg-[#121a2d]"
-        } shadow-none`}
+      className={`${
+        isScrolled
+          ? "border-b bg-white/75 backdrop-blur-lg dark:border-b-gray-500 dark:bg-black"
+          : isHomePage
+            ? "bg-transparent"
+            : "dark:bg-[#121a2d]"
+      } shadow-none`}
     >
       <MaxWidthWrapper className="flex h-[64px] items-center justify-between">
         <Button
@@ -98,17 +98,23 @@ const Navbar: React.FC = () => {
           <Navigations />
         </div>
 
-        <div className="flex items-center w-20  justify-end">
+        <div className="flex w-20 items-center justify-end">
           {loading ? (
             <Skeleton className="h-8 w-8 rounded-full" />
           ) : user ? (
             <UserNav />
           ) : (
-            <div className="lg:flex hidden items-center  justify-between space-x-4 md:me-0 md:flex">
-              <PrimaryBtn className="py-2 px-4" onClick={() => router.push("/login")}>
+            <div className="hidden items-center justify-between space-x-4 md:me-0 md:flex lg:flex">
+              <PrimaryBtn
+                className="px-4 py-2"
+                onClick={() => router.push("/login")}
+              >
                 Login
               </PrimaryBtn>
-              <SecondaryBtn className="py-2 px-4" onClick={() => router.push("/registration")}>
+              <SecondaryBtn
+                className="px-4 py-2"
+                onClick={() => router.push("/registration")}
+              >
                 Registration
               </SecondaryBtn>
             </div>

@@ -1,6 +1,7 @@
 export const siteConfig = {
   name: "Kalbela Jobs",
-  description: "Discover the perfect job for you with KalbelaJob - Your trusted job search platform",
+  description:
+    "Discover the perfect job for you with KalbelaJob - Your trusted job search platform",
   url: "https://kalbelajobs.com",
   ogImage: "/logo.png",
   links: {
@@ -73,11 +74,13 @@ export const siteConfig = {
     },
     {
       title: "Company Profiles",
-      description: "Explore detailed profiles of companies you're interested in",
+      description:
+        "Explore detailed profiles of companies you're interested in",
     },
     {
       title: "Career Resources",
-      description: "Benefit from expert guides, tips, and resources to boost your career",
+      description:
+        "Benefit from expert guides, tips, and resources to boost your career",
     },
     {
       title: "Job Alerts",

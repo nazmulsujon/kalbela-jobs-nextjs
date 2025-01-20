@@ -31,12 +31,15 @@ export function EditModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <form>
-        <DialogContent >
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
-            {description && <DialogDescription>{description}</DialogDescription>}
+            {description && (
+              <DialogDescription>{description}</DialogDescription>
+            )}
           </DialogHeader>
-          <div className="max-h-[500px] overflow-y-auto px-2"
+          <div
+            className="max-h-[500px] overflow-y-auto px-2"
             style={{ scrollbarWidth: "none" }}
           >
             {children}

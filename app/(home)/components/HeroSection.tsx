@@ -84,13 +84,13 @@ const HeroSection = () => {
           Find your dream job
         </h1>
 
-        <p className="!mb-2 max-w-4xl text-balance text-center text-xs md:text-sm font-medium">
+        <p className="!mb-2 max-w-4xl text-balance text-center text-xs font-medium md:text-sm">
           Your Career Starts Here with Kalbela Jobs! Discover the latest job
           opportunities in Bangladesh and worldwide, all in one place. Kalbela
           Jobs – where your next opportunity awaits.
         </p>
 
-        <div className="flex w-full max-w-3xl items-center space-x-2 rounded-sm border border-gray-200 bg-white px-4 py-3 text-gray-900 shadow-md dark:border-gray-700 dark:bg-gray-800 dark:text-slate-200 md:px-6 z-40">
+        <div className="z-40 flex w-full max-w-3xl items-center space-x-2 rounded-sm border border-gray-200 bg-white px-4 py-3 text-gray-900 shadow-md dark:border-gray-700 dark:bg-gray-800 dark:text-slate-200 md:px-6">
           <div className="relative flex w-full items-center space-x-2">
             <Search className="size-6 text-gray-500 dark:text-slate-200" />
             <Input
@@ -98,7 +98,7 @@ const HeroSection = () => {
               value={searchQuery}
               onChange={handleSkillChange}
               placeholder="Enter skills / designations / companies"
-              className="w-full border-none placeholder-gray-500 shadow-none outline-none focus-visible:ring-0 dark:placeholder-slate-200 !placeholder:font-medium font-medium"
+              className="!placeholder:font-medium w-full border-none font-medium placeholder-gray-500 shadow-none outline-none focus-visible:ring-0 dark:placeholder-slate-200"
             />
             {showSkillDropdown && filteredSkills.length > 0 && (
               <ul
@@ -134,7 +134,7 @@ const HeroSection = () => {
             />
 
             <Select onValueChange={(value: any) => setLocation(value)}>
-              <SelectTrigger className="w-40 border-none shadow-none outline-none focus:ring-0 dark:bg-gray-800 font-medium dark:text-slate-200 text-gray-600">
+              <SelectTrigger className="w-40 border-none font-medium text-gray-600 shadow-none outline-none focus:ring-0 dark:bg-gray-800 dark:text-slate-200">
                 <SelectValue placeholder="Select location" />
               </SelectTrigger>
               <SelectContent className="max-h-72 bg-white text-gray-900 dark:bg-gray-800 dark:text-slate-200">

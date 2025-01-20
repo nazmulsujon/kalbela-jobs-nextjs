@@ -24,7 +24,7 @@ const JobcardLarge: React.FC<JobcardLargeProps> = ({ job }) => {
             <div className="flex items-center space-x-4 text-sm">
               <span className="capitalize">{job.experience_level}</span>
               <span>
-                {(job.salary_negotiable || job.negotiable_note)
+                {job.salary_negotiable || job.negotiable_note
                   ? "Negotiable"
                   : `${job.salary_range?.min} - ${job.salary_range?.max} ${job.salary_range?.currency}`}
               </span>
@@ -33,12 +33,11 @@ const JobcardLarge: React.FC<JobcardLargeProps> = ({ job }) => {
               {job.description}
             </p>
           </header>
-          <div className="mt-4 flex whitespace-nowrap  lg:flex-wrap gap-2 w-full overflow-x-auto lg:overflow-x-visible">
-
+          <div className="mt-4 flex w-full gap-2 overflow-x-auto whitespace-nowrap lg:flex-wrap lg:overflow-x-visible">
             {job.skills?.map((skill: string, idx: number) => (
               <span
                 key={idx}
-                className="rounded border border-gray-400 px-2 py-1 text-xs text-wrap"
+                className="text-wrap rounded border border-gray-400 px-2 py-1 text-xs"
               >
                 {skill}
               </span>
@@ -54,7 +53,9 @@ const JobcardLarge: React.FC<JobcardLargeProps> = ({ job }) => {
           </div>
         </div>
         <footer className="flex items-center justify-between pt-1">
-          <p className="text-sm"><strong>Deadline:</strong> {job.expiry_date}</p>
+          <p className="text-sm">
+            <strong>Deadline:</strong> {job.expiry_date}
+          </p>
           <Button
             className="text-sm hover:no-underline"
             size="sm"
