@@ -39,7 +39,7 @@ export function EditModal({
             )}
           </DialogHeader>
           <div
-            className="max-h-[500px] overflow-y-auto px-2"
+            className="max-h-[500px] overflow-y-auto px-2 z-40"
             style={{ scrollbarWidth: "none" }}
           >
             {children}

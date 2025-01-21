@@ -72,6 +72,11 @@ export const selectCustomStyles = (theme: string) => ({
       color: theme === "dark" ? "#ffff" : "#000000",
     },
   }),
+  menuPortal: (base: any) => ({
+    ...base,
+    zIndex: 9999,
+    pointerEvents: "auto",
+  }),
 })
 
 export const formatDate = (dateString: string) => {

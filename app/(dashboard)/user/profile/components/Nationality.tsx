@@ -1,0 +1,129 @@
+"use client"
+
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
+import { EditModal } from "./CommonModal"
+import Select, { SingleValue } from "react-select"
+import { Pencil, Plus } from "lucide-react"
+import { useQuery } from "@tanstack/react-query"
+import { selectCustomStyles } from "@/lib/utils"
+import { useTheme } from "next-themes"
+
+type CountryOption = {
+  value: string
+  label: string
+}
+
+const fetchNationalities = async (): Promise<CountryOption[]> => {
+  const response = await fetch("https://restcountries.com/v3.1/all")
+  const data = await response.json()
+  return data.map((country: any) => ({
+    value: country.cca2, // Country Code (ISO 3166-1 alpha-2)
+    label: country.name.common // Country Name
+  }))
+}
+
+const Nationality = () => {
+  const { theme } = useTheme()
+  const customStyles = selectCustomStyles(theme || "light")
+  const [editNationalityOpen, setEditNationalityOpen] = useState(false)
+  const [selectedNationality, setSelectedNationality] = useState<CountryOption | null>(null)
+
+  // Updated `useQuery` with object format
+  const { data: nationalities = [], isLoading, isError } = useQuery({
+    queryKey: ["nationalities"], // queryKey as an array
+    queryFn: fetchNationalities,  // fetch function as `queryFn`
+  })
+
+  const handleSave = () => {
+    if (selectedNationality) {
+      console.log("Selected Nationality:", selectedNationality.label)
+      setEditNationalityOpen(false)
+    }
+  }
+
+  const handleAddEdit = () => {
+    setEditNationalityOpen(true)
+  }
+
+  return (
+    <div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Nationality</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="text-left">
+            {selectedNationality ? (
+              <div className="space-y-2">
+                <p className="text-lg font-semibold">{selectedNationality.label}</p>
+                <Button onClick={handleAddEdit} variant="outline">
+                  <Pencil className="h-4 w-4 mr-2" />
+                  Edit
+                </Button>
+              </div>
+            ) : (
+              <div>
+                <p className="mt-1 text-sm text-gray-500">No nationality added yet.</p>
+                <div className="mt-6">
+                  <Button variant="outline" onClick={handleAddEdit}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Nationality
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      {editNationalityOpen && (
+        <EditModal
+          open={editNationalityOpen}
+          onOpenChange={setEditNationalityOpen}
+          title={selectedNationality ? "Edit Nationality" : "Add Nationality"}
+        >
+          <form
+            className="space-y-6"
+            onSubmit={(e) => {
+              e.preventDefault()
+              handleSave()
+            }}
+          >
+            <div className="space-y-2">
+              <Label htmlFor="nationality">Select Nationality*</Label>
+              <div>
+                {isLoading ? (
+                  <p>Loading...</p>
+                ) : isError ? (
+                  <p className="text-red-500">Failed to load nationalities</p>
+                ) : (
+                  <Select
+                    id="nationality"
+                    options={nationalities as CountryOption[]}
+                    value={selectedNationality}
+                    onChange={(option: SingleValue<CountryOption>) => setSelectedNationality(option)}
+                    isSearchable
+                    placeholder="Search and select nationality..."
+                    menuPortalTarget={document.body}
+                    styles={customStyles}
+                  />
+
+                )}
+              </div>
+            </div>
+            <div className="text-right">
+              <Button type="submit" disabled={!selectedNationality}>
+                Save
+              </Button>
+            </div>
+          </form>
+        </EditModal>
+      )}
+    </div>
+  )
+}
+
+export default Nationality
