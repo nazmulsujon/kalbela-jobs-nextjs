@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { EditModal } from "./CommonModal"
 import { Calendar } from "@/components/ui/calendar"
-import { Edit, Pencil, Plus } from "lucide-react"
+import { Pencil, Plus } from "lucide-react"
 import { format, addYears, subYears } from "date-fns"
 
 const DateOfBirth = () => {

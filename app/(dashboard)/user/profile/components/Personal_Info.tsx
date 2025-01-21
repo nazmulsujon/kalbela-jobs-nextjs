@@ -56,7 +56,7 @@ import Resume from "./Resume"
 import Skills from "./Skills"
 import Gender from "./Gender"
 import DateOfBirth from "./DateOfBirth"
-import Nationality from "./Nationality"
+import UserIdentity from "./UserIdentity"
 
 export default function ProfilePage() {
   const [user, setUserData] = useUserData()
@@ -300,7 +300,7 @@ export default function ProfilePage() {
           <Skills />
           <Gender />
           <DateOfBirth />
-          <Nationality />
+          <UserIdentity />
 
           <EditModal
             open={editNameOpen}

@@ -6,10 +6,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { EditModal } from "./CommonModal"
 import Select, { SingleValue } from "react-select"
-import { Pencil, Plus } from "lucide-react"
+import { CalendarIcon, Pencil, Plus } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import { selectCustomStyles } from "@/lib/utils"
+import { cn, selectCustomStyles } from "@/lib/utils"
 import { useTheme } from "next-themes"
+import { Input } from "@/components/ui/input"
+import { Calendar } from "@/components/ui/calendar"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { format } from "date-fns"
 
 type CountryOption = {
   value: string
@@ -25,21 +33,28 @@ const fetchNationalities = async (): Promise<CountryOption[]> => {
   }))
 }
 
-const Nationality = () => {
+const UserIdentity = () => {
   const { theme } = useTheme()
   const customStyles = selectCustomStyles(theme || "light")
   const [editNationalityOpen, setEditNationalityOpen] = useState(false)
   const [selectedNationality, setSelectedNationality] = useState<CountryOption | null>(null)
 
-  // Updated `useQuery` with object format
+
+  const [nidImage, setNidImage] = useState<File | null>(null)
+  const [nidNumber, setNidNumber] = useState("")
+  const [nidIssueDate, setNidIssueDate] = useState<Date | null>(null)
+
   const { data: nationalities = [], isLoading, isError } = useQuery({
-    queryKey: ["nationalities"], // queryKey as an array
-    queryFn: fetchNationalities,  // fetch function as `queryFn`
+    queryKey: ["nationalities"],
+    queryFn: fetchNationalities,
   })
 
   const handleSave = () => {
     if (selectedNationality) {
       console.log("Selected Nationality:", selectedNationality.label)
+      console.log("NID/Passport/Birth Certificate Image:", nidImage)
+      console.log("NID/Passport/Birth Certificate Number:", nidNumber)
+      console.log("NID/Passport/Birth Certificate Issue Date:", nidIssueDate)
       setEditNationalityOpen(false)
     }
   }
@@ -110,10 +125,64 @@ const Nationality = () => {
                     menuPortalTarget={document.body}
                     styles={customStyles}
                   />
-
                 )}
               </div>
             </div>
+
+            {/* NID/Passport/Birth Certificate Image Field */}
+            <div className="space-y-2">
+              <Label htmlFor="nid-image">NID/Passport/Birth Certificate Image</Label>
+              <Input
+                id="nid-image"
+                type="file"
+                accept="image/*"
+                onChange={(e) => setNidImage(e.target.files ? e.target.files[0] : null)}
+              />
+            </div>
+
+            {/* NID/Passport/Birth Certificate Number Field */}
+            <div className="space-y-2">
+              <Label htmlFor="nid-number">NID/Passport/Birth Certificate No.</Label>
+              <Input
+                id="nid-number"
+                type="text"
+                value={nidNumber}
+                onChange={(e) => setNidNumber(e.target.value)}
+                placeholder="Enter NID/Passport/Birth Certificate No."
+              />
+            </div>
+
+            {/* NID/Passport/Birth Certificate Issue Date Field */}
+            <div className="space-y-2 flex flex-col">
+              <Label htmlFor="nid-issue-date">NID/Passport/Birth Certificate Issue Date</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className={cn(
+                      "pl-3 text-left font-normal",
+                      !nidIssueDate && "text-muted-foreground"
+                    )}
+                  >
+                    {nidIssueDate ? (
+                      format(nidIssueDate, "PPP")
+                    ) : (
+                      <span>Pick a date</span>
+                    )}
+                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    // @ts-ignore
+                    selected={nidIssueDate}
+                    onChange={setNidIssueDate}
+                    placeholder="Select issue date"
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+
             <div className="text-right">
               <Button type="submit" disabled={!selectedNationality}>
                 Save
@@ -126,4 +195,4 @@ const Nationality = () => {
   )
 }
 
-export default Nationality
+export default UserIdentity
