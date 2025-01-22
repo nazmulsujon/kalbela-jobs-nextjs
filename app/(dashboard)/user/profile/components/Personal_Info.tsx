@@ -57,6 +57,10 @@ import Skills from "./Skills"
 import Gender from "./Gender"
 import DateOfBirth from "./DateOfBirth"
 import UserIdentity from "./UserIdentity"
+import Address from "./Address"
+import EmergencyContact from "./EmergencyContact"
+import BloodGroup from "./BloodGroup"
+import CareerObjective from "./CareerObjective"
 
 export default function ProfilePage() {
   const [user, setUserData] = useUserData()
@@ -293,6 +297,7 @@ export default function ProfilePage() {
           )}
 
           <About />
+          <CareerObjective />
           <Resume />
           <Educations />
           <Experience />
@@ -301,6 +306,9 @@ export default function ProfilePage() {
           <Gender />
           <DateOfBirth />
           <UserIdentity />
+          <Address />
+          <EmergencyContact />
+          <BloodGroup />
 
           <EditModal
             open={editNameOpen}

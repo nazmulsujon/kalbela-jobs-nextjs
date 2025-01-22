@@ -40,8 +40,8 @@ const DateOfBirth = () => {
         <CardContent className="space-y-4">
           <div className="text-left">
             {selectedDate ? (
-              <div className="space-y-2">
-                <p className="text-lg font-semibold">
+              <div className="space-y-2 text-gray-600 dark:text-slate-200">
+                <p className="text-sm font-semibold">
                   {format(selectedDate, "dd MMM, yyyy")}
                 </p>
                 <Button onClick={handleAddEdit} variant="outline">

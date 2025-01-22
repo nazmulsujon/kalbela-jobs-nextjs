@@ -1,96 +1,107 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { EditModal } from "./CommonModal"
-import Select, { SingleValue } from "react-select"
-import { CalendarIcon, Pencil, Plus } from "lucide-react"
-import { useQuery } from "@tanstack/react-query"
-import { cn, selectCustomStyles } from "@/lib/utils"
-import { useTheme } from "next-themes"
-import { Input } from "@/components/ui/input"
-import { Calendar } from "@/components/ui/calendar"
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { EditModal } from "./CommonModal";
+import Select, { SingleValue } from "react-select";
+import { CalendarIcon, Pencil, Plus } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { format } from "date-fns"
+} from "@/components/ui/popover";
+import { format } from "date-fns";
+import { cn, selectCustomStyles } from "@/lib/utils";
+import { useTheme } from "next-themes";
 
 type CountryOption = {
-  value: string
-  label: string
-}
+  value: string;
+  label: string;
+};
 
 const fetchNationalities = async (): Promise<CountryOption[]> => {
-  const response = await fetch("https://restcountries.com/v3.1/all")
-  const data = await response.json()
+  const response = await fetch("https://restcountries.com/v3.1/all");
+  const data = await response.json();
   return data.map((country: any) => ({
-    value: country.cca2, // Country Code (ISO 3166-1 alpha-2)
-    label: country.name.common // Country Name
-  }))
-}
+    value: country.cca2,
+    label: country.name.common,
+  }));
+};
+
+const IdTypeOptions = [
+  { label: "Passport", value: "passport" },
+  { label: "NID", value: "NID" },
+  { label: "Birth Certificate", value: "birth_certificate" },
+];
 
 const UserIdentity = () => {
-  const { theme } = useTheme()
-  const customStyles = selectCustomStyles(theme || "light")
-  const [editNationalityOpen, setEditNationalityOpen] = useState(false)
-  const [selectedNationality, setSelectedNationality] = useState<CountryOption | null>(null)
-
-
-  const [nidImage, setNidImage] = useState<File | null>(null)
-  const [nidNumber, setNidNumber] = useState("")
-  const [nidIssueDate, setNidIssueDate] = useState<Date | null>(null)
+  const { theme } = useTheme();
+  const customStyles = selectCustomStyles(theme || "light");
+  const [editNationalityOpen, setEditNationalityOpen] = useState(false);
+  const [selectedNationality, setSelectedNationality] =
+    useState<CountryOption | null>(null);
+  const [identificationType, setIdentificationType] = useState<
+    { label: string; value: string } | null
+  >(null);
+  const [nidImage, setNidImage] = useState<File | null>(null);
+  const [nidNumber, setNidNumber] = useState("");
+  const [nidIssueDate, setNidIssueDate] = useState<Date | null>(null);
 
   const { data: nationalities = [], isLoading, isError } = useQuery({
     queryKey: ["nationalities"],
     queryFn: fetchNationalities,
-  })
+  });
 
   const handleSave = () => {
-    if (selectedNationality) {
-      console.log("Selected Nationality:", selectedNationality.label)
-      console.log("NID/Passport/Birth Certificate Image:", nidImage)
-      console.log("NID/Passport/Birth Certificate Number:", nidNumber)
-      console.log("NID/Passport/Birth Certificate Issue Date:", nidIssueDate)
-      setEditNationalityOpen(false)
-    }
-  }
-
-  const handleAddEdit = () => {
-    setEditNationalityOpen(true)
-  }
+    console.log("Selected Nationality:", selectedNationality?.label);
+    console.log("Identification Type:", identificationType?.label);
+    console.log("NID Image:", nidImage);
+    console.log("NID Number:", nidNumber);
+    console.log("Issue Date:", nidIssueDate);
+    setEditNationalityOpen(false);
+  };
 
   return (
     <div>
       <Card>
         <CardHeader>
-          <CardTitle>Nationality</CardTitle>
+          <CardTitle>Identity</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="text-left">
-            {selectedNationality ? (
-              <div className="space-y-2">
-                <p className="text-lg font-semibold">{selectedNationality.label}</p>
-                <Button onClick={handleAddEdit} variant="outline">
-                  <Pencil className="h-4 w-4 mr-2" />
-                  Edit
-                </Button>
-              </div>
-            ) : (
+        <CardContent>
+          {selectedNationality || nidNumber || nidImage || nidIssueDate ? (
+            <div className="space-y-2 text-gray-600 dark:text-slate-200">
+              <p className="text-sm font-semibold">Nationality: {selectedNationality?.label ? selectedNationality?.label : "N/A"}</p>
+              <p className="text-sm font-semibold">NID Number: {nidNumber ? nidNumber : "N/A"}</p>
+              {
+                nidIssueDate ? <p className="text-sm font-semibold">
+                  ID Issue Date:  {format(nidIssueDate, "dd MMM, yyyy")}
+                </p> : <span className="text-sm font-semibold"> ID Issue Date: N/A</span>
+              }
               <div>
-                <p className="mt-1 text-sm text-gray-500">No nationality added yet.</p>
-                <div className="mt-6">
-                  <Button variant="outline" onClick={handleAddEdit}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Nationality
-                  </Button>
-                </div>
+                <img src={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRz-FiPMV4405HDPHTbRP2tbxaK9ysV02HDLA&s'} alt="NID image" />
               </div>
-            )}
-          </div>
+              <Button onClick={() => setEditNationalityOpen(true)} variant="outline">
+                <Pencil className="h-4 w-4 mr-2" />
+                Edit
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <p className="text-gray-500">No identity added yet.</p>
+              <Button
+                onClick={() => setEditNationalityOpen(true)}
+                variant="outline"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Identity
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -98,92 +109,98 @@ const UserIdentity = () => {
         <EditModal
           open={editNationalityOpen}
           onOpenChange={setEditNationalityOpen}
-          title={selectedNationality ? "Edit Nationality" : "Add Nationality"}
+          title="Edit Identity"
         >
           <form
-            className="space-y-6"
             onSubmit={(e) => {
-              e.preventDefault()
-              handleSave()
+              e.preventDefault();
+              handleSave();
             }}
+            className="space-y-6"
           >
-            <div className="space-y-2">
-              <Label htmlFor="nationality">Select Nationality*</Label>
-              <div>
-                {isLoading ? (
-                  <p>Loading...</p>
-                ) : isError ? (
-                  <p className="text-red-500">Failed to load nationalities</p>
-                ) : (
-                  <Select
-                    id="nationality"
-                    options={nationalities as CountryOption[]}
-                    value={selectedNationality}
-                    onChange={(option: SingleValue<CountryOption>) => setSelectedNationality(option)}
-                    isSearchable
-                    placeholder="Search and select nationality..."
-                    menuPortalTarget={document.body}
-                    styles={customStyles}
-                  />
-                )}
-              </div>
+            <div>
+              <Label className="mb-2" htmlFor="nationality">Select Nationality</Label>
+              {isLoading ? (
+                <p>Loading...</p>
+              ) : isError ? (
+                <p className="text-red-500">Failed to load nationalities</p>
+              ) : (
+                <Select
+                  id="nationality"
+                  className="text-sm"
+                  options={nationalities}
+                  value={selectedNationality}
+                  onChange={(option) =>
+                    setSelectedNationality(option as CountryOption)
+                  }
+                  isSearchable
+                  placeholder="Select nationality"
+                  styles={customStyles}
+                />
+              )}
             </div>
 
-            {/* NID/Passport/Birth Certificate Image Field */}
-            <div className="space-y-2">
-              <Label htmlFor="nid-image">NID/Passport/Birth Certificate Image</Label>
+            <div>
+              <Label className="mb-2" htmlFor="id-type">Identification Type</Label>
+              <Select
+                id="id-type"
+                className="text-sm"
+                options={IdTypeOptions}
+                value={identificationType}
+                onChange={(option) => setIdentificationType(option)}
+                isSearchable
+                placeholder="Select ID type"
+                styles={customStyles}
+              />
+            </div>
+
+            <div>
+              <Label className="mb-2" htmlFor="nid-image">Upload Image</Label>
               <Input
                 id="nid-image"
+                className="text-sm"
                 type="file"
                 accept="image/*"
-                onChange={(e) => setNidImage(e.target.files ? e.target.files[0] : null)}
+                onChange={(e) =>
+                  setNidImage(e.target.files ? e.target.files[0] : null)
+                }
               />
             </div>
 
-            {/* NID/Passport/Birth Certificate Number Field */}
-            <div className="space-y-2">
-              <Label htmlFor="nid-number">NID/Passport/Birth Certificate No.</Label>
+            <div>
+              <Label className="mb-2" htmlFor="nid-number">ID Number</Label>
               <Input
                 id="nid-number"
-                type="text"
+                className="text-sm"
                 value={nidNumber}
                 onChange={(e) => setNidNumber(e.target.value)}
-                placeholder="Enter NID/Passport/Birth Certificate No."
+                placeholder="Enter ID number"
               />
             </div>
 
-            {/* NID/Passport/Birth Certificate Issue Date Field */}
-            <div className="space-y-2 flex flex-col">
-              <Label htmlFor="nid-issue-date">NID/Passport/Birth Certificate Issue Date</Label>
+            <div className="flex flex-col justify-start">
+              <Label className="mb-2" htmlFor="issue-date">Issue Date</Label>
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button
-                    variant={"outline"}
-                    className={cn(
-                      "pl-3 text-left font-normal",
-                      !nidIssueDate && "text-muted-foreground"
-                    )}
-                  >
-                    {nidIssueDate ? (
-                      format(nidIssueDate, "PPP")
-                    ) : (
-                      <span>Pick a date</span>
-                    )}
-                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                  <Button variant="outline" className="text-sm justify-start">
+                    <CalendarIcon className="mr-2" />
+                    {nidIssueDate
+                      ? format(nidIssueDate, "PPP")
+                      : "Select a date"}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
+                <PopoverContent>
                   <Calendar
-                    // @ts-ignore
-                    selected={nidIssueDate}
-                    onChange={setNidIssueDate}
-                    placeholder="Select issue date"
+                    className="text-sm"
+                    mode="single"
+                    selected={nidIssueDate as Date}
+                    onSelect={setNidIssueDate as any}
                   />
                 </PopoverContent>
               </Popover>
             </div>
 
-            <div className="text-right">
+            <div className="flex justify-end">
               <Button type="submit" disabled={!selectedNationality}>
                 Save
               </Button>
@@ -192,7 +209,7 @@ const UserIdentity = () => {
         </EditModal>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default UserIdentity
+export default UserIdentity;
