@@ -8,11 +8,10 @@ import { EditModal } from "./CommonModal"
 import { Pencil, Plus } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-
-const Gender = () => {
-  const [editGenderOpen, setEditGenderOpen] = useState(false)
+const BloodGroup = () => {
+  const [editBloodGroupOpen, setEditBloodGroupOpen] = useState(false)
   const [formData, setFormData] = useState({
-    gender: "",
+    bloodGroup: "",
   })
 
   const handleInputChange = (field: string, value: string) => {
@@ -20,28 +19,28 @@ const Gender = () => {
   }
 
   const handleSave = () => {
-    console.log("Gender data:", formData)
-    setEditGenderOpen(false)
+    console.log("Blood Group data:", formData)
+    setEditBloodGroupOpen(false)
   }
 
   const handleAddEdit = () => {
-    setEditGenderOpen(true)
+    setEditBloodGroupOpen(true)
   }
 
   return (
     <div>
       <Card>
         <CardHeader>
-          <CardTitle>Gender</CardTitle>
+          <CardTitle>Blood Group</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="text-left">
-            {formData.gender ? (
+            {formData.bloodGroup ? (
               <div className="space-y-2">
-                <p className="text-sm font-semibold text-gray-600 dark:text-slate-200">{formData.gender}</p>
+                <p className="text-sm font-semibold text-gray-600 dark:text-slate-200">{formData.bloodGroup}</p>
                 <Button onClick={handleAddEdit} variant="outline">
                   <Pencil className="h-4 w-4 mr-2" />
-                  Edit Gender
+                  Edit Blood Group
                 </Button>
               </div>
             ) : (
@@ -52,7 +51,7 @@ const Gender = () => {
                 <div className="mt-4">
                   <Button variant="outline" onClick={handleAddEdit}>
                     <Plus className="h-4 w-4 mr-2" />
-                    Add Gender
+                    Add Blood Group
                   </Button>
                 </div>
               </div>
@@ -61,11 +60,11 @@ const Gender = () => {
         </CardContent>
       </Card>
 
-      {editGenderOpen && (
+      {editBloodGroupOpen && (
         <EditModal
-          open={editGenderOpen}
-          onOpenChange={setEditGenderOpen}
-          title={formData.gender ? "Edit Gender" : "Add Gender"}
+          open={editBloodGroupOpen}
+          onOpenChange={setEditBloodGroupOpen}
+          title={formData.bloodGroup ? "Edit Blood Group" : "Add Blood Group"}
         >
           <form
             className="space-y-6"
@@ -75,20 +74,25 @@ const Gender = () => {
             }}
           >
             <div className="space-y-2">
-              <Label htmlFor="gender">Gender*</Label>
+              <Label htmlFor="blood-group">Blood Group*</Label>
               <Select
                 onValueChange={(value) =>
-                  setFormData((prev) => ({ ...prev, gender: value }))
+                  setFormData((prev) => ({ ...prev, bloodGroup: value }))
                 }
-                value={formData.gender}
+                value={formData.bloodGroup}
               >
-                <SelectTrigger id="gender">
-                  <SelectValue placeholder="Select gender" />
+                <SelectTrigger id="blood-group">
+                  <SelectValue placeholder="Select blood group" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Male">Male</SelectItem>
-                  <SelectItem value="Female">Female</SelectItem>
-                  <SelectItem value="Other">Other</SelectItem>
+                  <SelectItem value="A+">A+</SelectItem>
+                  <SelectItem value="A-">A-</SelectItem>
+                  <SelectItem value="B+">B+</SelectItem>
+                  <SelectItem value="B-">B-</SelectItem>
+                  <SelectItem value="AB+">AB+</SelectItem>
+                  <SelectItem value="AB-">AB-</SelectItem>
+                  <SelectItem value="O+">O+</SelectItem>
+                  <SelectItem value="O-">O-</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -102,4 +106,4 @@ const Gender = () => {
   )
 }
 
-export default Gender
+export default BloodGroup
