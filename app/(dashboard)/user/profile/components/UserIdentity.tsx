@@ -16,7 +16,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { format } from "date-fns";
-import { cn, selectCustomStyles } from "@/lib/utils";
+import { selectCustomStyles } from "@/lib/utils";
 import { useTheme } from "next-themes";
 
 type CountryOption = {
@@ -42,6 +42,7 @@ const IdTypeOptions = [
 const UserIdentity = () => {
   const { theme } = useTheme();
   const customStyles = selectCustomStyles(theme || "light");
+
   const [editNationalityOpen, setEditNationalityOpen] = useState(false);
   const [selectedNationality, setSelectedNationality] =
     useState<CountryOption | null>(null);
@@ -58,11 +59,11 @@ const UserIdentity = () => {
   });
 
   const handleSave = () => {
-    console.log("Selected Nationality:", selectedNationality?.label);
-    console.log("Identification Type:", identificationType?.label);
-    console.log("NID Image:", nidImage);
-    console.log("NID Number:", nidNumber);
-    console.log("Issue Date:", nidIssueDate);
+    // console.log("Selected Nationality:", selectedNationality?.label);
+    // console.log("Identification Type:", identificationType?.label);
+    // console.log("NID Image:", nidImage);
+    // console.log("NID Number:", nidNumber);
+    // console.log("Issue Date:", nidIssueDate);
     setEditNationalityOpen(false);
   };
 
@@ -109,7 +110,7 @@ const UserIdentity = () => {
         <EditModal
           open={editNationalityOpen}
           onOpenChange={setEditNationalityOpen}
-          title="Edit Identity"
+          title={selectedNationality || nidNumber || nidImage || nidIssueDate ? "Edit Identity" : "Add Identity"}
         >
           <form
             onSubmit={(e) => {
