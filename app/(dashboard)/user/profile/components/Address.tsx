@@ -1,32 +1,80 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { EditModal } from "./CommonModal"
-import { Pencil, Plus } from "lucide-react"
-import { Input } from "@/components/ui/input"
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import Select from "react-select";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { EditModal } from "./CommonModal";
+import { Pencil, Plus } from "lucide-react";
+import { cn, selectCustomStyles } from "@/lib/utils";
+import { useTheme } from "next-themes";
+
+type Option = {
+  value: string;
+  label: string;
+};
+
+const fetchCountries = async (): Promise<Option[]> => {
+  const response = await fetch("https://restcountries.com/v3.1/all");
+  const data = await response.json();
+  return data.map((country: any) => ({
+    value: country.cca2,
+    label: country.name.common,
+  }));
+};
+
+const fetchDivisions = async (): Promise<Option[]> => {
+  const response = await fetch("https://example.com/divisions");
+  const data = await response.json();
+  return data.map((division: any) => ({
+    value: division.id,
+    label: division.name,
+  }));
+};
+
+const fetchCities = async (): Promise<Option[]> => {
+  const response = await fetch("https://example.com/cities");
+  const data = await response.json();
+  return data.map((city: any) => ({
+    value: city.id,
+    label: city.name,
+  }));
+};
 
 const Address = () => {
-  const [editAddressOpen, setEditAddressOpen] = useState(false)
-  const [formData, setFormData] = useState({
-    presentAddress: "",
-    permanentAddress: "",
-  })
+  const { theme } = useTheme();
+  const customStyles = selectCustomStyles(theme || "light");
+  const [editAddressOpen, setEditAddressOpen] = useState(false);
+  const [addressData, setAddressData] = useState({
+    presentCountry: null as Option | null,
+    presentDivision: null as Option | null,
+    presentCity: null as Option | null,
+    permanentCountry: null as Option | null,
+    permanentDivision: null as Option | null,
+    permanentCity: null as Option | null,
+  });
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
-  }
+  const { data: countries = [], isLoading: loadingCountries } = useQuery({
+    queryKey: ["countries"],
+    queryFn: fetchCountries,
+  });
+
+  const { data: divisions = [], isLoading: loadingDivisions } = useQuery({
+    queryKey: ["divisions"],
+    queryFn: fetchDivisions,
+  });
+
+  const { data: cities = [], isLoading: loadingCities } = useQuery({
+    queryKey: ["cities"],
+    queryFn: fetchCities,
+  });
 
   const handleSave = () => {
-    console.log("Address data:", formData)
-    setEditAddressOpen(false)
-  }
-
-  const handleAddEdit = () => {
-    setEditAddressOpen(true)
-  }
+    console.log("Address data:", addressData);
+    setEditAddressOpen(false);
+  };
 
   return (
     <div>
@@ -34,37 +82,34 @@ const Address = () => {
         <CardHeader>
           <CardTitle>Address</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="text-left">
-            {formData.presentAddress || formData.permanentAddress ? (
-              <div className="space-y-2">
-                <p className="text-sm font-semibold text-gray-600 dark:text-slate-200">
-                  <span className="block">
-                    Present Address: {formData.presentAddress || "N/A"}
-                  </span>
-                  <span className="block">
-                    Permanent Address: {formData.permanentAddress || "N/A"}
-                  </span>
-                </p>
-                <Button onClick={handleAddEdit} variant="outline">
-                  <Pencil className="h-4 w-4 mr-2" />
-                  Edit Address
-                </Button>
-              </div>
-            ) : (
-              <div>
-                <p className="mt-1 text-sm text-gray-500">
-                  No address added yet.
-                </p>
-                <div className="mt-4">
-                  <Button variant="outline" onClick={handleAddEdit}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Address
-                  </Button>
-                </div>
-              </div>
-            )}
-          </div>
+        <CardContent>
+          {Object.values(addressData).some((field) => field) ? (
+            <div className="space-y-4 text-gray-600 dark:text-slate-200">
+              <p>
+                <strong>Present Address:</strong>
+                {`${addressData.presentCity?.label || "N/A"}, ${addressData.presentDivision?.label || "N/A"}, ${addressData.presentCountry?.label || "N/A"}`}
+              </p>
+              <p>
+                <strong>Permanent Address:</strong>
+                {`${addressData.permanentCity?.label || "N/A"}, ${addressData.permanentDivision?.label || "N/A"}, ${addressData.permanentCountry?.label || "N/A"}`}
+              </p>
+              <Button onClick={() => setEditAddressOpen(true)} variant="outline">
+                <Pencil className="h-4 w-4 mr-2" />
+                Edit Address
+              </Button>
+            </div>
+          ) : (
+            <div>
+              <p className="text-gray-500 mb-3">No address added yet.</p>
+              <Button
+                onClick={() => setEditAddressOpen(true)}
+                variant="outline"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Address
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -72,43 +117,105 @@ const Address = () => {
         <EditModal
           open={editAddressOpen}
           onOpenChange={setEditAddressOpen}
-          title={
-            formData.presentAddress || formData.permanentAddress
-              ? "Edit Address"
-              : "Add Address"
-          }
+          title="Edit Address"
         >
           <form
-            className="space-y-6"
             onSubmit={(e) => {
-              e.preventDefault()
-              handleSave()
+              e.preventDefault();
+              handleSave();
             }}
+            className="space-y-6"
           >
-            <div className="space-y-2">
-              <Label htmlFor="present-address">Present Address*</Label>
-              <Input
-                id="present-address"
-                type="text"
-                value={formData.presentAddress}
-                onChange={(e) =>
-                  handleInputChange("presentAddress", e.target.value)
-                }
-                placeholder="Enter present address"
-              />
+            <div>
+              <Label className="mb-2">Present Address</Label>
+              <div className="flex flex-col gap-4">
+                <Select
+                  options={countries}
+                  value={addressData.presentCountry}
+                  onChange={(option) =>
+                    setAddressData((prev) => ({
+                      ...prev,
+                      presentCountry: option,
+                    }))
+                  }
+                  isLoading={loadingCountries}
+                  placeholder="Select Country"
+                  styles={customStyles}
+                />
+                <Select
+                  options={divisions}
+                  value={addressData.presentDivision}
+                  onChange={(option) =>
+                    setAddressData((prev) => ({
+                      ...prev,
+                      presentDivision: option,
+                    }))
+                  }
+                  isLoading={loadingDivisions}
+                  placeholder="Select Division"
+                  styles={customStyles}
+                />
+                <Select
+                  options={cities}
+                  value={addressData.presentCity}
+                  onChange={(option) =>
+                    setAddressData((prev) => ({
+                      ...prev,
+                      presentCity: option,
+                    }))
+                  }
+                  isLoading={loadingCities}
+                  placeholder="Select City"
+                  styles={customStyles}
+                />
+              </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="permanent-address">Permanent Address*</Label>
-              <Input
-                id="permanent-address"
-                type="text"
-                value={formData.permanentAddress}
-                onChange={(e) =>
-                  handleInputChange("permanentAddress", e.target.value)
-                }
-                placeholder="Enter permanent address"
-              />
+
+            <div>
+              <Label className="mb-2">Permanent Address</Label>
+              <div className="flex flex-col gap-4">
+                <Select
+                  options={countries}
+                  value={addressData.permanentCountry}
+                  onChange={(option) =>
+                    setAddressData((prev) => ({
+                      ...prev,
+                      permanentCountry: option,
+                    }))
+                  }
+                  isLoading={loadingCountries}
+                  placeholder="Select Country"
+                  styles={customStyles}
+                />
+                <Select
+                  options={divisions}
+                  value={addressData.permanentDivision}
+                  onChange={(option) =>
+                    setAddressData((prev) => ({
+                      ...prev,
+                      permanentDivision: option,
+                    }))
+                  }
+                  isLoading={loadingDivisions}
+                  placeholder="Select Division"
+                  styles={customStyles}
+                />
+                <Select
+                  options={cities}
+                  value={addressData.permanentCity}
+                  onChange={(option) =>
+                    setAddressData((prev) => ({
+                      ...prev,
+                      permanentCity: option,
+                    }))
+                  }
+                  isLoading={loadingCities}
+                  placeholder="Select City"
+                  styles={customStyles}
+                />
+              </div>
             </div>
+
             <div className="text-right">
               <Button type="submit">Save</Button>
             </div>
@@ -116,7 +223,7 @@ const Address = () => {
         </EditModal>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Address
+export default Address;

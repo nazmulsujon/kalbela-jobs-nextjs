@@ -178,12 +178,14 @@ const JobsDetails = () => {
                 <Banknote className="mr-2 h-4 w-4" />
                 {jobData?.salary_negotiable
                   ? "Salary: Negotiable"
-                  : `Salary: ${jobData?.salary_range?.min} - ${jobData?.salary_range?.max} ${jobData?.salary_range?.currency}`}
+                  : jobData?.salary_range?.min === jobData?.salary_range?.max
+                    ? `Salary: ${jobData?.salary_range?.min} ${jobData?.salary_range?.currency} (Fixed)`
+                    : `Salary: ${jobData?.salary_range?.min} - ${jobData?.salary_range?.max} ${jobData?.salary_range?.currency}`}
               </Badge>
               {jobData?.gender && (
                 <Badge
                   variant="secondary"
-                  className="border border-black border-opacity-30 px-3 py-1 text-sm dark:border-gray-400"
+                  className="capitalize border border-black border-opacity-30 px-3 py-1 text-sm dark:border-gray-400"
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   Gender: {jobData?.gender}
@@ -195,6 +197,15 @@ const JobsDetails = () => {
                 title="About the job"
                 content={jobData?.job_description}
               />
+              {
+
+                <JobSection
+                  title="Location"
+                  content={jobData?.location?.remote
+                    ? "Remote"
+                    : `${jobData?.location?.location || ""}${jobData?.location?.district ? `, ${jobData?.location?.district}` : ""} ${`(${jobData?.location?.country})` || ""}`}
+                />
+              }
               <JobSection title="Benefits" content={jobData?.benefit} />
               <JobSection title="Required Skills">
                 <ul className="flex flex-wrap gap-2">
@@ -328,7 +339,7 @@ const JobSection = ({
     {content ? (
       <div
         dangerouslySetInnerHTML={{ __html: content }}
-        className="tajawal-font jodit-wysiwyg dark:text-gray-300! text-sm capitalize text-muted-foreground md:text-base"
+        className="tajawal-font jodit-wysiwyg dark:!text-gray-300 text-sm capitalize text-muted-foreground md:text-base"
       />
     ) : (
       children
