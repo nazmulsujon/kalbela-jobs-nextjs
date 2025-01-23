@@ -2,6 +2,7 @@ import Link from "next/link"
 import { Heart } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { formatDate } from "@/lib/utils"
 
 interface JobcardLargeProps {
   job: any
@@ -26,7 +27,7 @@ const JobcardLarge: React.FC<JobcardLargeProps> = ({ job }) => {
               <span>
                 {job.salary_negotiable || job.negotiable_note
                   ? "Negotiable"
-                  : `${job.salary_range?.min} - ${job.salary_range?.max} ${job.salary_range?.currency}`}
+                  : `${job.salary_range?.min}${job.salary_range?.max ? ` - ${job.salary_range.max}` : ""} ${job.salary_range?.currency || ""}`}
               </span>
             </div>
             <p className="mt-0.5 max-w-2xl truncate text-sm">
@@ -54,7 +55,7 @@ const JobcardLarge: React.FC<JobcardLargeProps> = ({ job }) => {
         </div>
         <footer className="flex items-center justify-between pt-1">
           <p className="text-sm">
-            <strong>Deadline:</strong> {job.expiry_date}
+            <strong>Deadline:</strong> {formatDate(job.expiry_date)}
           </p>
           <Button
             className="text-sm hover:no-underline"
