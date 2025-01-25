@@ -1,34 +1,58 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { EditModal } from "./CommonModal"
-import { Calendar } from "@/components/ui/calendar"
+import { set_user_data, useUserData } from "@/utils/encript_decript"
+import { addYears, format, subYears } from "date-fns"
 import { Pencil, Plus } from "lucide-react"
-import { format, addYears, subYears } from "date-fns"
+import { DayPicker } from "react-day-picker"
+
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import useApiForPost from "@/app/hooks/useApiForPost"
+
+import { EditModal } from "./CommonModal"
 
 const DateOfBirth = () => {
   const [editDobOpen, setEditDobOpen] = useState(false)
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined)
   const [currentDate, setCurrentDate] = useState(new Date())
+  const [loading, setLoading] = useState(false)
+  const [error_message, set_error_message] = useState("")
+  const { apiRequest } = useApiForPost()
+  const [user, setUserData] = useUserData()
 
   const handleSave = () => {
-    if (selectedDate) {
-      console.log("Selected Date of Birth:", format(selectedDate, "dd MMM, yyyy"))
-      setEditDobOpen(false)
-    }
+    update_contact()
   }
 
   const handleAddEdit = () => {
     setEditDobOpen(true)
   }
 
-  const handleYearChange = (direction: "prev" | "next") => {
-    setCurrentDate((prevDate) =>
-      direction === "prev" ? subYears(prevDate, 1) : addYears(prevDate, 1)
+  const update_contact = async () => {
+    setLoading(true)
+    const { data, error } = await apiRequest<any>(
+      `api/v1/user/update-profile?id=${user?._id}`,
+      "PUT",
+      {
+        date_of_birth: selectedDate,
+      }
     )
+
+    setLoading(false)
+    if (error) {
+      set_error_message(error.message)
+      return
+    }
+    if (data) {
+      set_user_data(data.data)
+      setUserData(data.data)
+      set_error_message("")
+      setEditDobOpen(false)
+    }
   }
 
   return (
@@ -39,13 +63,13 @@ const DateOfBirth = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="text-left">
-            {selectedDate ? (
+            {user?.date_of_birth ? (
               <div className="space-y-2 text-gray-600 dark:text-slate-200">
                 <p className="text-sm font-semibold">
-                  {format(selectedDate, "dd MMM, yyyy")}
+                  {format(user?.date_of_birth, "dd MMM, yyyy")}
                 </p>
                 <Button onClick={handleAddEdit} variant="outline">
-                  <Pencil className="h-4 w-4 mr-2" />
+                  <Pencil className="mr-2 h-4 w-4" />
                   Edit
                 </Button>
               </div>
@@ -54,7 +78,7 @@ const DateOfBirth = () => {
                 <p className="mt-1 text-sm text-gray-500">No data added yet.</p>
                 <div className="mt-6">
                   <Button variant="outline" onClick={handleAddEdit}>
-                    <Plus className="h-4 w-4 mr-2" />
+                    <Plus className="mr-2 h-4 w-4" />
                     Add Date of Birth
                   </Button>
                 </div>
@@ -79,38 +103,18 @@ const DateOfBirth = () => {
           >
             <div className="space-y-2">
               <Label htmlFor="calendar">Select Date of Birth*</Label>
-              <div className="p-4 border rounded-md">
-                {/* Year Navigation Controls */}
-                <div className="flex items-center justify-between mb-4">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleYearChange("prev")}
-                  >
-                    Previous Year
-                  </Button>
-                  <span className="text-lg font-semibold">
-                    {format(currentDate, "yyyy")}
-                  </span>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleYearChange("next")}
-                  >
-                    Next Year
-                  </Button>
-                </div>
-                {/* Calendar */}
-                <Calendar
-                  mode="single"
-                  selected={selectedDate}
-                  onSelect={setSelectedDate}
-                  defaultMonth={currentDate}
-                  key={currentDate.toISOString()}
-                />
-              </div>
+              <Input
+                type="date"
+                id="calendar"
+                name="calendar"
+                defaultValue={
+                  user?.date_of_birth
+                    ? format(user?.date_of_birth, "yyyy-MM-dd")
+                    : ""
+                }
+                onChange={(e) => setSelectedDate(new Date(e.target.value))}
+                required
+              />
             </div>
             <div className="text-right">
               <Button type="submit" disabled={!selectedDate}>

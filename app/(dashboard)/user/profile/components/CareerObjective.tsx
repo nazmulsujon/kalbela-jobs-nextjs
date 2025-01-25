@@ -1,33 +1,33 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import dynamic from "next/dynamic";
-import { Pencil, User } from "lucide-react";
+import { useState } from "react"
+import dynamic from "next/dynamic"
+import { Pencil, User } from "lucide-react"
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
 
-import { EditModal } from "./CommonModal";
-import "react-quill/dist/quill.snow.css";
-import { DialogFooter } from "@/components/ui/dialog";
+import { EditModal } from "./CommonModal"
+import "react-quill/dist/quill.snow.css"
+import { DialogFooter } from "@/components/ui/dialog"
 
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false })
 
 const CareerObjective = () => {
-  const [editDetailsOpen, setEditDetailsOpen] = useState(false);
-  const [description, setDescription] = useState("");
+  const [editDetailsOpen, setEditDetailsOpen] = useState(false)
+  const [description, setDescription] = useState("")
 
   const handleChange = (value: string) => {
-    setDescription(value);
-  };
+    setDescription(value)
+  }
 
   const handleUpdateDetails = () => {
-    console.log("Career Objective:", description);
-    setEditDetailsOpen(false); // Close the modal
-  };
+    console.log("Career Objective:", description)
+    setEditDetailsOpen(false) // Close the modal
+  }
 
-  const isEmpty = !description;
+  const isEmpty = !description
 
   return (
     <div>
@@ -92,10 +92,10 @@ const CareerObjective = () => {
         </DialogFooter>
       </EditModal>
     </div>
-  );
-};
+  )
+}
 
-export default CareerObjective;
+export default CareerObjective
 
 const EmptyState = ({ title, description, icon, action }: any) => {
   return (
@@ -105,5 +105,5 @@ const EmptyState = ({ title, description, icon, action }: any) => {
       <p className="mb-4 text-gray-500">{description}</p>
       {action}
     </div>
-  );
-};
+  )
+}

@@ -1,52 +1,54 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import Select from "react-select";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { EditModal } from "./CommonModal";
-import { Pencil, Plus } from "lucide-react";
-import { cn, selectCustomStyles } from "@/lib/utils";
-import { useTheme } from "next-themes";
+import { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
+import { Pencil, Plus } from "lucide-react"
+import { useTheme } from "next-themes"
+import Select from "react-select"
+
+import { cn, selectCustomStyles } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
+
+import { EditModal } from "./CommonModal"
 
 type Option = {
-  value: string;
-  label: string;
-};
+  value: string
+  label: string
+}
 
 const fetchCountries = async (): Promise<Option[]> => {
-  const response = await fetch("https://restcountries.com/v3.1/all");
-  const data = await response.json();
+  const response = await fetch("https://restcountries.com/v3.1/all")
+  const data = await response.json()
   return data.map((country: any) => ({
     value: country.cca2,
     label: country.name.common,
-  }));
-};
+  }))
+}
 
 const fetchDivisions = async (): Promise<Option[]> => {
-  const response = await fetch("https://example.com/divisions");
-  const data = await response.json();
+  const response = await fetch("https://example.com/divisions")
+  const data = await response.json()
   return data.map((division: any) => ({
     value: division.id,
     label: division.name,
-  }));
-};
+  }))
+}
 
 const fetchCities = async (): Promise<Option[]> => {
-  const response = await fetch("https://example.com/cities");
-  const data = await response.json();
+  const response = await fetch("https://example.com/cities")
+  const data = await response.json()
   return data.map((city: any) => ({
     value: city.id,
     label: city.name,
-  }));
-};
+  }))
+}
 
 const Address = () => {
-  const { theme } = useTheme();
-  const customStyles = selectCustomStyles(theme || "light");
-  const [editAddressOpen, setEditAddressOpen] = useState(false);
+  const { theme } = useTheme()
+  const customStyles = selectCustomStyles(theme || "light")
+  const [editAddressOpen, setEditAddressOpen] = useState(false)
   const [addressData, setAddressData] = useState({
     presentCountry: null as Option | null,
     presentDivision: null as Option | null,
@@ -54,27 +56,27 @@ const Address = () => {
     permanentCountry: null as Option | null,
     permanentDivision: null as Option | null,
     permanentCity: null as Option | null,
-  });
+  })
 
   const { data: countries = [], isLoading: loadingCountries } = useQuery({
     queryKey: ["countries"],
     queryFn: fetchCountries,
-  });
+  })
 
   const { data: divisions = [], isLoading: loadingDivisions } = useQuery({
     queryKey: ["divisions"],
     queryFn: fetchDivisions,
-  });
+  })
 
   const { data: cities = [], isLoading: loadingCities } = useQuery({
     queryKey: ["cities"],
     queryFn: fetchCities,
-  });
+  })
 
   const handleSave = () => {
-    console.log("Address data:", addressData);
-    setEditAddressOpen(false);
-  };
+    console.log("Address data:", addressData)
+    setEditAddressOpen(false)
+  }
 
   return (
     <div>
@@ -93,19 +95,22 @@ const Address = () => {
                 <strong>Permanent Address:</strong>
                 {`${addressData.permanentCity?.label || "N/A"}, ${addressData.permanentDivision?.label || "N/A"}, ${addressData.permanentCountry?.label || "N/A"}`}
               </p>
-              <Button onClick={() => setEditAddressOpen(true)} variant="outline">
-                <Pencil className="h-4 w-4 mr-2" />
+              <Button
+                onClick={() => setEditAddressOpen(true)}
+                variant="outline"
+              >
+                <Pencil className="mr-2 h-4 w-4" />
                 Edit Address
               </Button>
             </div>
           ) : (
             <div>
-              <p className="text-gray-500 mb-3">No address added yet.</p>
+              <p className="mb-3 text-gray-500">No address added yet.</p>
               <Button
                 onClick={() => setEditAddressOpen(true)}
                 variant="outline"
               >
-                <Plus className="h-4 w-4 mr-2" />
+                <Plus className="mr-2 h-4 w-4" />
                 Add Address
               </Button>
             </div>
@@ -121,8 +126,8 @@ const Address = () => {
         >
           <form
             onSubmit={(e) => {
-              e.preventDefault();
-              handleSave();
+              e.preventDefault()
+              handleSave()
             }}
             className="space-y-6"
           >
@@ -223,7 +228,7 @@ const Address = () => {
         </EditModal>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Address;
+export default Address

@@ -8,6 +8,7 @@ import {
   Award,
   Book,
   Contact,
+  Crown,
   Edit,
   Eye,
   GraduationCap,
@@ -17,6 +18,7 @@ import {
   Pencil,
   Plus,
   Share2,
+  Star,
   Upload,
   Video,
 } from "lucide-react"
@@ -32,6 +34,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { EditModal } from "./CommonModal"
 import "react-phone-input-2/lib/style.css"
 import { set_user_data, useUserData } from "@/utils/encript_decript"
+import { useQuery } from "@tanstack/react-query"
 import { Controller, useForm } from "react-hook-form"
 import PhoneInput from "react-phone-input-2"
 import CreatableSelect from "react-select/creatable"
@@ -49,18 +52,18 @@ import useUploadImage from "@/app/hooks/useUploadImage"
 import uploadImage from "@/app/hooks/useUploadImage"
 
 import About from "./About"
-import Certifications from "./Certifications"
-import Educations from "./Educations"
-import Experience from "./Experience"
-import Resume from "./Resume"
-import Skills from "./Skills"
-import Gender from "./Gender"
-import DateOfBirth from "./DateOfBirth"
-import UserIdentity from "./UserIdentity"
 import Address from "./Address"
-import EmergencyContact from "./EmergencyContact"
 import BloodGroup from "./BloodGroup"
 import CareerObjective from "./CareerObjective"
+import Certifications from "./Certifications"
+import DateOfBirth from "./DateOfBirth"
+import Educations from "./Educations"
+import EmergencyContact from "./EmergencyContact"
+import Experience from "./Experience"
+import Gender from "./Gender"
+import Resume from "./Resume"
+import Skills from "./Skills"
+import UserIdentity from "./UserIdentity"
 
 export default function ProfilePage() {
   const [user, setUserData] = useUserData()
@@ -203,6 +206,53 @@ export default function ProfilePage() {
     }
   }
 
+  const { data: educations = [] } = useQuery({
+    queryKey: ["educations_data", user?._id],
+    queryFn: async () => {
+      if (!user?._id) return []
+      const res = await fetch(
+        `${process.env.NEXT_APP_BASE_URL}/api/v1/user/get-education?user_id=${user._id}`
+      )
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch education data")
+      }
+
+      const data = await res.json()
+      return data.data
+    },
+    enabled: !!user?._id,
+  })
+
+  const [completion, setCompletion] = useState(30)
+  const showStar = completion === 100
+
+  useEffect(() => {
+    let completion = 0
+    if (user?.fullName?.length) completion += 10
+    if (user?.email) completion += 10
+    if (user?.phone_number?.length > 5) completion += 10
+    if (user?.profile_picture) completion += 10
+    if (user?.languages?.length) completion += 10
+    if (user?.title?.length > 1) completion += 10
+    if (user?.description?.length > 4) completion += 10
+    if (user?.date_of_birth) completion += 10
+    if (user?.gender) completion += 10
+    if (educations.length) completion += 10
+    setCompletion(completion)
+  }, [
+    user?.title,
+    user?.description,
+    user?.fullName,
+    user?.email,
+    user?.phone_number,
+    user?.profile_picture,
+    user?.languages,
+    user?.date_of_birth,
+    user?.gender,
+    educations,
+  ])
+
   return (
     <div>
       <div className="mb-14 grid grid-cols-1 gap-6 lg:mb-0 lg:grid-cols-[1fr_300px]">
@@ -210,27 +260,70 @@ export default function ProfilePage() {
           {/* Header Section */}
           {user ? (
             <div className="flex items-center gap-4">
-              <div
-                className="group relative flex h-20 w-20 cursor-pointer items-center justify-center rounded-full bg-blue-600 text-3xl text-white"
-                onClick={() => setEditImageOpen(true)}
-              >
-                {user?.profile_picture ? (
-                  <Image
-                    src={user?.profile_picture}
-                    alt="Bright Future Logo"
-                    width={80}
-                    height={80}
-                    className="h-20 w-20 rounded-full"
-                  />
-                ) : (
-                  <span className="flex items-center justify-center">
-                    {user?.fullName?.charAt(0).toUpperCase()}
-                  </span>
-                )}
+              <div className="relative">
+                <div
+                  className="group relative flex h-24 w-24 cursor-pointer items-center justify-center rounded-full"
+                  onClick={() => setEditImageOpen(true)}
+                >
+                  {/* Profile Image */}
+                  <div className="relative h-full w-full overflow-hidden rounded-full border-4 border-primary">
+                    {user?.profile_picture ? (
+                      <Image
+                        src={user.profile_picture || "/placeholder.svg"}
+                        alt="Profile Picture"
+                        fill
+                        className="object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center bg-primary text-3xl text-primary-foreground">
+                        {user?.fullName?.[0]?.toUpperCase() || "?"}
+                      </div>
+                    )}
 
-                {/* Update text on hover */}
-                <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black bg-opacity-50 opacity-0 transition-opacity group-hover:opacity-100">
-                  <span className="text-sm font-medium text-white">Update</span>
+                    {/* Dark Overlay */}
+                    <div className="absolute inset-0 bg-black/30" />
+                  </div>
+
+                  {/* Progress Ring */}
+                  <svg className="absolute inset-0 h-full w-full -rotate-90">
+                    <circle
+                      className="text-white"
+                      strokeWidth="4"
+                      stroke="currentColor"
+                      fill="transparent"
+                      r="46"
+                      cx="48"
+                      cy="48"
+                    />
+                    <circle
+                      className="text-blue-500"
+                      strokeWidth="4"
+                      strokeDasharray={290}
+                      strokeDashoffset={290 - (290 * completion) / 100}
+                      strokeLinecap="round"
+                      stroke="currentColor"
+                      fill="transparent"
+                      r="46"
+                      cx="48"
+                      cy="48"
+                    />
+                  </svg>
+
+                  {/* Star or Percentage */}
+                  <div className="absolute -bottom-1 flex items-center justify-center rounded bg-primary px-2 py-0.5 text-primary-foreground shadow-lg">
+                    {showStar ? (
+                      <Star className="h-4 w-4 fill-current text-yellow-400" />
+                    ) : (
+                      <span className="text-sm font-medium">{completion}%</span>
+                    )}
+                  </div>
+
+                  {/* Update text on hover */}
+                  <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black bg-opacity-50 opacity-0 transition-opacity group-hover:opacity-100">
+                    <span className="text-sm font-medium text-white">
+                      Update
+                    </span>
+                  </div>
                 </div>
               </div>
 

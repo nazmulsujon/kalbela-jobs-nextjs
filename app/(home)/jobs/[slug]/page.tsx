@@ -185,7 +185,7 @@ const JobsDetails = () => {
               {jobData?.gender && (
                 <Badge
                   variant="secondary"
-                  className="capitalize border border-black border-opacity-30 px-3 py-1 text-sm dark:border-gray-400"
+                  className="border border-black border-opacity-30 px-3 py-1 text-sm capitalize dark:border-gray-400"
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   Gender: {jobData?.gender}
@@ -198,12 +198,13 @@ const JobsDetails = () => {
                 content={jobData?.job_description}
               />
               {
-
                 <JobSection
                   title="Location"
-                  content={jobData?.location?.remote
-                    ? "Remote"
-                    : `${jobData?.location?.location || ""}${jobData?.location?.district ? `, ${jobData?.location?.district}` : ""} ${`(${jobData?.location?.country})` || ""}`}
+                  content={
+                    jobData?.location?.remote
+                      ? "Remote"
+                      : `${jobData?.location?.location || ""}${jobData?.location?.district ? `, ${jobData?.location?.district}` : ""} ${`(${jobData?.location?.country})` || ""}`
+                  }
                 />
               }
               <JobSection title="Benefits" content={jobData?.benefit} />
@@ -339,7 +340,7 @@ const JobSection = ({
     {content ? (
       <div
         dangerouslySetInnerHTML={{ __html: content }}
-        className="tajawal-font jodit-wysiwyg dark:!text-gray-300 text-sm capitalize text-muted-foreground md:text-base"
+        className="tajawal-font jodit-wysiwyg text-sm capitalize text-muted-foreground dark:!text-gray-300 md:text-base"
       />
     ) : (
       children

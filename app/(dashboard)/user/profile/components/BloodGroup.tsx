@@ -1,12 +1,20 @@
 "use client"
 
 import { useState } from "react"
+import { Pencil, Plus } from "lucide-react"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
 import { EditModal } from "./CommonModal"
-import { Pencil, Plus } from "lucide-react"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 const BloodGroup = () => {
   const [editBloodGroupOpen, setEditBloodGroupOpen] = useState(false)
@@ -37,20 +45,20 @@ const BloodGroup = () => {
           <div className="text-left">
             {formData.bloodGroup ? (
               <div className="space-y-2">
-                <p className="text-sm font-semibold text-gray-600 dark:text-slate-200">{formData.bloodGroup}</p>
+                <p className="text-sm font-semibold text-gray-600 dark:text-slate-200">
+                  {formData.bloodGroup}
+                </p>
                 <Button onClick={handleAddEdit} variant="outline">
-                  <Pencil className="h-4 w-4 mr-2" />
+                  <Pencil className="mr-2 h-4 w-4" />
                   Edit Blood Group
                 </Button>
               </div>
             ) : (
               <div>
-                <p className="mt-1 text-sm text-gray-500">
-                  No data added yet.
-                </p>
+                <p className="mt-1 text-sm text-gray-500">No data added yet.</p>
                 <div className="mt-4">
                   <Button variant="outline" onClick={handleAddEdit}>
-                    <Plus className="h-4 w-4 mr-2" />
+                    <Plus className="mr-2 h-4 w-4" />
                     Add Blood Group
                   </Button>
                 </div>
