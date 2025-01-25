@@ -1,12 +1,14 @@
 "use client"
 
 import { useState } from "react"
+import { Pencil, Plus } from "lucide-react"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { EditModal } from "./CommonModal"
-import { Pencil, Plus } from "lucide-react"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+
+import { EditModal } from "./CommonModal"
 
 const EmergencyContact = () => {
   const [editContactOpen, setEditContactOpen] = useState(false)
@@ -47,7 +49,7 @@ const EmergencyContact = () => {
                   </span>
                 </p>
                 <Button onClick={handleAddEdit} variant="outline">
-                  <Pencil className="h-4 w-4 mr-2" />
+                  <Pencil className="mr-2 h-4 w-4" />
                   Edit Contact
                 </Button>
               </div>
@@ -58,7 +60,7 @@ const EmergencyContact = () => {
                 </p>
                 <div className="mt-4">
                   <Button variant="outline" onClick={handleAddEdit}>
-                    <Plus className="h-4 w-4 mr-2" />
+                    <Plus className="mr-2 h-4 w-4" />
                     Add Contact
                   </Button>
                 </div>
