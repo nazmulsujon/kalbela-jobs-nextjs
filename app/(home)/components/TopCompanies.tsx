@@ -82,7 +82,7 @@ const TopCompanies: React.FC = () => {
     "GET"
   )
 
-  console.log("company data", data)
+  console.log("company data>>>", data)
 
   useEffect(() => {
     if (!api) return
@@ -126,36 +126,33 @@ const TopCompanies: React.FC = () => {
           <CarouselContent className="flex">
             {loading
               ? Array.from({ length: 5 }).map((_, index) => (
-                  <Skeleton key={index} className="mx-2 h-auto w-full" />
-                ))
+                <Skeleton key={index} className="mx-2 h-auto w-full" />
+              ))
               : data?.data?.map((company: any) => (
-                  <CarouselItem
-                    key={company._id}
-                    className="min-w-48 basis-1/2 md:basis-1/4 lg:basis-1/5"
+                <CarouselItem
+                  key={company._id}
+                  className="min-w-48 basis-1/2 md:basis-1/4 lg:basis-1/5"
+                >
+                  <Link
+                    href={`companies/${company.company_website}`}
+                    className="flex h-full w-full flex-col items-center justify-between rounded-sm border p-2 py-4"
                   >
-                    <Link
-                      href={`companies/${company.company_website}`}
-                      className="flex h-full w-full flex-col items-center justify-between rounded-sm border p-2 py-4"
-                    >
-                      <div className="flex size-24 items-center justify-center">
-                        <img
-                          className="mr-1 size-full rounded-sm object-cover"
-                          src={company.logo}
-                          style={{ aspectRatio: "3/2" }}
-                          alt={`${company.company_name} image`}
-                          loading="lazy"
-                        />
-                      </div>
-                      <h3 className="my-2 max-w-sm truncate text-sm font-semibold">
-                        {company.company_name}
-                      </h3>
-                      <p className="mb-2 text-center text-xs">
-                        {company.job_title}
-                      </p>
-                      <SecondaryBtn className="mt-2">View jobs</SecondaryBtn>
-                    </Link>
-                  </CarouselItem>
-                ))}
+                    <div className="flex size-24 items-center justify-center">
+                      <img
+                        className="mr-1 size-full rounded-sm object-cover"
+                        src={company.logo}
+                        style={{ aspectRatio: "3/2" }}
+                        alt={`${company.company_name} image`}
+                        loading="lazy"
+                      />
+                    </div>
+                    <h3 className="my-2 max-w-48 truncate text-sm font-semibold">
+                      {company.company_name}
+                    </h3>
+                    <SecondaryBtn className="mt-2">View jobs</SecondaryBtn>
+                  </Link>
+                </CarouselItem>
+              ))}
           </CarouselContent>
 
           <div className="h-6 w-6">
