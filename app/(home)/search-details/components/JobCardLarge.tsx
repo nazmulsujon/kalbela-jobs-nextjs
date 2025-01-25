@@ -3,6 +3,7 @@ import { Heart } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { formatDate } from "@/lib/utils"
+import fallback_image from "../../../../public/fallback_img.png"
 
 interface JobcardLargeProps {
   job: any
@@ -48,7 +49,7 @@ const JobcardLarge: React.FC<JobcardLargeProps> = ({ job }) => {
           <div className="absolute right-0 top-0 w-16 md:w-20">
             <img
               className="rounded"
-              src={job.company_info?.logo}
+              src={job.company_info?.logo || fallback_image.src}
               alt={`${job.company_info?.name} logo`}
             />
           </div>
