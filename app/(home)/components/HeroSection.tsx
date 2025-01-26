@@ -3,9 +3,9 @@
 import * as React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Activity, Search, Users } from "lucide-react"
+import { Activity, Award, Briefcase, Search, TrendingUp, Users } from "lucide-react"
 import { useTheme } from "next-themes"
-
+import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 import { Input } from "@/components/ui/input"
 import {
@@ -20,6 +20,8 @@ import { Separator } from "@/components/ui/separator"
 import MaxWidthWrapper from "@/components/MaxWidthWrapper"
 import PrimaryBtn from "@/components/PrimaryBtn"
 import { Building, } from "lucide-react"
+import { Card, CardContent } from "@/components/ui/card"
+import { TypingRandomizedTextEffect } from "@/components/RandomizedTextEffect"
 
 const locationSuggestions = [
       "dhaka",
@@ -30,6 +32,15 @@ const locationSuggestions = [
       "barishal",
       "mymensingh",
       "rangpur",
+]
+
+const statistics = [
+      { title: "LIVE JOBS", value: "60+", icon: Activity },
+      { title: "VACANCIES", value: "200+", icon: Briefcase },
+      { title: "COMPANIES", value: "99+", icon: Building },
+      { title: "FRESHERS JOBS", value: "50+", icon: Users },
+      { title: "EXPERIENCED JOBS", value: "30+", icon: TrendingUp },
+      { title: "TOP INDUSTRIES", value: "20+", icon: Award },
 ]
 
 const HeroSection = () => {
@@ -82,83 +93,46 @@ const HeroSection = () => {
             <div className="z-40">
                   <MaxWidthWrapper className="flex flex-col items-center space-y-4  py-6 md:py-2 md:pb-4 lg:pb-4">
 
-                        <div className=" max-w-3xl lg:mt-10 lg:py-8">
-                              <div className="grid grid-cols-2 lg:grid-cols-6 gap-x-10 gap-y-4 py-4">
-                                    {/* Live Jobs */}
-                                    <div className="flex items-center gap-3">
-                                          <div className="rounded-full bg-[#324686] p-3">
-                                                <Activity className="w-5 h-5 text-gray-100" />
-                                          </div>
-                                          <div>
-                                                <p className="text-sm font-medium whitespace-nowrap text-muted-foreground">LIVE JOBS</p>
-                                                <p className="text-2xl font-bold text-gray-900">5,061</p>
-                                          </div>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                          <div className="rounded-full bg-[#324686] p-3">
-                                                <Activity className="w-5 h-5 text-gray-100" />
-                                          </div>
-                                          <div>
-                                                <p className="text-sm font-medium whitespace-nowrap text-muted-foreground">LIVE JOBS</p>
-                                                <p className="text-2xl font-bold text-gray-900">5,061</p>
-                                          </div>
-                                    </div>
+                        {/* <h1 className="text-center  leading-tight  text-black sm:text-4xl lg:text-5xl text-3xl font-bold md:text-4xl lg:mt-20 mt-4 ">
+                              Find your dream job
+                        </h1> */}
 
-                                    {/* Vacancies */}
-                                    <div className="flex items-center gap-3">
-                                          <div className="rounded-full bg-[#324686] p-3">
-                                                <Users className="w-5 h-5 text-gray-100" />
-                                          </div>
-                                          <div>
-                                                <p className="text-sm font-medium whitespace-nowrap text-muted-foreground">VACANCIES</p>
-                                                <p className="text-2xl font-bold text-gray-900">20,919+</p>
-                                          </div>
-                                    </div>
 
-                                    <div className="flex items-center gap-3">
-                                          <div className="rounded-full bg-[#324686] p-3">
-                                                <Users className="w-5 h-5 text-gray-100" />
-                                          </div>
-                                          <div>
-                                                <p className="text-sm font-medium whitespace-nowrap text-muted-foreground">VACANCIES</p>
-                                                <p className="text-2xl font-bold text-gray-900">20,919+</p>
-                                          </div>
-                                    </div>
+                        <div className=' py-4 rounded-md'>
+                              <h1
+                                    className="text-center leading-tight  bg-clip-text  sm:text-4xl lg:text-5xl text-3xl font-bold md:text-4xl lg:mt-10 mt-4"
+                                    style={{
+                                          backgroundImage: 'linear-gradient(to right, #001968, #0a4d92)',
+                                          WebkitBackgroundClip: 'text',
+                                    }}
+                              >
+                                    <TypingRandomizedTextEffect text="Find Your Dream Jobs" />
+                              </h1>
 
-                                    {/* Companies */}
-                                    <div className="flex items-center gap-3">
-                                          <div className="rounded-full bg-[#324686] p-3">
-                                                <Building className="w-5 h-5 text-gray-100" />
-                                          </div>
-                                          <div>
-                                                <p className="text-sm font-medium whitespace-nowrap text-muted-foreground">COMPANIES</p>
-                                                <p className="text-2xl font-bold text-gray-900">2,834</p>
-                                          </div>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                          <div className="rounded-full bg-[#324686] p-3">
-                                                <Building className="w-5 h-5 text-gray-100" />
-                                          </div>
-                                          <div>
-                                                <p className="text-sm font-medium whitespace-nowrap text-muted-foreground">COMPANIES</p>
-                                                <p className="text-2xl font-bold text-gray-900">2,834</p>
-                                          </div>
-                                    </div>
-
-                                    {/* New Jobs */}
-
-                              </div>
+                              <p className="!mb-2 max-w-4xl text-balance text-center text-lg mt-4 font-medium md:text-sm">
+                                    Your Career Starts Here with Kalbela Jobs! Discover the latest job
+                                    opportunities in Bangladesh.
+                              </p>
                         </div>
 
-                        <h1 className="text-center text-3xl font-bold md:text-4xl mt-20">
-                              Find your dream job
-                        </h1>
 
-                        <p className="!mb-2 max-w-4xl text-balance text-center text-xs font-medium md:text-sm">
-                              Your Career Starts Here with Kalbela Jobs! Discover the latest job
-                              opportunities in Bangladesh.
-                        </p>
 
+
+                        <div className=" mx-auto px-4 lg:py-8 py-0">
+                              <div className="grid grid-cols-2 sm:grid-cols-6  gap-x-20 lg:gap-x-4 gap-y-4">
+                                    {statistics.map((stat) => (
+                                          <div key={stat.title} className="flex items-center">
+                                                <div className="mr-3 bg-[#001968] p-2 lg:p-3 rounded-full">
+                                                      <stat.icon className="w-4 h-4 text-white" />
+                                                </div>
+                                                <div>
+                                                      <p className="text-xs font-bold text-gray-900">{stat.title}</p>
+                                                      <p className="text-sm font-bold text-gray-600">{stat.value}</p>
+                                                </div>
+                                          </div>
+                                    ))}
+                              </div>
+                        </div>
                         <div className="z-40 flex w-full max-w-3xl items-center space-x-2 rounded-sm border border-gray-200 bg-white px-4 py-3 text-gray-900 shadow-md dark:border-gray-700 dark:bg-gray-800 dark:text-slate-200 md:px-6">
                               <div className="relative flex w-full items-center space-x-2">
                                     <Search className="size-6 text-gray-500 dark:text-slate-200" />

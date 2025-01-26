@@ -226,6 +226,12 @@ const JobsDetails = () => {
                                                 content={jobData?.responsibilities}
                                           />
                                     </div>
+                                    {jobData?.cvEmailSent ? <div className="text-base text-[#001968]">
+                                          <h2 className="my-2 text-xl font-semibold">Apply Procedure</h2>
+                                          <h1>
+                                                Email Your CV to: {jobData?.cvEmailAddress}
+                                          </h1>
+                                    </div> : ''}
                                     <h2 className="my-2 text-xl font-semibold">Company Info</h2>
                                     <div className="flex items-center gap-4">
                                           <Avatar className="h-16 w-16">
