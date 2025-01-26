@@ -1,8 +1,9 @@
 import Link from "next/link"
 import { Heart } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
 import { formatDate } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+
 import fallback_image from "../../../../public/fallback_img.png"
 
 interface JobcardLargeProps {

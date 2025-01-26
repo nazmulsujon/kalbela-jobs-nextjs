@@ -6,17 +6,18 @@ import { dummyJobs } from "@/public/assets/dummyData"
 import { useUserData } from "@/utils/encript_decript"
 import { Avatar } from "@radix-ui/react-avatar"
 import {
-      Banknote,
-      Briefcase,
-      BriefcaseIcon,
-      Building2,
-      CalendarIcon,
-      CurrencyIcon as CurrencyDollarIcon,
-      Info,
-      MapPinIcon,
+  Banknote,
+  Briefcase,
+  BriefcaseIcon,
+  Building2,
+  CalendarIcon,
+  CurrencyIcon as CurrencyDollarIcon,
+  Info,
+  MapPinIcon,
 } from "lucide-react"
 import { toast } from "react-toastify"
 
+import { formatDate } from "@/lib/utils"
 import { AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardTitle } from "@/components/ui/card"
@@ -28,330 +29,331 @@ import useApiForPost from "@/app/hooks/useApiForPost"
 import useApiRequest from "@/app/hooks/useApiRequest"
 
 import JobDetailsSkeleton from "./components/JobDetailsSkeleton"
-import { formatDate } from "@/lib/utils"
 
 const JobsDetails = () => {
-      const { slug } = useParams()
-      const [user] = useUserData()
+  const { slug } = useParams()
+  const [user] = useUserData()
 
-      const { data, loading, error } = useApiRequest<any>(
-            `jobs/get-by-url?url=${slug}`,
-            "GET"
-      )
+  const { data, loading, error } = useApiRequest<any>(
+    `jobs/get-by-url?url=${slug}`,
+    "GET"
+  )
 
-      const { apiRequest } = useApiForPost()
+  const { apiRequest } = useApiForPost()
 
-      const save_jobs = async (job_id: any) => {
-            if (!user) {
-                  toast.warning("You need to login to save jobs")
-                  return
-            }
-            const upload_data = {
-                  user_id: user._id,
-                  job_id,
-            }
-            if (!user._id) {
-                  toast.info("You need to login to save jobs")
-                  return
-            }
-            if (!job_id) {
-                  toast.error("Something went wrong")
-                  return
-            }
-            const { data, error } = await apiRequest<any>(
-                  `api/v1/user/save-jobs`,
-                  "POST",
-                  upload_data
-            )
-            if (error) {
-                  toast.error(error.message)
-            } else {
-                  toast.success(data.message)
-            }
-      }
+  const save_jobs = async (job_id: any) => {
+    if (!user) {
+      toast.warning("You need to login to save jobs")
+      return
+    }
+    const upload_data = {
+      user_id: user._id,
+      job_id,
+    }
+    if (!user._id) {
+      toast.info("You need to login to save jobs")
+      return
+    }
+    if (!job_id) {
+      toast.error("Something went wrong")
+      return
+    }
+    const { data, error } = await apiRequest<any>(
+      `api/v1/user/save-jobs`,
+      "POST",
+      upload_data
+    )
+    if (error) {
+      toast.error(error.message)
+    } else {
+      toast.success(data.message)
+    }
+  }
 
-      if (loading) {
-            return <JobDetailsSkeleton />
-      }
+  if (loading) {
+    return <JobDetailsSkeleton />
+  }
 
-      if (error) {
-            return <div>Error loading job details. Please try again later.</div>
-      }
+  if (error) {
+    return <div>Error loading job details. Please try again later.</div>
+  }
 
-      const jobData = data?.data
-      const jobUrl = `https://kalbelajobs.com/jobs/${slug}`
+  const jobData = data?.data
+  const jobUrl = `https://kalbelajobs.com/jobs/${slug}`
 
-      return (
-            <MaxWidthWrapper>
-                  <Head>
-                        <title>{jobData?.job_title || "Job Details"} | YourJobSite</title>
-                        <meta
-                              name="description"
-                              content={`${jobData?.job_title} - ${jobData?.company_info?.name}. ${jobData?.job_description?.slice(0, 160)}...`}
-                        />
-                        <meta
-                              property="og:title"
-                              content={`${jobData?.job_title} | YourJobSite`}
-                        />
-                        <meta
-                              property="og:description"
-                              content={`${jobData?.job_title} - ${jobData?.company_info?.name}. ${jobData?.job_description?.slice(0, 160)}...`}
-                        />
-                        <meta property="og:image" content={jobData?.company_info?.logo || ``} />
-                        <meta property="og:url" content={jobUrl} />
-                        <meta property="og:type" content="website" />
-                        <meta name="twitter:card" content="summary_large_image" />
-                        <meta name="viewport" content="width=device-width, initial-scale=1" />
-                        <link rel="icon" href={jobData?.company_info?.logo} />
-                        <script type="application/ld+json">
-                              {JSON.stringify({
-                                    "@context": "https://schema.org/",
-                                    "@type": "JobPosting",
-                                    title: jobData?.job_title,
-                                    description: jobData?.job_description,
-                                    datePosted: jobData?.posted_date,
-                                    validThrough: jobData?.expiry_date,
-                                    employmentType: jobData?.job_type,
-                                    hiringOrganization: {
-                                          "@type": "Organization",
-                                          name: jobData?.company_info?.name,
-                                          logo: jobData?.company_info?.logo,
-                                    },
-                                    jobLocation: {
-                                          "@type": "Place",
-                                          address: {
-                                                "@type": "PostalAddress",
-                                                addressCountry: jobData?.location?.country,
-                                          },
-                                    },
-                                    baseSalary: {
-                                          "@type": "MonetaryAmount",
-                                          currency: jobData?.salary_range?.currency,
-                                          value: {
-                                                "@type": "QuantitativeValue",
-                                                minValue: jobData?.salary_range?.min,
-                                                maxValue: jobData?.salary_range?.max,
-                                                unitText: "YEAR",
-                                          },
-                                    },
-                              })}
-                        </script>
-                  </Head>
-                  <div className="flex flex-col gap-8 py-4 pb-14 md:gap-4 lg:flex-row">
-                        {/* Left Section */}
-                        <div className="flex-1 text-[18px]">
-                              <Card className="border-0 border-gray-200 border-opacity-0 bg-transparent shadow-none dark:border-gray-500 lg:border lg:border-opacity-45 lg:p-6 lg:shadow-lg">
-                                    <div className="mb-4 flex items-start justify-between">
-                                          <h1 className="text-2xl font-bold text-primary md:text-4xl">
-                                                {jobData?.job_title}
-                                          </h1>
-                                          <ShareButton
-                                                url={jobUrl}
-                                                title={`${jobData?.job_title} at ${jobData?.company_info?.name}`}
-                                          />
-                                    </div>
-                                    <div className="mb-4 flex flex-wrap gap-1 md:gap-4">
-                                          <Badge
-                                                variant="secondary"
-                                                className="border border-black border-opacity-30 px-3 py-1 text-sm dark:border-gray-400"
-                                          >
-                                                <BriefcaseIcon className="mr-2 h-4 w-4" />
-                                                {jobData?.job_type}
-                                          </Badge>
-                                          <Badge
-                                                variant="secondary"
-                                                className="border border-black border-opacity-30 px-3 py-1 text-sm dark:border-gray-400"
-                                          >
-                                                <MapPinIcon className="mr-2 h-4 w-4" />
-                                                {jobData?.location?.country}
-                                          </Badge>
-                                          <Badge
-                                                variant="secondary"
-                                                className="border border-black border-opacity-30 px-3  py-1 text-sm dark:border-gray-400"
-                                          >
-                                                <CalendarIcon className="mr-2 h-4 w-4" />
-                                                {/* jobData?.deadline  this is string now need to convert to date */}
-                                                Deadline: {formatDate(jobData?.expiry_date || new Date())}
-                                          </Badge>
-                                          <Badge
-                                                variant="secondary"
-                                                className="border border-black border-opacity-30 px-3 py-1 text-sm dark:border-gray-400"
-                                          >
-                                                <Banknote className="mr-2 h-4 w-4" />
-                                                {jobData?.salary_negotiable || jobData?.negotiable_note
-                                                      ? "Negotiable"
-                                                      : `${jobData?.salary_range?.min}${jobData?.salary_range?.max ? ` - ${jobData?.salary_range.max}` : ""} ${jobData?.salary_range?.currency || ""}`}
-                                          </Badge>
-                                          {jobData?.gender && (
-                                                <Badge
-                                                      variant="secondary"
-                                                      className="border border-black border-opacity-30 px-3 py-1 text-sm capitalize dark:border-gray-400"
-                                                >
-                                                      <CalendarIcon className="mr-2 h-4 w-4" />
-                                                      Gender: {jobData?.gender}
-                                                </Badge>
-                                          )}
-                                    </div>
-                                    <div className="space-y-4">
-                                          <JobSection
-                                                title="About the job"
-                                                content={jobData?.job_description}
-                                          />
-                                          {
-                                                <JobSection
-                                                      title="Location"
-                                                      content={
-                                                            jobData?.location?.remote
-                                                                  ? "Remote"
-                                                                  : `${jobData?.location?.location || ""}${jobData?.location?.district ? `, ${jobData?.location?.district}` : ""} ${`(${jobData?.location?.country})` || ""}`
-                                                      }
-                                                />
-                                          }
-                                          <JobSection title="Benefits" content={jobData?.benefit} />
-                                          <JobSection title="Required Skills">
-                                                <ul className="flex flex-wrap gap-2">
-                                                      {jobData?.skills.map((skill: string) => (
-                                                            <Badge variant="secondary" className="px-3 py-1 text-sm">
-                                                                  {skill}
-                                                            </Badge>
-                                                      ))}
-                                                </ul>
-                                          </JobSection>
-                                          <JobSection
-                                                title="Experience level"
-                                                content={jobData?.experience_level}
-                                          />
-                                          <JobSection
-                                                title="Responsibilities"
-                                                content={jobData?.responsibilities}
-                                          />
-                                    </div>
-                                    {jobData?.cvEmailSent ? <div className="text-base text-[#001968]">
-                                          <h2 className="my-2 text-xl font-semibold">Apply Procedure</h2>
-                                          <h1>
-                                                Email Your CV to: {jobData?.cvEmailAddress}
-                                          </h1>
-                                    </div> : ''}
-                                    <h2 className="my-2 text-xl font-semibold">Company Info</h2>
-                                    <div className="flex items-center gap-4">
-                                          <Avatar className="h-16 w-16">
-                                                <AvatarImage
-                                                      className="w-20 rounded border-2 border-gray-300 bg-white object-contain p-2 shadow-md"
-                                                      src={
-                                                            jobData?.company_info?.logo ||
-                                                            "https://via.placeholder.com/64"
-                                                      }
-                                                      alt={jobData?.company_info?.name || "Company Logo"}
-                                                />
-                                                <AvatarFallback className="text-lg">
-                                                      {jobData?.company_info?.name.charAt(0)}
-                                                </AvatarFallback>
-                                          </Avatar>
-                                          <div>
-                                                <h4 className="text-xl font-medium">
-                                                      {jobData?.company_info?.name || "N/A"}
-                                                </h4>
-                                                <p className="text-sm uppercase text-muted-foreground">
-                                                      {jobData?.company_info?.industry || "N/A"} (
-                                                      {jobData?.company_info?.company_size || "N/A"})
-                                                </p>
-                                          </div>
-                                    </div>
+  return (
+    <MaxWidthWrapper>
+      <Head>
+        <title>{jobData?.job_title || "Job Details"} | YourJobSite</title>
+        <meta
+          name="description"
+          content={`${jobData?.job_title} - ${jobData?.company_info?.name}. ${jobData?.job_description?.slice(0, 160)}...`}
+        />
+        <meta
+          property="og:title"
+          content={`${jobData?.job_title} | YourJobSite`}
+        />
+        <meta
+          property="og:description"
+          content={`${jobData?.job_title} - ${jobData?.company_info?.name}. ${jobData?.job_description?.slice(0, 160)}...`}
+        />
+        <meta property="og:image" content={jobData?.company_info?.logo || ``} />
+        <meta property="og:url" content={jobUrl} />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href={jobData?.company_info?.logo} />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org/",
+            "@type": "JobPosting",
+            title: jobData?.job_title,
+            description: jobData?.job_description,
+            datePosted: jobData?.posted_date,
+            validThrough: jobData?.expiry_date,
+            employmentType: jobData?.job_type,
+            hiringOrganization: {
+              "@type": "Organization",
+              name: jobData?.company_info?.name,
+              logo: jobData?.company_info?.logo,
+            },
+            jobLocation: {
+              "@type": "Place",
+              address: {
+                "@type": "PostalAddress",
+                addressCountry: jobData?.location?.country,
+              },
+            },
+            baseSalary: {
+              "@type": "MonetaryAmount",
+              currency: jobData?.salary_range?.currency,
+              value: {
+                "@type": "QuantitativeValue",
+                minValue: jobData?.salary_range?.min,
+                maxValue: jobData?.salary_range?.max,
+                unitText: "YEAR",
+              },
+            },
+          })}
+        </script>
+      </Head>
+      <div className="flex flex-col gap-8 py-4 pb-14 md:gap-4 lg:flex-row">
+        {/* Left Section */}
+        <div className="flex-1 text-[18px]">
+          <Card className="border-0 border-gray-200 border-opacity-0 bg-transparent shadow-none dark:border-gray-500 lg:border lg:border-opacity-45 lg:p-6 lg:shadow-lg">
+            <div className="mb-4 flex items-start justify-between">
+              <h1 className="text-2xl font-bold text-primary md:text-4xl">
+                {jobData?.job_title}
+              </h1>
+              <ShareButton
+                url={jobUrl}
+                title={`${jobData?.job_title} at ${jobData?.company_info?.name}`}
+              />
+            </div>
+            <div className="mb-4 flex flex-wrap gap-1 md:gap-4">
+              <Badge
+                variant="secondary"
+                className="border border-black border-opacity-30 px-3 py-1 text-sm dark:border-gray-400"
+              >
+                <BriefcaseIcon className="mr-2 h-4 w-4" />
+                {jobData?.job_type}
+              </Badge>
+              <Badge
+                variant="secondary"
+                className="border border-black border-opacity-30 px-3 py-1 text-sm dark:border-gray-400"
+              >
+                <MapPinIcon className="mr-2 h-4 w-4" />
+                {jobData?.location?.country}
+              </Badge>
+              <Badge
+                variant="secondary"
+                className="border border-black border-opacity-30 px-3 py-1 text-sm dark:border-gray-400"
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {/* jobData?.deadline  this is string now need to convert to date */}
+                Deadline: {formatDate(jobData?.expiry_date || new Date())}
+              </Badge>
+              <Badge
+                variant="secondary"
+                className="border border-black border-opacity-30 px-3 py-1 text-sm dark:border-gray-400"
+              >
+                <Banknote className="mr-2 h-4 w-4" />
+                {jobData?.salary_negotiable || jobData?.negotiable_note
+                  ? "Negotiable"
+                  : `${jobData?.salary_range?.min}${jobData?.salary_range?.max ? ` - ${jobData?.salary_range.max}` : ""} ${jobData?.salary_range?.currency || ""}`}
+              </Badge>
+              {jobData?.gender && (
+                <Badge
+                  variant="secondary"
+                  className="border border-black border-opacity-30 px-3 py-1 text-sm capitalize dark:border-gray-400"
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  Gender: {jobData?.gender}
+                </Badge>
+              )}
+            </div>
+            <div className="space-y-4">
+              <JobSection
+                title="About the job"
+                content={jobData?.job_description}
+              />
+              {
+                <JobSection
+                  title="Location"
+                  content={
+                    jobData?.location?.remote
+                      ? "Remote"
+                      : `${jobData?.location?.location || ""}${jobData?.location?.district ? `, ${jobData?.location?.district}` : ""} ${`(${jobData?.location?.country})` || ""}`
+                  }
+                />
+              }
+              <JobSection title="Benefits" content={jobData?.benefit} />
+              <JobSection title="Required Skills">
+                <ul className="flex flex-wrap gap-2">
+                  {jobData?.skills.map((skill: string) => (
+                    <Badge variant="secondary" className="px-3 py-1 text-sm">
+                      {skill}
+                    </Badge>
+                  ))}
+                </ul>
+              </JobSection>
+              <JobSection
+                title="Experience level"
+                content={jobData?.experience_level}
+              />
+              <JobSection
+                title="Responsibilities"
+                content={jobData?.responsibilities}
+              />
+            </div>
+            {jobData?.cvEmailSent ? (
+              <div className="text-base text-[#001968]">
+                <h2 className="my-2 text-xl font-semibold">Apply Procedure</h2>
+                <h1>Email Your CV to: {jobData?.cvEmailAddress}</h1>
+              </div>
+            ) : (
+              ""
+            )}
+            <h2 className="my-2 text-xl font-semibold">Company Info</h2>
+            <div className="flex items-center gap-4">
+              <Avatar className="h-16 w-16">
+                <AvatarImage
+                  className="w-20 rounded border-2 border-gray-300 bg-white object-contain p-2 shadow-md"
+                  src={
+                    jobData?.company_info?.logo ||
+                    "https://via.placeholder.com/64"
+                  }
+                  alt={jobData?.company_info?.name || "Company Logo"}
+                />
+                <AvatarFallback className="text-lg">
+                  {jobData?.company_info?.name.charAt(0)}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <h4 className="text-xl font-medium">
+                  {jobData?.company_info?.name || "N/A"}
+                </h4>
+                <p className="text-sm uppercase text-muted-foreground">
+                  {jobData?.company_info?.industry || "N/A"} (
+                  {jobData?.company_info?.company_size || "N/A"})
+                </p>
+              </div>
+            </div>
 
-                                    <div className="space-y-2">
-                                          <div
-                                                dangerouslySetInnerHTML={{
-                                                      __html: jobData?.company_info?.about,
-                                                }}
-                                                className="tajawal-font jodit-wysiwyg mt-1 text-sm capitalize text-muted-foreground md:text-base"
-                                          />
-                                    </div>
+            <div className="space-y-2">
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: jobData?.company_info?.about,
+                }}
+                className="tajawal-font jodit-wysiwyg mt-1 text-sm capitalize text-muted-foreground md:text-base"
+              />
+            </div>
 
-                                    <div className="flex items-center gap-4 pt-8 font-semibold">
-                                          <ApplyModal
-                                                slug={jobData?.url}
-                                                company={jobData?.company_info?.company_id}
-                                                user={user}
-                                          />
-                                          <SecondaryBtn
-                                                className="px-10 py-2"
-                                                onClick={() => save_jobs(jobData?._id)}
-                                          >
-                                                Save
-                                          </SecondaryBtn>
-                                    </div>
-                              </Card>
-                        </div>
+            <div className="flex items-center gap-4 pt-8 font-semibold">
+              <ApplyModal
+                slug={jobData?.url}
+                company={jobData?.company_info?.company_id}
+                user={user}
+              />
+              <SecondaryBtn
+                className="px-10 py-2"
+                onClick={() => save_jobs(jobData?._id)}
+              >
+                Save
+              </SecondaryBtn>
+            </div>
+          </Card>
+        </div>
 
-                        {/* Right Section */}
-                        <div className="lg:w-96">
-                              <div className=" ">
-                                    <CardTitle className="mb-5 text-2xl font-bold">
-                                          Similar Jobs
-                                    </CardTitle>
-                                    <div className="space-y-4">
-                                          {dummyJobs?.slice(2, 5).map((jobPost, index) => (
-                                                <Card
-                                                      key={index}
-                                                      className="p-4 transition-shadow hover:shadow-md"
-                                                >
-                                                      <CardContent className="p-0">
-                                                            <h3 className="mb-2 text-lg font-semibold">
-                                                                  {jobPost?.title}
-                                                            </h3>
-                                                            <div className="mb-2 flex flex-wrap gap-2">
-                                                                  <Badge variant="outline" className="text-xs">
-                                                                        {jobPost?.workMode}
-                                                                  </Badge>
-                                                                  <Badge variant="outline" className="text-xs">
-                                                                        {jobPost?.jobType}
-                                                                  </Badge>
-                                                            </div>
-                                                            <p className="mb-2 text-sm text-muted-foreground">
-                                                                  Salary: {jobPost?.salary.slice(0, 9)} | Deadline:{" "}
-                                                                  {jobPost.deadline}
-                                                            </p>
-                                                            <p className="mb-4 text-sm">
-                                                                  {jobPost.description.slice(0, 100)}...
-                                                            </p>
+        {/* Right Section */}
+        <div className="lg:w-96">
+          <div className=" ">
+            <CardTitle className="mb-5 text-2xl font-bold">
+              Similar Jobs
+            </CardTitle>
+            <div className="space-y-4">
+              {dummyJobs?.slice(2, 5).map((jobPost, index) => (
+                <Card
+                  key={index}
+                  className="p-4 transition-shadow hover:shadow-md"
+                >
+                  <CardContent className="p-0">
+                    <h3 className="mb-2 text-lg font-semibold">
+                      {jobPost?.title}
+                    </h3>
+                    <div className="mb-2 flex flex-wrap gap-2">
+                      <Badge variant="outline" className="text-xs">
+                        {jobPost?.workMode}
+                      </Badge>
+                      <Badge variant="outline" className="text-xs">
+                        {jobPost?.jobType}
+                      </Badge>
+                    </div>
+                    <p className="mb-2 text-sm text-muted-foreground">
+                      Salary: {jobPost?.salary.slice(0, 9)} | Deadline:{" "}
+                      {jobPost.deadline}
+                    </p>
+                    <p className="mb-4 text-sm">
+                      {jobPost.description.slice(0, 100)}...
+                    </p>
 
-                                                            <SecondaryBtn
-                                                                  onClick={() => save_jobs(jobPost?.id)}
-                                                                  className="w-full"
-                                                            >
-                                                                  Save Job
-                                                            </SecondaryBtn>
-                                                      </CardContent>
-                                                </Card>
-                                          ))}
-                                    </div>
-                              </div>
-                        </div>
-                  </div>
-            </MaxWidthWrapper>
-      )
+                    <SecondaryBtn
+                      onClick={() => save_jobs(jobPost?.id)}
+                      className="w-full"
+                    >
+                      Save Job
+                    </SecondaryBtn>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </MaxWidthWrapper>
+  )
 }
 
 const JobSection = ({
-      title,
-      content,
-      children,
+  title,
+  content,
+  children,
 }: {
-      title: string
-      content?: string
-      children?: React.ReactNode
+  title: string
+  content?: string
+  children?: React.ReactNode
 }) => (
-      <div>
-            <h2 className="mb-2 text-xl font-semibold">{title}</h2>
-            {content ? (
-                  <div
-                        dangerouslySetInnerHTML={{ __html: content }}
-                        className="tajawal-font jodit-wysiwyg text-sm capitalize text-muted-foreground dark:!text-gray-300 md:text-base"
-                  />
-            ) : (
-                  children
-            )}
-      </div>
+  <div>
+    <h2 className="mb-2 text-xl font-semibold">{title}</h2>
+    {content ? (
+      <div
+        dangerouslySetInnerHTML={{ __html: content }}
+        className="tajawal-font jodit-wysiwyg text-sm capitalize text-muted-foreground dark:!text-gray-300 md:text-base"
+      />
+    ) : (
+      children
+    )}
+  </div>
 )
 
 export default JobsDetails
