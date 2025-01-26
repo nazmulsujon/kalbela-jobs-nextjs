@@ -1,5 +1,4 @@
-"use client"
-
+'use client'
 import React from "react"
 import Link from "next/link"
 import { ChevronRight } from "lucide-react"
@@ -9,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import MaxWidthWrapper from "@/components/MaxWidthWrapper"
 import useApiRequest from "@/app/hooks/useApiRequest"
 
-const Govt_jobs = () => {
+const page = () => {
       const { data, loading, error } = useApiRequest<any>(
             "jobs/get-all-govt-jobs",
             "GET"
@@ -69,6 +68,6 @@ const Govt_jobs = () => {
                   </MaxWidthWrapper>
             </section>
       )
-}
+};
 
-export default Govt_jobs
+export default page;
