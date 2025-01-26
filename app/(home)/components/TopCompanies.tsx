@@ -141,12 +141,11 @@ const TopCompanies: React.FC = () => {
                         <img
                           className="mr-1 size-full rounded-sm object-scale-down"
                           src={company.logo}
-                          style={{ aspectRatio: "3/2" }}
                           alt={`${company.company_name} image`}
                           loading="lazy"
                         />
                       </div>
-                      <h3 className="my-2 max-w-48 truncate text-sm font-semibold">
+                      <h3 className="my-2 max-w-40 truncate text-sm font-semibold">
                         {company.company_name}
                       </h3>
                       <SecondaryBtn className="mt-2">View jobs</SecondaryBtn>

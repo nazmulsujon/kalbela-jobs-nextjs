@@ -86,7 +86,6 @@ const JobType: React.FC = () => {
                         <img
                           className="mr-1 size-8 md:size-10"
                           src={type.image}
-                          style={{ aspectRatio: "3/2" }}
                           alt={`${type.label} image`}
                           loading="lazy"
                         />
