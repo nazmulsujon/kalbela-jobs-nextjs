@@ -8,69 +8,78 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Skeleton } from "@/components/ui/skeleton"
 import MaxWidthWrapper from "@/components/MaxWidthWrapper"
 import useApiRequest from "@/app/hooks/useApiRequest"
+import Govt_jobs from "./Govt_jobs"
 
 const FeaturedJobs: React.FC = () => {
-  const { data, loading, error } = useApiRequest<any>(
-    "jobs/get-featured-jobs",
-    "GET"
-  )
+      const { data, loading, error } = useApiRequest<any>(
+            "jobs/get-featured-jobs",
+            "GET"
+      )
 
-  console.log("data from featured jobs", data)
+      console.log("data from featured jobs", data)
 
-  return (
-    <section>
-      <MaxWidthWrapper className="py-6 md:py-10">
-        <h2 className="mb-4 flex items-center text-xl font-bold md:text-3xl">
-          <span className="mr-2 text-red-500">🔥</span> Featured Jobs
-        </h2>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {loading
-            ? Array.from({ length: 16 }).map((_, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col items-start rounded-sm border p-4 md:flex-row"
-                >
-                  <Skeleton className="mr-3 h-14 w-14 rounded-full" />
-                  <div className="flex-grow">
-                    <Skeleton className="mb-2 h-5 w-24" />
-                    <Skeleton className="h-4 w-32" />
-                  </div>
-                </div>
-              ))
-            : data?.data?.map((job: any) => (
-                <Link
-                  href={`/jobs/${job.url}`}
-                  key={job._id}
-                  className="group relative flex w-full flex-col items-center justify-center gap-2 space-x-2 overflow-hidden rounded-sm border p-4 md:flex-row"
-                >
-                  <div className="lg:w-[25%]">
-                    <div className="h-16 w-16">
-                      <img
-                        className="h-full w-20 rounded border-2 border-gray-300 bg-white object-contain p-2 shadow-md"
-                        src={
-                          job?.company_info?.logo ||
-                          "https://via.placeholder.com/64"
-                        }
-                        alt={job?.company_info?.name || "Company Logo"}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex-grow text-center md:text-start lg:w-[60%]">
-                    <h3 className="font-semibold capitalize hover:text-blue-500">
-                      {job.company_info?.name}
-                    </h3>
-                    <p className="text-xs">{job.job_title}</p>
-                  </div>
+      return (
+            <section>
+                  <MaxWidthWrapper className="py-6 md:py-10">
+                        <h2 className="mb-4 flex items-center text-xl font-bold md:text-3xl">
+                              <span className="mr-2 text-red-500">🔥</span> Featured Jobs
+                        </h2>
+                        <div className="grid grid-cols-1 lg:gap-4 sm:grid-cols-2 lg:grid-cols-4">
 
-                  <div className="absolute inset-0 flex items-center justify-end bg-black bg-opacity-60 pe-2 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100">
-                    <ChevronRight className="text-gray-800 group-hover:text-white dark:text-white" />
-                  </div>
-                </Link>
-              ))}
-        </div>
-      </MaxWidthWrapper>
-    </section>
-  )
+                              <div className="grid gap-4 grid-cols-2 lg:grid-cols-3  col-span-3">
+                                    {loading
+                                          ? Array.from({ length: 16 }).map((_, index) => (
+                                                <div
+                                                      key={index}
+                                                      className="flex flex-col items-start rounded-sm border p-4 md:flex-row"
+                                                >
+                                                      <Skeleton className="mr-3 h-14 w-14 rounded-full" />
+                                                      <div className="flex-grow">
+                                                            <Skeleton className="mb-2 h-5 w-24" />
+                                                            <Skeleton className="h-4 w-32" />
+                                                      </div>
+                                                </div>
+                                          ))
+                                          : data?.data?.map((job: any) => (
+                                                <Link
+                                                      href={`/jobs/${job.url}`}
+                                                      key={job._id}
+                                                      className="group relative flex w-full flex-col hover:bg-[#001968] hover:bg-opacity-15 items-center justify-center gap-2 space-x-2 overflow-hidden rounded-sm border p-4 md:flex-row"
+                                                >
+                                                      <div className="lg:w-[25%]">
+                                                            <div className="h-16 w-16">
+                                                                  <img
+                                                                        className="h-full w-20 rounded border-2 border-gray-300 bg-white object-contain p-2 shadow-md"
+                                                                        src={
+                                                                              job?.company_info?.logo ||
+                                                                              "https://via.placeholder.com/64"
+                                                                        }
+                                                                        alt={job?.company_info?.name || "Company Logo"}
+                                                                  />
+                                                            </div>
+                                                      </div>
+                                                      <div className="flex-grow text-center md:text-start lg:w-[60%]">
+                                                            <h3 className="font-semibold capitalize hover:text-blue-500">
+                                                                  {job.company_info?.name}
+                                                            </h3>
+                                                            <p className="text-xs">{job.job_title}</p>
+                                                      </div>
+
+                                                      <div className="absolute inset-0 hidden  group-hover:flex items-center justify-end group-hover:opacity-100">
+                                                            <ChevronRight className="text-gray-800 group-hover:text-white dark:text-white" />
+                                                      </div>
+                                                </Link>
+                                          ))}
+                              </div>
+
+                              <div>
+                                    <Govt_jobs />
+                              </div>
+                        </div>
+
+                  </MaxWidthWrapper>
+            </section >
+      )
 }
 
 export default FeaturedJobs

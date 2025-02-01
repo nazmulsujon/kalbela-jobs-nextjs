@@ -51,7 +51,7 @@ const useApiRequest = <T>(
     return () => controller.abort()
   }, [url, method, JSON.stringify(body)])
 
-  return { data, loading, error }
+  return { data , loading, error }
 }
 
 export default useApiRequest

@@ -121,24 +121,17 @@ p,
 
 .jodit-editor ul,
 .jodit-editor ol {
-      /* List styles */
       padding-left: 20px;
-      /* Adjust as needed */
 }
 
 .jodit-editor ul li,
 .jodit-editor ol li {
-      /* List item styles */
       list-style-type: disc;
-      /* Unordered list marker style */
       margin-bottom: 5px;
-      /* Adjust as needed */
 }
 
 .jodit-editor ol li {
-      /* Additional styles for ordered list items */
       list-style-type: decimal;
-      /* Ordered list marker style */
 }
 
 /* Targeting unordered and ordered lists within JoditEditor */
@@ -184,4 +177,16 @@ p,
 .jodit-wysiwyg ol.lower-greek li {
       list-style-type: lower-greek;
       /* Lowercase Greek marker style */
+}
+
+
+.scrollbar-hide::-webkit-scrollbar {
+      display: none;
+}
+
+.scrollbar-hide {
+      -ms-overflow-style: none;
+      /* IE and Edge */
+      scrollbar-width: none;
+      /* Firefox */
 }
