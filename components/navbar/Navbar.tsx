@@ -104,7 +104,7 @@ const Navbar: React.FC = () => {
                               <Navigations />
                         </div>
 
-                        <div className="flex w-20 items-center justify-end">
+                        <div className="flex  items-center justify-end">
                               <UserNav loading={loading} user={user} />
 
                               {!user && !loading && (

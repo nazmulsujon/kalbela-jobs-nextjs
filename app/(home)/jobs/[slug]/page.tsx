@@ -7,7 +7,7 @@ import { useParams } from "next/navigation"
 import { dummyJobs } from "@/public/assets/dummyData"
 import { useUserData } from "@/utils/encript_decript"
 import { Avatar } from "@radix-ui/react-avatar"
-import { Banknote, Briefcase, Building2, CalendarIcon, Facebook, FileWarning, Linkedin, MapPin, Share2, Twitter } from 'lucide-react'
+import { Banknote, Briefcase, Building2, Calendar, CalendarIcon, Facebook, FileWarning, Linkedin, MapPin, Share2, Twitter } from 'lucide-react'
 import { toast } from "react-toastify"
 
 import { formatDate } from "@/lib/utils"
@@ -81,6 +81,23 @@ const JobsDetails = () => {
       const jobDescription = encodeURIComponent(jobData?.description?.slice(0, 100) || "Exciting job opportunity!");
       const fullMessage = `${jobTitle} - ${jobDescription} ${shareUrl}`;
 
+
+      const formatLocation = () => {
+            if (jobData?.location?.remote) return "Remote";
+
+            const { country, district, division, location } = jobData?.location || {};
+
+            return [
+                  country,
+                  Array.isArray(district) ? district.join(", ") : district,
+                  Array.isArray(division) ? division.join(", ") : division,
+                  location
+            ]
+                  .filter(Boolean)
+                  .join(", ");
+      };
+
+
       return (
             <MaxWidthWrapper>
                   <Head>
@@ -153,9 +170,11 @@ const JobsDetails = () => {
                         <div className="relative h-full">
                               <div className="container mx-auto flex h-full flex-col justify-end px-4 pb-8 ">
                                     <div className="max-w-3xl">
-                                          <h1 className="mb-2 text-4xl font-bold  md:text-5xl lg:text-6xl">
+                                          <h1 className="mb-2 text-4xl font-bold md:text-5xl lg:text-6xl text-transparent custom-outline">
                                                 Hiring
                                           </h1>
+
+
                                           <h2 className="mb-4 text-3xl font-semibold /90 md:text-4xl">
                                                 {jobData?.job_title}
                                           </h2>
@@ -194,33 +213,34 @@ const JobsDetails = () => {
                                                 </AvatarFallback>
                                           </Avatar>
                                           <div>
-                                                <h3 className="font-semibold">{jobData?.company_info?.name}</h3>
-                                                <p className="text-sm text-muted-foreground">
-                                                      {jobData?.company_info?.industry}
+                                                <h3 className="font-semibold capitalize">{jobData?.company_info?.name} {jobData?.company_info?.industry && `(${jobData?.company_info?.industry})`}</h3>
+
+                                                <p className="text-sm ">
+                                                      {jobData?.job_title}
                                                 </p>
                                           </div>
                                     </div>
 
                                     <div className="space-y-4">
                                           <div className="grid grid-cols-2 gap-2 text-sm">
-                                                <div className="text-muted-foreground">Job Title</div>
-                                                <div>{jobData?.job_title}</div>
 
-                                                <div className="text-muted-foreground">Deadline</div>
-                                                <div>{formatDate(jobData?.expiry_date || new Date())}</div>
 
-                                                <div className="text-muted-foreground">Office Time</div>
-                                                <div>{jobData?.office_time || "9:00 AM - 6:00 PM"}</div>
+                                                <div className="space-y-3">
+                                                      <div className="flex items-center gap-2 text-sm">
+                                                            <Calendar className="h-4 w-4 text-muted-foreground" />
+                                                            <span className="text-muted-foreground">Deadline:</span>
+                                                            <span>{formatDate(jobData?.expiry_date || new Date())}</span>
+                                                      </div>
 
-                                                <div className="text-muted-foreground">Location</div>
-                                                <div className="flex items-center gap-1">
-                                                      <MapPin className="h-4 w-4" />
-                                                      {jobData?.location?.remote
-                                                            ? "Remote"
-                                                            : [jobData?.location?.country, jobData?.location?.location, jobData?.location?.district,]
-                                                                  ?.filter(Boolean)
-                                                                  ?.join(", ")}
+                                                      <div className="flex whitespace-break-spaces items-start gap-2 text-sm">
+                                                            <MapPin className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
+                                                            <div>
+                                                                  <span className="text-muted-foreground mr-2">Location:</span>
+                                                                  <span>{formatLocation()}</span>
+                                                            </div>
+                                                      </div>
                                                 </div>
+
                                           </div>
 
                                           <div className="flex items-center gap-4 pt-4">
@@ -296,9 +316,10 @@ const JobsDetails = () => {
                                                 <h3 className="mb-4 text-xl font-semibold">Skills</h3>
                                                 <div className="flex flex-wrap gap-2">
                                                       {jobData?.skills?.map((skill: string, index: number) => (
-                                                            <Badge key={index} variant="outline">
+
+                                                            <div key={index} className="border px-2 text-xs py-0.5 rounded-md">
                                                                   {skill}
-                                                            </Badge>
+                                                            </div>
                                                       ))}
                                                 </div>
                                           </section>
@@ -394,7 +415,7 @@ const JobSection = ({
             {content ? (
                   <div
                         dangerouslySetInnerHTML={{ __html: content }}
-                        className="prose prose-sm max-w-none text-muted-foreground dark:prose-invert"
+                        className="prose prose-sm jodit-editor max-w-none text-muted-foreground dark:prose-invert"
                   />
             ) : (
                   children

@@ -21,19 +21,19 @@ const Page = () => {
 
       return (
             <div className="w-full mt-8 lg:mt-0 ">
-                  <section className="border border-green-200 rounded-lg p-2 relative w-full">
-                        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-white px-4">
+                  <section className="border border-green-200 border-opacity-50 rounded-lg p-2 relative w-full">
+                        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-white dark:bg-[#030711] px-4">
                               <h2 className="flex items-center justify-center font-bold whitespace-nowrap">
                                     <img
                                           src="https://image.kalbelajobs.com/api/v1/image/679674886283397bf670bc7d.png"
                                           alt="Government Jobs"
-                                          className="mr-2 w-6 h-6"
+                                          className="mr-2 w-6 h-6 rounded-full"
                                     />
                                     Government Jobs
                               </h2>
                         </div>
 
-                        <div className="flex flex-col gap-2 max-h-[500px] scrollbar-hide overflow-y-auto pt-2">
+                        <div className="flex flex-col gap-2 max-h-[500px] overflow-y-auto pt-2">
                               {loading
                                     ? Array.from({ length: 8 }).map((_, index) => (
                                           <div key={index} className="flex flex-col rounded-lg border p-4 shadow-sm">

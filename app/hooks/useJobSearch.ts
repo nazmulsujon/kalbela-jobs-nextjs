@@ -5,11 +5,13 @@ import axios, { CancelTokenSource } from "axios"
 
 interface UseJobsSearchProps<T> {
   endpoint: string
-  query?: string
+  search?: string
   pageNumber: number
   location?: string
   job_type?: string
   category?: string
+  salary_range?: string
+  limit?: number
 }
 
 interface UseJobsSearchReturn<T> {
@@ -23,11 +25,13 @@ interface UseJobsSearchReturn<T> {
 
 export default function useJobsSearch<T>({
   endpoint,
-  query = "",
-  pageNumber,
+  search = "",
+  pageNumber = 1,
   location = "",
   job_type = "",
   category = "",
+  salary_range = "",
+  limit = 10
 }: UseJobsSearchProps<T>): UseJobsSearchReturn<T> {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
@@ -38,9 +42,10 @@ export default function useJobsSearch<T>({
 
   const triggerRevalidate = () => setRevalidate((prev) => !prev)
 
+  // Reset jobs when filters change
   useEffect(() => {
     setJobs([])
-  }, [query, location, job_type, category])
+  }, [pageNumber]) // Only reset jobs when pageNumber changes
 
   useEffect(() => {
     setLoading(true)
@@ -48,23 +53,23 @@ export default function useJobsSearch<T>({
 
     let cancel: CancelTokenSource
 
-    const params = {
-      limit: 10,
-      page: (pageNumber - 1) * 10,
-      ...(query && { search: query }),
-      ...(location && { location: location }),
-      ...(job_type && { job_type: job_type }),
-      ...(category && { category: category }),
-    }
+    // Build query parameters according to API documentation
+    const params = new URLSearchParams()
+    if (search) params.append('search', search)
+    if (category) params.append('category', category)
+    if (location) params.append('location', location)
+    if (job_type) params.append('job_type', job_type)
+    if (salary_range) params.append('salary_range', salary_range)
+    params.append('page', pageNumber.toString())
+    params.append('limit', limit.toString())
 
     const fetchData = async () => {
       try {
         cancel = axios.CancelToken.source()
         const res = await axios.get(
-          `${process.env.NEXT_APP_BASE_URL}/api/v1/${endpoint}`,
+          `${process.env.NEXT_APP_BASE_URL}/api/v1/${endpoint}?${params.toString()}`,
           {
             headers: { "Content-Type": "application/json" },
-            params,
             cancelToken: cancel.token,
           }
         )
@@ -72,9 +77,10 @@ export default function useJobsSearch<T>({
         const fetchedData: T[] = res.data.data.jobs
         const totalCount = res.data.data.pagination?.totalCount
 
-        setJobs((prev) => [...prev, ...fetchedData])
+        // Replace existing jobs instead of appending for proper pagination
+        setJobs(fetchedData)
         setTotalJobs(totalCount || 0)
-        setHasMore(fetchedData.length === params.limit)
+        setHasMore(fetchedData.length === limit)
         setLoading(false)
       } catch (e) {
         if (axios.isCancel(e)) return
@@ -85,7 +91,17 @@ export default function useJobsSearch<T>({
 
     fetchData()
     return () => cancel?.cancel()
-  }, [endpoint, query, pageNumber, location, job_type, category, revalidate])
+  }, [
+    endpoint,
+    search,
+    pageNumber,
+    location,
+    job_type,
+    category,
+    salary_range,
+    limit,
+    revalidate
+  ])
 
   return { loading, error, jobs, totalJobs, hasMore, triggerRevalidate }
 }

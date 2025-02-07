@@ -31,6 +31,7 @@ import MaxWidthWrapper from "@/components/MaxWidthWrapper"
 import PrimaryBtn from "@/components/PrimaryBtn"
 import { TypingRandomizedTextEffect } from "@/components/RandomizedTextEffect"
 import useApiRequest from "@/app/hooks/useApiRequest"
+import Job_type_tag from "./Job_type_tag"
 
 const locationSuggestions = [
       "dhaka",
@@ -126,25 +127,6 @@ const HeroSection = () => {
                               </p>
                         </div>
 
-                        <div className="mx-auto px-4 py-0 lg:py-8">
-                              <div className="grid grid-cols-2 gap-x-20 gap-y-4 sm:grid-cols-6 lg:gap-x-4">
-                                    {statistics.map((stat) => (
-                                          <div key={stat.title} className="flex items-center">
-                                                <div className="mr-3 rounded-full bg-[#001968] p-2 lg:p-3">
-                                                      <stat.icon className="h-4 w-4 text-white" />
-                                                </div>
-                                                <div>
-                                                      <p className="text-xs font-bold text-gray-900 dark:text-slate-200">
-                                                            {stat.title}
-                                                      </p>
-                                                      <p className="text-sm font-bold text-gray-600 dark:text-slate-300">
-                                                            {stat.value}
-                                                      </p>
-                                                </div>
-                                          </div>
-                                    ))}
-                              </div>
-                        </div>
                         <div className="z-40 flex w-full max-w-3xl items-center space-x-2 rounded-sm border border-gray-200 bg-white px-4 py-3 text-gray-900 shadow-md dark:border-gray-700 dark:bg-gray-800 dark:text-slate-200 md:px-6">
                               <div className="relative flex w-full items-center space-x-2">
                                     <Search className="size-6 text-gray-500 dark:text-slate-200" />
@@ -210,6 +192,27 @@ const HeroSection = () => {
 
                               <PrimaryBtn onClick={handleSearch}>Search</PrimaryBtn>
                         </div>
+                        <Job_type_tag />
+                        <div className="mx-auto px-4 py-0 lg:py-8">
+                              <div className="grid grid-cols-2 gap-x-20 gap-y-4 sm:grid-cols-6 lg:gap-x-4">
+                                    {statistics.map((stat) => (
+                                          <div key={stat.title} className="flex items-center">
+                                                <div className="mr-3 rounded-full bg-[#001968] p-2 lg:p-3">
+                                                      <stat.icon className="h-4 w-4 text-white" />
+                                                </div>
+                                                <div>
+                                                      <p className="text-xs font-bold text-gray-900 dark:text-slate-200">
+                                                            {stat.title}
+                                                      </p>
+                                                      <p className="text-sm font-bold text-gray-600 dark:text-slate-300">
+                                                            {stat.value}
+                                                      </p>
+                                                </div>
+                                          </div>
+                                    ))}
+                              </div>
+                        </div>
+
                   </MaxWidthWrapper>
             </div>
       )
