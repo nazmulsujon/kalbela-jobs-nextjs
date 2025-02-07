@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { FileText } from "lucide-react"
 import { toast } from "react-toastify"
@@ -22,9 +22,16 @@ interface ApplyModalProps {
 const ApplyModal: React.FC<ApplyModalProps> = ({ slug, company, user }) => {
       const navigation = useRouter()
 
+      const [open, setOpen] = useState(false)
+
+      const handleClose = () => {
+            setOpen(false)
+      }
+
+
       return (
             <div className="">
-                  <Dialog>
+                  <Dialog open={open} onOpenChange={setOpen}>
                         <div className="">
                               {user ? (
                                     <DialogTrigger asChild>
@@ -44,9 +51,9 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ slug, company, user }) => {
                               )}
                         </div>
 
-                        <DialogContent className="w-[300px] max-w-full sm:w-[400px] md:w-[600px] lg:w-[744px]">
+                        <DialogContent className=" sm:w-[400px] md:w-[600px] lg:w-[744px]">
                               <DialogHeader>
-                                    <DailogForm slug={slug} company={company} user={user} />
+                                    <DailogForm slug={slug} company={company} user={user} onClose={() => handleClose()} />
                               </DialogHeader>
                         </DialogContent>
                   </Dialog>

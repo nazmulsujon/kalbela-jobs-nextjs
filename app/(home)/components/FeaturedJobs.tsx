@@ -44,9 +44,9 @@ const FeaturedJobs: React.FC = () => {
                                                 <Link
                                                       href={`/jobs/${job.url}`}
                                                       key={job._id}
-                                                      className="group relative flex w-full flex-col hover:bg-[#001968] hover:bg-opacity-15 items-center justify-center gap-2 space-x-2 overflow-hidden rounded-sm border p-4 md:flex-row"
+                                                      className="group flex justify-start flex-col md:flex-row w-full  items-center gap-2  overflow-hidden rounded-sm border p-2  hover:bg-[#001968] hover:bg-opacity-15"
                                                 >
-                                                      <div className="lg:w-[25%]">
+                                                      <div className="">
                                                             <div className="h-16 w-16">
                                                                   <img
                                                                         className="h-full w-20 rounded border-2 border-gray-300 bg-white object-contain p-2 shadow-md"
@@ -58,16 +58,17 @@ const FeaturedJobs: React.FC = () => {
                                                                   />
                                                             </div>
                                                       </div>
-                                                      <div className="flex-grow text-center md:text-start lg:w-[60%]">
-                                                            <h3 className="font-semibold capitalize hover:text-blue-500">
-                                                                  {job.company_info?.name}
+                                                      <div className="flex-grow  gap-1 text-center md:text-start">
+                                                            <h3 className="font-semibold text-sm capitalize group-hover:text-blue-500">
+
+                                                                  {job.job_title}
                                                             </h3>
-                                                            <p className="text-xs">{job.job_title}</p>
+                                                            <p className="text-xs"> {job.company_info?.name}</p>
                                                       </div>
 
-                                                      <div className="absolute inset-0 hidden  group-hover:flex items-center justify-end group-hover:opacity-100">
+                                                      {/* <div className="absolute inset-0 hidden  group-hover:flex items-center justify-end group-hover:opacity-100">
                                                             <ChevronRight className="text-gray-800 group-hover:text-white dark:text-white" />
-                                                      </div>
+                                                      </div> */}
                                                 </Link>
                                           ))}
                               </div>

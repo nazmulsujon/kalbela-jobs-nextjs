@@ -190,3 +190,9 @@ p,
       scrollbar-width: none;
       /* Firefox */
 }
+
+ .custom-outline {
+       -webkit-text-stroke: 1px black;
+       color: transparent;
+
+ }

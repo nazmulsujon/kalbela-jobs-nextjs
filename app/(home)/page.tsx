@@ -36,7 +36,7 @@ const HomePage = () => {
                   <div className="relative">
                         <div className="z-50">
                               <HeroSection />
-                              <Job_type_tag />
+                              {/* <Job_type_tag /> */}
                               {/* <JobType /> */}
                         </div>
                         <div className="pointer-events-none absolute right-0 top-0 z-0 w-full">
@@ -50,7 +50,7 @@ const HomePage = () => {
 
                   <TopCompanies />
 
-                  <InterviewQuestions />
+                  {/* <InterviewQuestions /> */}
                   <Testimonial />
                   <NesLetter />
             </Fragment>
