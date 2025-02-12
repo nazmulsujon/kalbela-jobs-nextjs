@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { logout } from "@/utils/encript_decript"
 import {
       BookmarkPlus,
@@ -16,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import SecondaryBtn from "@/components/SecondaryBtn"
+
 
 const sidebarItems = [
       { name: "Dashboard", href: "/user", icon: LayoutDashboard },
@@ -32,6 +33,9 @@ export function Sidebar({
       setIsDashboardSidebarOpen?: React.Dispatch<React.SetStateAction<boolean>>
 }) {
       const pathname = usePathname()
+
+      const router = useRouter()
+
 
       return (
             <ScrollArea className="h-full py-6">
@@ -65,7 +69,7 @@ export function Sidebar({
                               className="mt-2 flex w-full items-center justify-center space-x-4 py-2 text-red-500 hover:text-red-600"
                               onClick={() => {
                                     logout()
-                                    window.location.href = "/login"
+                                    router.push('/login')
                               }}
                         >
                               <LogOut className="mr-2 h-4 w-4" />

@@ -6,7 +6,6 @@ import { useSearchParams } from "next/navigation"
 import { Filter } from "lucide-react"
 import { useTheme } from "next-themes"
 import Select from "react-select"
-
 import { selectCustomStyles } from "@/lib/utils"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import JobCardSkeleton from "@/components/JobCardSkeleton"
@@ -146,8 +145,8 @@ const SearchDetails: React.FC = () => {
                                     </div>
                               ) : (
                                     <div className="space-y-4">
-                                          {jobs.length > 0 ? (
-                                                jobs.map((job, index) => <JobcardLarge job={job} key={index} />)
+                                          {jobs?.length > 0 ? (
+                                                jobs?.map((job, index) => <JobcardLarge job={job} key={index} />)
                                           ) : (
                                                 <div className="flex min-h-[60vh] items-center justify-center">
                                                       <NoVacancies />

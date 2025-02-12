@@ -1,0 +1,22 @@
+{
+  "/_not-found": "app/_not-found.js",
+  "/(auth)/registration/page": "app/(auth)/registration/page.js",
+  "/(auth)/login/page": "app/(auth)/login/page.js",
+  "/(dashboard)/user/message/page": "app/(dashboard)/user/message/page.js",
+  "/(dashboard)/user/products/page": "app/(dashboard)/user/products/page.js",
+  "/(dashboard)/user/applied-jobs/page": "app/(dashboard)/user/applied-jobs/page.js",
+  "/(dashboard)/user/products/sticky-note/page": "app/(dashboard)/user/products/sticky-note/page.js",
+  "/(dashboard)/user/page": "app/(dashboard)/user/page.js",
+  "/(dashboard)/user/profile/page": "app/(dashboard)/user/profile/page.js",
+  "/(dashboard)/user/saved-jobs/page": "app/(dashboard)/user/saved-jobs/page.js",
+  "/(dashboard)/user/reports/page": "app/(dashboard)/user/reports/page.js",
+  "/(dashboard)/user/products/todo/page": "app/(dashboard)/user/products/todo/page.js",
+  "/(home)/career-resources/page": "app/(home)/career-resources/page.js",
+  "/(home)/companies/[slug]/page": "app/(home)/companies/[slug]/page.js",
+  "/(home)/govt-jobs/[slag]/page": "app/(home)/govt-jobs/[slag]/page.js",
+  "/(home)/search-details/page": "app/(home)/search-details/page.js",
+  "/(home)/jobs/[slug]/page": "app/(home)/jobs/[slug]/page.js",
+  "/(home)/govt-jobs/page": "app/(home)/govt-jobs/page.js",
+  "/(home)/career-resources/[slug]/page": "app/(home)/career-resources/[slug]/page.js",
+  "/(home)/page": "app/(home)/page.js"
+}
