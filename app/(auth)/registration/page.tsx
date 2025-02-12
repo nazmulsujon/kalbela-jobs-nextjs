@@ -11,7 +11,8 @@ import SecondaryBtn from "@/components/SecondaryBtn"
 import useApiForPost from "@/app/hooks/useApiForPost"
 
 import AuthAnimation from "../components/AuthAnimation"
-import googleLogin from "@/app/hooks/firebse"
+// import { googleLogin } from "@/app/hooks/firebse"
+
 
 interface FormData {
       fullName: string
@@ -213,7 +214,7 @@ const RegistrationPage = () => {
                                     <div className="mt-3 space-y-3">
                                           <SecondaryBtn
                                                 // onClick={handlerGoogleLogin}
-                                                onClick={() => googleLogin()}
+                                                // onClick={() => googleLogin()}
                                                 className="relative w-full py-3"
                                           >
                                                 <div className="absolute inset-y-0 left-0 px-4 py-2">
