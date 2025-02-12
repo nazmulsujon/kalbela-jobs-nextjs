@@ -39,7 +39,7 @@ const DialogContent = React.forwardRef<
                   className={cn(
                         "fixed w-full text-start z-50 max-w-lg bg-white p-6 shadow-lg transition-all duration-300",
                         "sm:rounded-lg", // Rounded corners on larger screens
-                        "bottom-0 z-50 left-1/2 -translate-x-1/2 rounded-t-[32px] lg:bottom-auto lg:top-1/2 lg:-translate-y-1/2" // Bottom for mobile, centered for larger screens
+                        "bottom-0 z-50 left-1/2 -translate-x-1/2 rounded-t-[20px] lg:bottom-auto lg:top-1/2 lg:-translate-y-1/2" // Bottom for mobile, centered for larger screens
                   )}
                   {...props}
             >

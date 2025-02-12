@@ -23,14 +23,14 @@ const Page = () => {
             <div className="w-full mt-8 lg:mt-0 ">
                   <section className="border border-green-200 border-opacity-50 rounded-lg p-2 relative w-full">
                         <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-white dark:bg-[#030711] px-4">
-                              <h2 className="flex items-center justify-center font-bold whitespace-nowrap">
+                              <Link href="/govt-jobs" className="flex items-center justify-center font-bold whitespace-nowrap">
                                     <img
                                           src="https://image.kalbelajobs.com/api/v1/image/679674886283397bf670bc7d.png"
                                           alt="Government Jobs"
                                           className="mr-2 w-6 h-6 rounded-full"
                                     />
                                     Government Jobs
-                              </h2>
+                              </Link>
                         </div>
 
                         <div className="flex flex-col gap-2 max-h-[500px] overflow-y-auto pt-2">
@@ -48,16 +48,14 @@ const Page = () => {
                                           </div>
                                     ))
                                     : data?.data
-                                          ?.slice(0, 8)
-                                          .sort((a: any, b: any) => a.name.length - b.name.length)
                                           ?.map((org: any) => (
                                                 <Link
                                                       href={`/govt-jobs/${org?.jobs[0]?._id}`}
                                                       key={org._id}
-                                                      className="flex flex-col justify-between rounded-lg border p-4 shadow-sm transition-all hover:shadow-md hover:border-gray-300"
+                                                      className="flex flex-col justify-between rounded-lg border px-4 py-2 shadow-sm transition-all hover:shadow-md hover:border-gray-300"
                                                 >
-                                                      <div className="flex items-start gap-4">
-                                                            <Avatar className="h-16 w-16 rounded-lg">
+                                                      <div className="flex items-center gap-4">
+                                                            <Avatar className="size-12 rounded-lg">
                                                                   <AvatarImage
                                                                         src={org.logo}
                                                                         alt={org.name}
@@ -65,11 +63,11 @@ const Page = () => {
                                                                   />
                                                                   <AvatarFallback>{org.name.substring(0, 2).toUpperCase()}</AvatarFallback>
                                                             </Avatar>
-                                                            <div className="flex-1">
-                                                                  <h3 className="font-semibold capitalize text-sm sm:text-base leading-tight line-clamp-2">
+                                                            <div className="flex-0.5">
+                                                                  <h3 className="font-semibold capitalize  leading-tight line-clamp-2">
                                                                         {org.name}
                                                                   </h3>
-                                                                  <div className="flex flex-wrap items-center gap-2 mt-2">
+                                                                  <div className="flex flex-wrap items-center gap-2 mt-0.5">
                                                                         <p className="flex items-center text-xs text-gray-600">
                                                                               <Star className="mr-1 w-3 h-3 fill-yellow-400 text-yellow-400" />
                                                                               Openings: {org.job_count}
@@ -83,6 +81,9 @@ const Page = () => {
                                                       </div>
                                                 </Link>
                                           ))}
+                              <Link href="/govt-jobs" className="flex items-center justify-center text-blue-500">
+                                    View All
+                              </Link>
                         </div>
                   </section>
             </div>

@@ -150,7 +150,7 @@ const JobsDetails = () => {
                   </Head>
 
                   {/* Hero Section */}
-                  <div className="relative h-[300px] mt-4 rounded-xl w-full overflow-hidden bg-light-theme shadow dark:bg-dark-theme   md:h-[400px]">
+                  <div className="relative h-[300px] mt-4 rounded-xl w-full overflow-hidden bg-light-theme border shadow dark:bg-dark-theme   md:h-[400px]">
                         <div className="absolute left-0 top-0">
                               <img
                                     className="w-16 md:w-24 lg:w-32 xl:w-full"
@@ -170,7 +170,7 @@ const JobsDetails = () => {
                         <div className="relative h-full">
                               <div className="container mx-auto flex h-full flex-col justify-end px-4 pb-8 ">
                                     <div className="max-w-3xl">
-                                          <h1 className="mb-2 text-4xl font-bold md:text-5xl lg:text-6xl text-transparent custom-outline">
+                                          <h1 className="mb-2 text-4xl font-bold md:text-5xl lg:text-6xl text-transparent custom-outline dark:custom-outline-light">
                                                 Hiring
                                           </h1>
 
@@ -198,23 +198,24 @@ const JobsDetails = () => {
 
                   {/* Content Section */}
                   <div className="mt-4">
-                        <div className="grid gap-8 lg:grid-cols-3">
+                        <div className="grid gap-8 grid-cols-1 lg:grid-cols-3">
                               {/* Left Column - Company Info */}
-                              <Card className="h-fit p-6 lg:col-span-1 sticky lg:top-20">
+                              <Card className="h-fit p-6  lg:col-span-1 sticky lg:top-20  ">
                                     <div className="mb-6 flex items-center gap-4">
-                                          <Avatar className="h-16 w-16">
-                                                <AvatarImage
-                                                      className="w-20 rounded border-2 border-gray-300 bg-white object-contain p-2 shadow-md"
-                                                      src={jobData?.company_info?.logo || "/placeholder.svg"}
-                                                      alt={jobData?.company_info?.name || "Company Logo"}
-                                                />
-                                                <AvatarFallback className="text-lg">
-                                                      {jobData?.company_info?.name?.charAt(0)}
-                                                </AvatarFallback>
-                                          </Avatar>
+                                          <div className="flex-shrink-0">
+                                                <Avatar className="h-12 w-12">
+                                                      <AvatarImage
+                                                            className="h-12 w-12  rounded border-2 border-gray-300  object-scale-down p-2 shadow-md"
+                                                            src={jobData?.company_info?.logo || "/placeholder.svg"}
+                                                            alt={jobData?.company_info?.name || "Company Logo"}
+                                                      />
+                                                      <AvatarFallback className="text-lg">
+                                                            {jobData?.company_info?.name?.charAt(0)}
+                                                      </AvatarFallback>
+                                                </Avatar>
+                                          </div>
                                           <div>
                                                 <h3 className="font-semibold capitalize">{jobData?.company_info?.name} {jobData?.company_info?.industry && `(${jobData?.company_info?.industry})`}</h3>
-
                                                 <p className="text-sm ">
                                                       {jobData?.job_title}
                                                 </p>
@@ -223,7 +224,6 @@ const JobsDetails = () => {
 
                                     <div className="space-y-4">
                                           <div className="grid grid-cols-2 gap-2 text-sm">
-
 
                                                 <div className="space-y-3">
                                                       <div className="flex items-center gap-2 text-sm">
@@ -302,7 +302,7 @@ const JobsDetails = () => {
                               </Card>
 
                               {/* Right Column - Job Details */}
-                              <div className="lg:col-span-2">
+                              <div className="lg:col-span-2 col-span-1">
                                     <div className="space-y-8">
                                           <section>
                                                 <h3 className="mb-4 text-xl font-semibold">Company Description</h3>
@@ -324,9 +324,11 @@ const JobsDetails = () => {
                                                 </div>
                                           </section>
 
-                                          <JobSection title="About the job" content={jobData?.job_description} />
-                                          <JobSection title="Responsibilities" content={jobData?.responsibilities} />
-                                          <JobSection title="Benefits" content={jobData?.benefit} />
+                                          <div className="w-full overflow-hidden">
+                                                <JobSection title="About the job" content={jobData?.job_description} />
+                                                <JobSection title="Responsibilities" content={jobData?.responsibilities} />
+                                                <JobSection title="Benefits" content={jobData?.benefit} />
+                                          </div>
 
                                           {jobData?.attachment_url && (
                                                 <section>
@@ -415,7 +417,7 @@ const JobSection = ({
             {content ? (
                   <div
                         dangerouslySetInnerHTML={{ __html: content }}
-                        className="prose prose-sm jodit-editor max-w-none text-muted-foreground dark:prose-invert"
+                        className="jodit-editor text-muted-foreground whitespace-break-spaces w-auto dark:prose-invert"
                   />
             ) : (
                   children

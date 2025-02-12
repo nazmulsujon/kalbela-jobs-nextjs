@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge"
 import ShareButton from "@/components/ShareButton"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useRouter } from "next/navigation"
+import { ImageCarousel } from "./components/Carousel"
 
 const Page = ({ params }: { params: { slag: string } }) => {
       const { data: singleJobData, loading: singleJobLoading } = useApiRequest<Record<string, any>>(
@@ -65,7 +66,7 @@ const Page = ({ params }: { params: { slag: string } }) => {
       return (
             <section className="">
                   <MaxWidthWrapper className="grid gap-6 py-6 md:grid-cols-[350px,1fr] md:py-10">
-                        {/* Left Sidebar - Job Listings */}
+
                         <div className="space-y-4 h-screen md:sticky md:top-20 overflow-y-auto">
                               {all_org_jobs_loading
                                     ? Array.from({ length: 4 }).map((_, index) => (
@@ -137,58 +138,21 @@ const Page = ({ params }: { params: { slag: string } }) => {
                               ) : (
                                     singleJobData?.data && (
                                           <div >
-                                                <div className="grid grid-cols-3 gap-2">
-                                                      {relatedJobsLoading
-                                                            ? Array.from({ length: 4 }).map((_, index) => (
-                                                                  <Card key={index} className="p-4">
-                                                                        <div className="flex gap-4">
-                                                                              <Skeleton className="h-16 w-16 rounded-full" />
-                                                                              <div className="flex-1 space-y-2">
-                                                                                    <Skeleton className="h-4 w-3/4" />
-                                                                                    <Skeleton className="h-4 w-1/2" />
-                                                                                    <Skeleton className="h-4 w-1/4" />
-                                                                              </div>
-                                                                        </div>
-                                                                  </Card>
-                                                            ))
-                                                            : relatedJobs?.data?.map((job: any) => (
-                                                                  <Link href={`/govt-jobs/${job._id}`} key={job._id}>
-                                                                        <Card
-                                                                              className={`transition-all hover:shadow-md mb-2 ${job._id === params.slag ? "border-2 bg-blue-100" : ""}`}
-                                                                        >
-                                                                              <div className="space-y-4 p-4">
-                                                                                    <div className="flex items-center gap-4">
-                                                                                          <Avatar className="size-10">
-                                                                                                <AvatarImage src={job?.organization?.logo} alt={job?.organization?.name} className="object-scale-down h-full bg-white w-full" />
-                                                                                                <AvatarFallback>{job?.organization?.name?.[0]}</AvatarFallback>
-                                                                                          </Avatar>
-                                                                                          <div className="flex-1">
-                                                                                                <h3 className="font-semibold">{job.title}</h3>
-                                                                                                {/* <p className="text-sm text-muted-foreground">{job?.organization?.name}</p> */}
-                                                                                                {/* <p className="text-xs text-muted-foreground">Job ID: {job._id}</p> */}
-                                                                                          </div>
-                                                                                    </div>
-                                                                                    {/*
-                                                                                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                                                                                          <div className="flex items-center gap-1">
-                                                                                                <Globe className="h-4 w-4" />
-                                                                                                <a href={job._id} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                                                                                                      Apply Online
-                                                                                                </a>
-                                                                                          </div>
-                                                                                          <div className="flex items-center gap-1">
-                                                                                                <Users className="h-4 w-4" />
-                                                                                                <span>{job.vacancy} vacancy</span>
-                                                                                          </div>
-                                                                                    </div> */}
-                                                                              </div>
-                                                                        </Card>
-                                                                  </Link>
-                                                            ))}
-                                                </div>
+                                                {/* <div>
+                                                      <ImageCarousel
+                                                            images={[
+                                                                  "https://i.ibb.co.com/R4VMkhCG/image.png",
+                                                                  "https://nilg.gov.bd/sites/default/files/files/nilg.portal.gov.bd/top_banner/582a54bf_ccea_4247_99ed_0ba278ddf46e/2024-08-11-08-23-c1e2b6583951ae03beb38f57795c9e03.jpg",
+                                                            ]}
+                                                            orgName={singleJobData.data.organization.name}
+                                                            orgLogo={singleJobData.data.organization.logo}
+                                                      />
+                                                </div> */}
+
                                                 <Card className="overflow-hidden">
                                                       <div className="border-b p-6">
                                                             <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+
                                                                   <div className="flex gap-6">
                                                                         <Avatar className="h-24 w-24 rounded-xl">
                                                                               <AvatarImage
@@ -205,6 +169,13 @@ const Page = ({ params }: { params: { slag: string } }) => {
                                                                                     {singleJobData.data.organization.name}
 
                                                                               </h1>
+                                                                              <div className="">
+                                                                                    <div className="text-sm text-muted-foreground">
+                                                                                          Website: <a href={singleJobData.data.organization.website} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                                                                                                {singleJobData.data.organization.website}
+                                                                                          </a>
+                                                                                    </div>
+                                                                              </div>
                                                                               <p className="text-lg text-muted-foreground">
                                                                                     {singleJobData.data.title}
                                                                               </p>
@@ -216,6 +187,7 @@ const Page = ({ params }: { params: { slag: string } }) => {
                                                                                           ADV NO: {singleJobData.data.advertisementNo}
                                                                                     </p>
                                                                               </div>
+
                                                                         </div>
                                                                   </div>
                                                                   <div className="flex flex-col gap-2">
@@ -267,6 +239,11 @@ const Page = ({ params }: { params: { slag: string } }) => {
                                                             </Card>
                                                       </div>
                                                       <div className="px-6 pb-6">
+
+                                                            <div
+                                                                  dangerouslySetInnerHTML={{ __html: singleJobData?.data?.description }}
+                                                                  className="jodit-editor text-muted-foreground whitespace-break-spaces w-auto dark:prose-invert"
+                                                            />
                                                             <div className="aspect-[16/9] w-full rounded-lg bg-zinc-700 flex  items-center justify-center">
                                                                   {singleJobData.data.uploadDocument ? (
                                                                         singleJobData.data.uploadDocument.endsWith(".pdf") ? (
@@ -284,6 +261,42 @@ const Page = ({ params }: { params: { slag: string } }) => {
                                                             </div>
                                                       </div>
                                                 </Card>
+
+                                                <div className="grid grid-cols-3 gap-2 mt-4">
+                                                      {relatedJobsLoading
+                                                            ? Array.from({ length: 4 }).map((_, index) => (
+                                                                  <Card key={index} className="p-4">
+                                                                        <div className="flex gap-4">
+                                                                              <Skeleton className="h-16 w-16 rounded-full" />
+                                                                              <div className="flex-1 space-y-2">
+                                                                                    <Skeleton className="h-4 w-3/4" />
+                                                                                    <Skeleton className="h-4 w-1/2" />
+                                                                                    <Skeleton className="h-4 w-1/4" />
+                                                                              </div>
+                                                                        </div>
+                                                                  </Card>
+                                                            ))
+                                                            : relatedJobs?.data?.map((job: any) => (
+                                                                  <Link href={`/govt-jobs/${job._id}`} key={job._id}>
+                                                                        <Card
+                                                                              className={`transition-all hover:shadow-md mb-2 ${job._id === params.slag ? "border-2 bg-blue-100" : ""}`}
+                                                                        >
+                                                                              <div className="space-y-4 p-4">
+                                                                                    <div className="flex items-center gap-4">
+                                                                                          <Avatar className="size-10">
+                                                                                                <AvatarImage src={job?.organization?.logo} alt={job?.organization?.name} className="object-scale-down h-full bg-white w-full" />
+                                                                                                <AvatarFallback>{job?.organization?.name?.[0]}</AvatarFallback>
+                                                                                          </Avatar>
+                                                                                          <div className="flex-1">
+                                                                                                <h3 className="font-semibold">{job.title}</h3>
+
+                                                                                          </div>
+                                                                                    </div>
+                                                                              </div>
+                                                                        </Card>
+                                                                  </Link>
+                                                            ))}
+                                                </div>
                                           </div>
                                     )
                               )}

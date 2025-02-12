@@ -20,9 +20,9 @@ const Job_type_tag = () => {
             router.push(`/search-details?${queryParams}`)
       }
       return (
-            <MaxWidthWrapper>
-                  <div className="mt-2 w-full overflow-hidden">
-                        <div className="flex w-full justify-start gap-2 overflow-x-auto scrollbar-hide  lg:justify-center">
+            <div className="mx-auto h-full w-full max-w-screen-xl 2xl:max-w-screen-2xl">
+                  <div className="mt-2 mx-auto max-w-3xl overflow-hidden" >
+                        <div className="flex w-full justify-between gap-2  overflow-x-auto scrollbar-hide ">
                               {data?.data?.slice(0, 6)?.map((single_data: any) => (
                                     <button
                                           onClick={() => handleRedirect(single_data.name)}
@@ -34,7 +34,7 @@ const Job_type_tag = () => {
                               ))}
                         </div>
                   </div>
-            </MaxWidthWrapper>
+            </div>
       )
 }
 

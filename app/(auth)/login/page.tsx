@@ -6,12 +6,14 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { set_user_data } from "@/utils/encript_decript"
 import { Eye, EyeOff } from "lucide-react"
+import { signIn } from "next-auth/react"
 
 import PrimaryBtn from "@/components/PrimaryBtn"
 import SecondaryBtn from "@/components/SecondaryBtn"
 import useApiForPost from "@/app/hooks/useApiForPost"
 
 import AuthAnimation from "../components/AuthAnimation"
+import googleLogin from "@/app/hooks/firebse"
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false })
 
@@ -189,7 +191,7 @@ const RegistrationPage = () => {
                                     <div className="mt-3 space-y-3">
                                           <SecondaryBtn
                                                 // onClick={handlerGoogleLogin}
-
+                                                onClick={() => googleLogin()}
                                                 className="relative w-full py-3"
                                           >
                                                 <div className="absolute inset-y-0 left-0 px-4 py-2">
@@ -201,20 +203,7 @@ const RegistrationPage = () => {
                                                 </div>
                                                 Sign in with Google
                                           </SecondaryBtn>
-                                          {/* <SecondaryBtn
-                                                // onClick={handlerGoogleLogin}
 
-                                                className="relative w-full py-3"
-                                          >
-                                                <div className="absolute inset-y-0 left-0 px-4 py-2">
-                                                      <img
-                                                            className="h-6 w-6 text-[#2563EB]"
-                                                            src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png"
-                                                            alt=""
-                                                      />
-                                                </div>
-                                                Sign in with Linkedin
-                                          </SecondaryBtn> */}
 
                                           <SecondaryBtn className="relative w-full py-3">
                                                 <a
