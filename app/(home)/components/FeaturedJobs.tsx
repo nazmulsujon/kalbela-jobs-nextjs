@@ -24,7 +24,7 @@ const FeaturedJobs: React.FC = () => {
                         <h2 className="mb-4 flex items-center text-xl font-bold md:text-3xl">
                               <span className="mr-2 text-red-500">🔥</span> Featured Jobs
                         </h2>
-                        <div className="grid grid-cols-1 lg:gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                        <div className="grid grid-cols-1 lg:gap-4 sm:grid-cols-1 lg:grid-cols-4">
 
                               <div className="grid gap-4 grid-cols-2 lg:grid-cols-3  col-span-3">
                                     {loading
@@ -66,9 +66,7 @@ const FeaturedJobs: React.FC = () => {
                                                             <p className="text-xs"> {job.company_info?.name}</p>
                                                       </div>
 
-                                                      {/* <div className="absolute inset-0 hidden  group-hover:flex items-center justify-end group-hover:opacity-100">
-                                                            <ChevronRight className="text-gray-800 group-hover:text-white dark:text-white" />
-                                                      </div> */}
+
                                                 </Link>
                                           ))}
                               </div>

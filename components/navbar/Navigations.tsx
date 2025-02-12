@@ -178,11 +178,7 @@ export function Navigations() {
                               )}
                         </div>
 
-                        <Link href="/govt-jobs">
-                              <SecondaryBtn className="flex items-center gap-2 px-4 py-2">
-                                    Govt Jobs
-                              </SecondaryBtn>
-                        </Link>
+
                   </nav>
             </section>
       )

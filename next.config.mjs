@@ -8,7 +8,7 @@ const nextConfig = {
                         protocol: 'https',
                         hostname: 'i.ibb.co.com',
                         port: '',
-                        pathname: '/J25bz4n/**',
+                        pathname: '/**',
                   },
                   {
                         protocol: 'https',
@@ -18,9 +18,9 @@ const nextConfig = {
                   },
                   {
                         protocol: 'https',
-                        hostname: 'encrypted-tbn0.gstatic.com',
+                        hostname: 'lh3.googleusercontent.com',
                         port: '',
-                        pathname: '/images?**',
+                        pathname: '/**',
                   },
 
 
